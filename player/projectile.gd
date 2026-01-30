@@ -20,6 +20,7 @@ func set_direction(direction: Vector3) -> void:
 	linear_velocity = direction * speed
 
 func _on_body_entered(body: Node) -> void:
+	print("projectile hit body: %s" % body.get_path())
 	if body.is_in_group("player"):
 		return  # Don't hit the player who fired
 

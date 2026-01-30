@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://i70vqocbrk20"]
 
-[ext_resource type="Script" uid="uid://dk7bkethynyqk" path="res://assets/enemies/test_projectile.gd" id="1_0vro4"]
+[ext_resource type="Script" uid="uid://dk7bkethynyqk" path="res://assets/enemies/test_enemy_projectile.gd" id="1_0vro4"]
 
 [sub_resource type="QuadMesh" id="QuadMesh_y4vra"]
 

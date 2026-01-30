@@ -2,7 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://bloabf7ru74em" path="res://assets/world_scene.tscn" id="1_qmwpp"]
 [ext_resource type="PackedScene" uid="uid://cgtjcig0iej8n" path="res://assets/main_camera.tscn" id="2_wpvyo"]
-[ext_resource type="Script" path="res://player/cursor_manager.gd" id="3_cursor"]
+[ext_resource type="Script" uid="uid://bu8s18bawijbh" path="res://player/cursor_manager.gd" id="3_cursor"]
 [ext_resource type="PackedScene" uid="uid://enemy001" path="res://player/enemy.tscn" id="4_enemy"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qmwpp"]
@@ -18,8 +18,16 @@ sky = SubResource("Sky_wpvyo")
 tonemap_mode = 2
 glow_enabled = true
 
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_1"]
-size = Vector2(32, 32)
+[sub_resource type="Gradient" id="Gradient_s4q73"]
+offsets = PackedFloat32Array(0.16225961, 0.16947116, 0.24639423, 0.2560096, 0.84975964, 0.86658657, 0.92908657, 0.9411058)
+colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0.8217887, 0.82178867, 0.82178867, 1, 0.8217887, 0.82178867, 0.82178867, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_uaptj"]
+gradient = SubResource("Gradient_s4q73")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.90000004, 0.2)
+metadata/_snap_enabled = true
 
 [node name="Game" type="Node3D" unique_id=520359190]
 
@@ -35,18 +43,21 @@ environment = SubResource("Environment_s4q73")
 [node name="MainCamera" parent="." unique_id=944365240 instance=ExtResource("2_wpvyo")]
 transform = Transform3D(0.87758255, -0.22984886, 0.4207355, 0, 0.87758255, 0.47942555, -0.47942555, -0.4207355, 0.77015114, 16.933674, 19.295818, 30.99688)
 
-[node name="CursorLayer" type="CanvasLayer" parent="."]
+[node name="CursorLayer" type="CanvasLayer" parent="." unique_id=2101360869]
 layer = 100
 script = ExtResource("3_cursor")
+cursor_color_normal = Color(0.8784314, 1, 1, 0.68235296)
+cursor_color_enemy = Color(1, 0.27450982, 0, 0.91764706)
 
-[node name="CursorSprite" type="Sprite2D" parent="CursorLayer"]
-texture = SubResource("PlaceholderTexture2D_1")
+[node name="CursorSprite" type="Sprite2D" parent="CursorLayer" unique_id=2084466331]
+modulate = Color(0.3764706, 1, 1, 0.49803922)
+texture = SubResource("GradientTexture2D_uaptj")
 
-[node name="Enemy1" parent="." instance=ExtResource("4_enemy")]
+[node name="Enemy1" parent="." unique_id=1704982411 instance=ExtResource("4_enemy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 20)
 
-[node name="Enemy2" parent="." instance=ExtResource("4_enemy")]
+[node name="Enemy2" parent="." unique_id=495449601 instance=ExtResource("4_enemy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, 15)
 
-[node name="Enemy3" parent="." instance=ExtResource("4_enemy")]
+[node name="Enemy3" parent="." unique_id=1796703053 instance=ExtResource("4_enemy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 25)

@@ -11,6 +11,18 @@ orientation = 1
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fvgax"]
 albedo_color = Color(0.800883, 0.46875292, 0.25697276, 1)
 
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_ctr7f"]
+points = PackedVector3Array(-5, 0, -5, -5, 0, 5, 5, 0, -5, 5, 0, 5)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_2orrn"]
+points = PackedVector3Array(-5, 0, -5, -5, 0, 5, 5, 0, -5, 5, 0, 5)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_m4ir6"]
+points = PackedVector3Array(-5, 0, -5, -5, 0, 5, 5, 0, -5, 5, 0, 5)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_ju5dd"]
+points = PackedVector3Array(-5, 0, -5, -5, 0, 5, 5, 0, -5, 5, 0, 5)
+
 [sub_resource type="Curve3D" id="Curve3D_q24km"]
 closed = true
 _data = {
@@ -25,20 +37,40 @@ point_count = 11
 mesh = SubResource("QuadMesh_q24km")
 surface_material_override/0 = SubResource("StandardMaterial3D_fvgax")
 
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D" unique_id=153978873]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D" unique_id=1503049481]
+shape = SubResource("ConvexPolygonShape3D_ctr7f")
+
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=23748179]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11)
 mesh = SubResource("QuadMesh_q24km")
 surface_material_override/0 = SubResource("StandardMaterial3D_fvgax")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D2" unique_id=1751367757]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D2/StaticBody3D" unique_id=421790080]
+shape = SubResource("ConvexPolygonShape3D_2orrn")
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="." unique_id=1314727076]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, -11)
 mesh = SubResource("QuadMesh_q24km")
 surface_material_override/0 = SubResource("StandardMaterial3D_fvgax")
 
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D3" unique_id=813500537]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D3/StaticBody3D" unique_id=1284530823]
+shape = SubResource("ConvexPolygonShape3D_m4ir6")
+
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="." unique_id=293813828]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 0)
 mesh = SubResource("QuadMesh_q24km")
 surface_material_override/0 = SubResource("StandardMaterial3D_fvgax")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D4" unique_id=1761189469]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D4/StaticBody3D" unique_id=730578997]
+shape = SubResource("ConvexPolygonShape3D_ju5dd")
 
 [node name="LevelPath" type="Node3D" parent="." unique_id=1138437555 node_paths=PackedStringArray("remote_transform")]
 script = ExtResource("1_fvgax")
