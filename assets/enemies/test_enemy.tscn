@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dnffch5xjp5by"]
+
+[ext_resource type="Script" uid="uid://cc34hukncrwip" path="res://assets/test_enemy.gd" id="1_2yjhm"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_qsxe3"]
+size = Vector3(1, 1, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6o7wi"]
+albedo_color = Color(0.840419, 0.28326923, 0.5273993, 1)
+
+[node name="Enemy" type="Node3D" unique_id=1300767209]
+script = ExtResource("1_2yjhm")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=873037277]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 1, 4.371139e-08)
+mesh = SubResource("PrismMesh_qsxe3")
+surface_material_override/0 = SubResource("StandardMaterial3D_6o7wi")
