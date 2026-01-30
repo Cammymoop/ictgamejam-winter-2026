@@ -14,7 +14,6 @@ var hovered_enemy: Node3D = null
 var aim_cast_mask: int
 
 func _ready() -> void:
-    prints("cursor manager ready")
     # Hide the default OS cursor
     Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
     
@@ -27,7 +26,7 @@ func _ready() -> void:
     
     # Find player in scene
     await get_tree().process_frame
-    player = get_tree().get_first_node_in_group("player")
+    player = Util.get_player_ref()
     if player:
         weapon_manager = player.get_node_or_null("WeaponManager")
 

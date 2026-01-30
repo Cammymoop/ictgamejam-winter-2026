@@ -21,7 +21,7 @@ func set_direction(direction: Vector3) -> void:
 
 func _on_body_entered(body: Node) -> void:
 	print("projectile hit body: %s" % body.get_path())
-	if body.is_in_group("player"):
+	if Util.check_coll_layer(body, "Player"):
 		return  # Don't hit the player who fired
 
 	if body.has_method("take_damage"):

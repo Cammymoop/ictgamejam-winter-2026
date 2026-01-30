@@ -8,15 +8,15 @@ transform = Transform3D(0.87758255, -0.22984886, 0.42073548, 0, 0.87758255, 0.47
 script = ExtResource("1_yyo2i")
 
 [node name="CameraTarget" type="Node3D" parent="." unique_id=2114645445]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 2.9802322e-08, 0, 1, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 2.9802322e-08, 0, 1, -2.3841858e-07, -4.7683716e-07, 10)
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=983139188]
-transform = Transform3D(0.87758255, -0.22984886, 0.42073548, 0, 0.87758255, 0.47942555, -0.47942555, -0.4207355, 0.77015114, 0, 0, 0)
+transform = Transform3D(0.87758255, -0.22984886, 0.42073548, 0, 0.87758255, 0.47942555, -0.47942555, -0.4207355, 0.77015114, 4.207355, 4.7942557, 7.7015114)
 top_level = true
 current = true
 
-[node name="Player" parent="." unique_id=1524924709 groups=["Player"] instance=ExtResource("1_aftc5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, -10)
+[node name="Player" parent="." unique_id=1524924709 instance=ExtResource("1_aftc5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 2.9802322e-08, 0, 1, 7.1525574e-07, -3.9999998, -2.3841858e-07)
 
 [node name="RemoteTransform3D" type="RemoteTransform3D" parent="Player" unique_id=2032687418]
 remote_path = NodePath("../../Node/DebugCam")
@@ -26,7 +26,7 @@ update_scale = false
 [node name="Node" type="Node" parent="." unique_id=1863999681]
 
 [node name="DebugCam" type="Node3D" parent="Node" unique_id=1197250047]
-transform = Transform3D(0.87758255, -0.22984886, 0.42073548, 0, 0.87758255, 0.47942555, -0.47942555, -0.4207355, 0.77015114, -3.287959, -8.304585, -6.0185695)
+transform = Transform3D(0.87758255, -0.22984886, 0.42073548, 0, 0.87758255, 0.47942555, -0.47942555, -0.4207355, 0.77015114, 0.9193959, -3.51033, 1.6829413)
 
 [node name="Camera3D" type="Camera3D" parent="Node/DebugCam" unique_id=673011308]
 transform = Transform3D(0.4886206, 0.70269907, -0.5171692, -0.41829708, 0.7088522, 0.5679403, 0.7656876, -0.061176986, 0.64029676, -15.952106, 14.4056635, 16.240967)

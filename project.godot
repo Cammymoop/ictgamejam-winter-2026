@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 Util="*uid://cvyn3aer18w50"
+EntityManager="*res://static/entity_manager.gd"
 
 [global_group]
 

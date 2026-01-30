@@ -6,7 +6,6 @@ var level_path: LevelPath
 @onready var debug_cam: Camera3D = find_child("DebugCam").get_node("Camera3D")
 
 func _ready() -> void:
-    camera.global_transform = camera_target.global_transform
     level_path = get_node("/root/Game/World/LevelPath") as LevelPath
     if not level_path:
         print_debug("Level path not found")
@@ -18,8 +17,12 @@ func _ready() -> void:
     
     level_path.start()
 
+    global_position = level_path.path_follow.global_position
+
+    camera.global_transform = camera_target.global_transform
+
 func _process(delta: float) -> void:
-    camera.global_transform = camera.global_transform.interpolate_with(camera_target.global_transform, delta * 1.4)
+    camera.global_transform = camera.global_transform.interpolate_with(camera_target.global_transform, delta * 3.4)
     
     if Input.is_action_just_pressed("debug_switch_cam"):
         if debug_cam.current:

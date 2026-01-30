@@ -1,26 +1,28 @@
-[gd_scene load_steps=4 format=3 uid="uid://player001"]
+[gd_scene format=3 uid="uid://player001"]
 
-[ext_resource type="Script" path="res://player/player.gd" id="1_player"]
+[ext_resource type="Script" uid="uid://sd52aqoi6ilr" path="res://player/player.gd" id="1_player"]
 [ext_resource type="PackedScene" uid="uid://weapon001" path="res://player/weapon_manager.tscn" id="2_weapon"]
+[ext_resource type="Script" uid="uid://byxnatvcndpcu" path="res://assets/general/entity_stats.gd" id="3_g1dw6"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_1"]
-radius = 0.5
-height = 1.0
 radial_segments = 8
 rings = 4
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_1"]
-radius = 0.5
 
-[node name="Player" type="CharacterBody3D" groups=["player"]]
-collision_layer = 1
+[node name="Player" type="CharacterBody3D" unique_id=1128950859 groups=["Player"]]
+collision_layer = 2
 collision_mask = 6
 script = ExtResource("1_player")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1878669128]
 mesh = SubResource("SphereMesh_1")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=460760399]
 shape = SubResource("SphereShape3D_1")
 
-[node name="WeaponManager" parent="." instance=ExtResource("2_weapon")]
+[node name="WeaponManager" parent="." unique_id=1367059967 instance=ExtResource("2_weapon")]
+
+[node name="EntityStats" type="Node" parent="." unique_id=316789595]
+script = ExtResource("3_g1dw6")
+metadata/_custom_type_script = "uid://byxnatvcndpcu"
