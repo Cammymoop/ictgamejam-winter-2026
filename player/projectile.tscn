@@ -1,15 +1,19 @@
 [gd_scene format=3 uid="uid://b11035icliyy"]
 
 [ext_resource type="Script" uid="uid://dcmmrywk0ofdd" path="res://player/projectile.gd" id="1_projectile"]
+[ext_resource type="Texture2D" uid="uid://bxjret3dr74om" path="res://assets/textures/fuzzy_particle.tres" id="2_islhu"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_1"]
-radius = 0.1
-height = 0.2
-radial_segments = 8
-rings = 4
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gjidt"]
+transparency = 1
+shading_mode = 0
+albedo_texture = ExtResource("2_islhu")
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="QuadMesh_q5b1o"]
+size = Vector2(1.6, 1.6)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_1"]
-radius = 0.1
+radius = 0.5691054
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_1"]
 emission_shape = 1
@@ -30,9 +34,11 @@ continuous_cd = true
 contact_monitor = true
 max_contacts_reported = 1
 script = ExtResource("1_projectile")
+speed = 38.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1042464119]
-mesh = SubResource("SphereMesh_1")
+material_override = SubResource("StandardMaterial3D_gjidt")
+mesh = SubResource("QuadMesh_q5b1o")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1101082834]
 shape = SubResource("SphereShape3D_1")
