@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cgtjcig0iej8n"]
 
-[ext_resource type="PackedScene" uid="uid://b4sp72w5sobps" path="res://assets/player.tscn" id="1_aftc5"]
+[ext_resource type="PackedScene" uid="uid://player001" path="res://player/player.tscn" id="1_aftc5"]
 [ext_resource type="Script" uid="uid://dsier5i5qqku" path="res://assets/main_camera.gd" id="1_yyo2i"]
 
 [node name="MainCamera" type="Node3D" unique_id=944365240]
