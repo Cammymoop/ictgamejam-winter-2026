@@ -12,6 +12,10 @@ var total_length: float = 0
 
 var is_moving: bool = false
 
+func _ready() -> void:
+    SplineMath.update_cardinal_spline_curve3d(path_3d.curve, 0.5)
+
+
 func start() -> void:
     var delay_timer = Timer.new()
     delay_timer.wait_time = delay_time
