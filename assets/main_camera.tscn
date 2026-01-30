@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://cgtjcig0iej8n"]
+
+[ext_resource type="PackedScene" uid="uid://b4sp72w5sobps" path="res://assets/player.tscn" id="1_aftc5"]
+
+[node name="MainCamera" type="Node3D" unique_id=944365240]
+transform = Transform3D(0.87758255, -0.22984886, 0.42073548, 0, 0.87758255, 0.47942555, -0.47942555, -0.4207355, 0.77015114, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=983139188]
+current = true
+
+[node name="Player" parent="." unique_id=1524924709 instance=ExtResource("1_aftc5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, -10)

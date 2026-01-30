@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bloabf7ru74em"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_q24km"]
+size = Vector2(10, 10)
+orientation = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fvgax"]
+albedo_color = Color(0.800883, 0.46875292, 0.25697276, 1)
+
+[node name="World" type="Node3D" unique_id=1982225913]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=282516482]
+mesh = SubResource("QuadMesh_q24km")
+surface_material_override/0 = SubResource("StandardMaterial3D_fvgax")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=23748179]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -11)
+mesh = SubResource("QuadMesh_q24km")
+surface_material_override/0 = SubResource("StandardMaterial3D_fvgax")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="." unique_id=1314727076]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, -11)
+mesh = SubResource("QuadMesh_q24km")
+surface_material_override/0 = SubResource("StandardMaterial3D_fvgax")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="." unique_id=293813828]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0, 0)
+mesh = SubResource("QuadMesh_q24km")
+surface_material_override/0 = SubResource("StandardMaterial3D_fvgax")
