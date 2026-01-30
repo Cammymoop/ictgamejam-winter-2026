@@ -3,22 +3,21 @@ class_name Projectile
 
 var damage: float = 10.0
 var lifetime: float = 5.0
-var direction: Vector3 = Vector3.FORWARD
 var speed: float = 30.0
 
 @onready var particles: GPUParticles3D = $GPUParticles3D
 @onready var mesh: MeshInstance3D = $MeshInstance3D
 
 func _ready() -> void:
-	# Set initial velocity
-	linear_velocity = direction * speed
-
 	# Start lifetime timer
 	var timer := get_tree().create_timer(lifetime)
 	timer.timeout.connect(_on_lifetime_expired)
 
 	# Connect body entered signal
 	body_entered.connect(_on_body_entered)
+
+func set_direction(direction: Vector3) -> void:
+	linear_velocity = direction * speed
 
 func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("player"):

@@ -54,9 +54,9 @@ func raycast_to_world(screen_pos: Vector2) -> Dictionary:
 			return result_data
 
 	# Get ray origin and direction from camera
-	var ray_origin := camera.project_ray_origin(screen_pos)
+	var ray_origin := camera.global_position
 	var ray_direction := camera.project_ray_normal(screen_pos)
-	var ray_end := ray_origin + ray_direction * 1000.0
+	var ray_end := ray_origin + ray_direction * 2000.0
 
 	# Perform raycast - collides with Ground (2) and Enemies (4), excludes Player (1)
 	var space_state := camera.get_world_3d().direct_space_state
@@ -66,20 +66,20 @@ func raycast_to_world(screen_pos: Vector2) -> Dictionary:
 	query.collision_mask = LAYER_GROUND | LAYER_ENEMIES  # Ground + Enemies
 
 	var result := space_state.intersect_ray(query)
+	if not result:
+		return {
+			"position": ray_end,
+			"enemy": null
+		}
 
 	if result:
 		result_data.position = result.position
 		# Check if we hit an enemy
-		var collider = result.collider
-		if collider and collider.is_in_group("enemies"):
-			result_data.enemy = collider
+		if result.collider and result.collider.is_in_group("enemies"):
+			result_data.enemy = result.collider
 		return result_data
-
-	# Fallback: intersect with Y=0 plane if no collision
-	if ray_direction.y != 0:
-		var t := -ray_origin.y / ray_direction.y
-		if t > 0:
-			result_data.position = ray_origin + ray_direction * t
+	else:
+		print_debug("empty raycast result")
 
 	return result_data
 

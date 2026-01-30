@@ -100,8 +100,12 @@ func fire() -> void:
 			var spread_rad := deg_to_rad(weapon.spread_angle)
 			var angle_offset := randf_range(-spread_rad, spread_rad)
 			direction = direction.rotated(Vector3.UP, angle_offset)
+		
+		print("target_position: %s" % target_position)
+		var dir_to_target = (target_position - spawn_pos).normalized()
+		dir_to_target = dir_to_target.rotated(global_basis.y, randf_range(-deg_to_rad(weapon.spread_angle), deg_to_rad(weapon.spread_angle)))
 
-		_spawn_projectile(spawn_pos, direction, weapon)
+		_spawn_projectile(spawn_pos, dir_to_target, weapon)
 
 	# Start cooldown
 	can_fire = false
@@ -113,7 +117,7 @@ func _spawn_projectile(pos: Vector3, direction: Vector3, weapon: WeaponData) -> 
 	get_tree().root.add_child(projectile)
 
 	projectile.global_position = pos
-	projectile.direction = direction
+	projectile.set_direction(direction)
 	projectile.speed = weapon.projectile_speed
 	projectile.damage = weapon.damage
 	projectile.set_color(weapon.projectile_color)

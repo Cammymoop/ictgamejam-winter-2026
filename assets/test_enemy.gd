@@ -51,10 +51,8 @@ func _process(delta: float) -> void:
         if player_distance < active_distance:
             is_active = true
             random_delay()
-            print_debug("Activating, player distance: %s" % player_distance)
     elif player_distance > active_distance + 5:
         is_active = false
-        print_debug("Deactivating, player distance: %s" % player_distance)
     
     if not is_shooting:
         return
