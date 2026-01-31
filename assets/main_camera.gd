@@ -31,6 +31,9 @@ func _process(delta: float) -> void:
         else:
             debug_cam.current = true
             camera.current = false
+    
+    if Input.is_action_just_pressed("reset"):
+        get_tree().reload_current_scene()
 
     set_deferred("global_basis", Basis.looking_at(level_path.look_here.global_position - global_position, Vector3.UP))
     

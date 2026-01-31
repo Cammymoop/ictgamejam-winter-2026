@@ -119,7 +119,7 @@ func fire() -> void:
 func _spawn_projectile(pos: Vector3, direction: Vector3, weapon: WeaponData) -> void:
     var projectile: = projectile_scene.instantiate()
     projectile.is_enemy_projectile = false
-    get_tree().root.add_child(projectile)
+    get_tree().current_scene.add_child(projectile)
 
     projectile.global_position = pos
     projectile.set_direction(direction)

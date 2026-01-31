@@ -25,4 +25,8 @@ weapon_colors = Array[Color]([Color(0.6489241, 0.6994695, 0.1877679, 1), Color(0
 
 [node name="EntityStats" type="Node" parent="." unique_id=316789595]
 script = ExtResource("3_g1dw6")
+health = 5.0
+max_health = 5.0
 metadata/_custom_type_script = "uid://byxnatvcndpcu"
+
+[connection signal="out_of_health" from="EntityStats" to="." method="_on_entity_stats_out_of_health"]

@@ -4,12 +4,15 @@ var projectile_scene: PackedScene = preload("res://assets/new_projectile.tscn")
 
 @export var shoot_from: Node3D = null
 
+@export var show_warning_time: float = 0.3
+
 @export var move_speed: float = 4
 @export var fire_rate: float = 0.8
 @export var delay_ratio: float = 0.2
 @export var delay_base_time: float = 1.4
 @export var active_distance: float = 57
 
+@export var show_before_shoot: Node3D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
 @export var bullet_speed: float = 90
@@ -31,6 +34,9 @@ var is_enabled: bool = true
 var is_active: bool = false
 
 func _ready() -> void:
+    if show_before_shoot:
+        show_before_shoot.visible = false
+    
     delay_timer = Timer.new()
     delay_timer.one_shot = true
     delay_timer.timeout.connect(delay_over)
@@ -47,7 +53,7 @@ func disable() -> void:
 func random_delay() -> void:
     is_shooting = false
     is_reloading = true
-    reload_timeleft = 0
+    reload_timeleft = show_warning_time
     delay_timer.wait_time = delay_base_time * randf_range(.8, 1.5)
     delay_timer.start()
 
@@ -55,6 +61,8 @@ func delay_over() -> void:
     is_shooting = true
 
 func _process(delta: float) -> void:
+    if show_before_shoot:
+        show_before_shoot.visible = false
     if not is_enabled:
         return
     
@@ -71,6 +79,8 @@ func _process(delta: float) -> void:
     
     if is_reloading:
         reload_timeleft -= delta
+        if show_before_shoot:
+            show_before_shoot.visible = reload_timeleft < show_warning_time
         if reload_timeleft <= 0:
             is_reloading = false
             return
@@ -100,6 +110,8 @@ func fire() -> void:
     fire_dir = fire_dir.rotated(fire_basis.z, randf_range(0, TAU))
     
     projectile.set_direction(fire_dir)
+    
+    projectile.damage = 1
 
     get_parent().add_child(projectile)
     projectile.global_position = start_pos

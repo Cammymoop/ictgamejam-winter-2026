@@ -74,6 +74,13 @@ _data = {
 &"flash": SubResource("Animation_6o7wi")
 }
 
+[sub_resource type="SphereMesh" id="SphereMesh_qsxe3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_diy82"]
+albedo_color = Color(0.21950102, 0.21950102, 0.21950102, 1)
+emission_enabled = true
+emission = Color(0.8507975, 0.6891485, 0.11126738, 1)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qsxe3"]
 albedo_color = Color(0.20511743, 0.20511743, 0.20511743, 1)
 
@@ -81,9 +88,10 @@ albedo_color = Color(0.20511743, 0.20511743, 0.20511743, 1)
 radius = 1.0
 height = 2.0
 
-[node name="Enemy" type="Node3D" unique_id=1300767209 node_paths=PackedStringArray("shoot_from")]
+[node name="Enemy" type="Node3D" unique_id=1300767209 node_paths=PackedStringArray("shoot_from", "show_before_shoot")]
 script = ExtResource("1_2yjhm")
 shoot_from = NodePath("MeshInstance3D2")
+show_before_shoot = NodePath("MeshInstance3D3")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=873037277]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 4, 4.371139e-08)
@@ -105,6 +113,11 @@ metadata/_custom_type_script = "uid://byxnatvcndpcu"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2014065352]
 libraries/ = SubResource("AnimationLibrary_diy82")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="." unique_id=704030985]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.764829, -0.7024983)
+mesh = SubResource("SphereMesh_qsxe3")
+surface_material_override/0 = SubResource("StandardMaterial3D_diy82")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=574068161]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -0.7024983)

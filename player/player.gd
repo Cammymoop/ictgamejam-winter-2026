@@ -33,3 +33,10 @@ func set_target_position(world_pos: Vector3) -> void:
 	var look_target := Vector3(world_pos.x, global_position.y, world_pos.z)
 	if look_target.distance_to(global_position) > 0.1:
 		look_at(look_target, Vector3.UP)
+
+
+func _on_entity_stats_out_of_health() -> void:
+	set_physics_process(false)
+	visible = false
+	await get_tree().create_timer(1).timeout
+	get_tree().reload_current_scene()
