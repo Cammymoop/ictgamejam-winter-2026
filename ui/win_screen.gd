@@ -11,4 +11,6 @@ func hide_screen() -> void:
 	hide()
 
 func _on_restart_pressed() -> void:
+	# Unpause before reloading
+	get_tree().paused = false
 	get_tree().reload_current_scene()

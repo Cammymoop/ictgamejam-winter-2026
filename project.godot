@@ -17,10 +17,10 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Util="*uid://cvyn3aer18w50"
+Util="*res://static/util.gd"
 EntityManager="*res://static/entity_manager.gd"
 Global="*res://static/global.gd"
-SfxManager="*uid://bhxpnr87aqkum"
+SFXManager="*res://static/sfx_manager.gd"
 
 [global_group]
 
