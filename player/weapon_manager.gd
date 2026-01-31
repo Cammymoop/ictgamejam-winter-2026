@@ -115,7 +115,6 @@ func fire() -> void:
             var angle_offset := randf_range(-spread_rad, spread_rad)
             direction = direction.rotated(Vector3.UP, angle_offset)
         
-        print("target_position: %s" % target_position)
         var base_dir: = (target_position - spawn_pos).normalized()
         var base_basis: = Basis.looking_at(base_dir, Vector3.UP)
         var dir_to_target: = base_dir.rotated(base_basis.y, randf_range(-deg_to_rad(weapon.spread_angle), deg_to_rad(weapon.spread_angle)))

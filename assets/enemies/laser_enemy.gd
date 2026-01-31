@@ -282,12 +282,6 @@ func _play_hit_flash() -> void:
 		return
 
 	var std_mat := material as StandardMaterial3D
-	var original_emission := std_mat.emission
-	var original_enabled := std_mat.emission_enabled
 
 	std_mat.emission_enabled = true
 	std_mat.emission = Color.WHITE
-
-	_hit_flash_tween = create_tween()
-	_hit_flash_tween.tween_property(std_mat, "emission", original_emission, 0.3)
-	_hit_flash_tween.tween_callback(func(): std_mat.emission_enabled = original_enabled)

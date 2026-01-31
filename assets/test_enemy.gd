@@ -261,7 +261,6 @@ func draw_debug_path(start_pos: Vector3, end_pos: Vector3) -> void:
     debug_path.queue_free()
 
 func _on_entity_stats_got_hit() -> void:
-    print("enemy got hit")
     if flash_animator.is_playing():
         flash_animator.stop()
     flash_animator.play("flash")
@@ -275,10 +274,6 @@ func _on_entity_stats_out_of_health() -> void:
     #queue_free()
 
 func damage_anim_material() -> void:
-    var entity_stats: = find_child("EntityStats") as EntityStats
-    if not entity_stats:
-        print_debug("Entity stats not found")
-        return
     var health_ratio = entity_stats.health / entity_stats.max_health
     var material: = find_child("MeshInstance3D").material_override as StandardMaterial3D
     if not material:
@@ -296,27 +291,31 @@ func show_death_anim() -> void:
     other_animator.play("death")
 
 func spawn_random_impact() -> void:
-    for i in 6:
+    for i in 5:
         _spawn_random_impact()
 
 func _spawn_random_impact() -> bool:
-    var ray_cast_origin: = shake_offset.global_position + (Vector3.UP * 3)
+    var ray_cast_destination: = shake_offset.global_position + (Vector3.UP * 5)
     var ray_cast_direction: = Vector3.FORWARD.rotated(Vector3.RIGHT, (TAU/4) * ease(randf(), 2))
     ray_cast_direction = ray_cast_direction.rotated(Vector3.UP, randf_range(0, TAU/4))
     
     var ray_cast_query: = PhysicsRayQueryParameters3D.new()
-    ray_cast_query.from = ray_cast_origin
-    ray_cast_query.to = ray_cast_origin + ray_cast_direction * 40
+    ray_cast_query.from = ray_cast_destination + ray_cast_direction * 4
+    ray_cast_query.to = ray_cast_destination
     ray_cast_query.collision_mask = Util.layer_to_bit(Util.get_phys_layer_by_name("Enemies"))
     ray_cast_query.hit_from_inside = true
     var ray_cast_result: = get_world_3d().direct_space_state.intersect_ray(ray_cast_query)
     
-    if not ray_cast_result:
+    if not ray_cast_result or not ray_cast_result.collider:
         #print_debug("No ray cast result")
+        return false
+    var the_collider: = ray_cast_result.collider as CollisionObject3D
+    if not EntityManager.get_entity_from_coll_object(the_collider) == self:
+        print("explosion impact position check hit something else: %s" % the_collider.get_path())
         return false
 
     var impact: = preload("res://assets/effects/impact_sphere.tscn").instantiate()
-    impact.scale = Vector3.ONE * randf_range(1.5, 2.6)
+    impact.scale = Vector3.ONE * randf_range(0.7, 1.9)
     get_parent().add_child(impact)
     
     impact.global_position = ray_cast_result.position

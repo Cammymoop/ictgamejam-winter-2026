@@ -59,7 +59,6 @@ func _on_body_entered(body: Node) -> void:
     var hit_something = false
     var entity = EntityManager.get_entity_from_coll_object(body)
     if entity:
-        #print("projectile hit entity: %s" % entity.get_path())
         hit_something = EntityManager.hit_entity(entity, damage)
     elif body.has_method("take_damage"):
         body.take_damage(damage)

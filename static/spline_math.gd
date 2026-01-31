@@ -138,14 +138,14 @@ static func make_scalar_cardinal_sampler_bundle_discontinuous(tension: float, an
 # returned sampler format:
 # [anchor_points: Array[float], segment_curves: Array[Curve]]
 static func function_like_2d_spline_to_1d_sampler(positions: Array[Vector2], handle_vectors: Array[Vector2], segment_resolution: int = 100, with_debug: bool = false) -> Array[Array]:
-    var num_anchors: int = positions.size()/2
+    var num_anchors: int = floori(positions.size()/2.)
     if num_anchors < 2:
         print_debug("function-like 2d spline to 1d sampler: need at least 2 anchors to create a sampler")
         return [[], [], [], []]
     for i in positions.size():
         if handle_vectors[i].x < 0.01 * absf(handle_vectors[i].y):
             print_debug("function-like 2d spline to 1d sampler: handle passed in is incompatible with a function-like sampler")
-            print_debug("point index: ", i/2, " (out)" if i%2 == 1 else " (in)", " handle: ", handle_vectors[i])
+            print_debug("point index: ", floori(i/2.0), " (out)" if i%2 == 1 else " (in)", " handle: ", handle_vectors[i])
             return [[], [], [], []]
     
     var anchor_points: Array[float] = []
@@ -171,7 +171,7 @@ static func function_like_2d_spline_to_1d_sampler(positions: Array[Vector2], han
         var points: Array[Vector2] = []
         var tangents_of_angles: Array[float] = []
 
-        var angle_0
+        #var angle_0
         var partial_0
         for i in segment_resolution:
             var seg_t: float = float(i) / float(segment_resolution - 1)
@@ -186,7 +186,7 @@ static func function_like_2d_spline_to_1d_sampler(positions: Array[Vector2], han
             #diff.x /= seg_out.x - seg_in.x
             if i == 0:
                 partial_0 = partial_bezier
-                angle_0 = angle
+                #angle_0 = angle
             #segment_curve.add_point(point, tan(angle), tan(angle))
             #segment_curve.add_point(point, rad_to_deg(diff.angle()), rad_to_deg(diff.angle()))
         segment_curve.min_value = min_val

@@ -41,6 +41,7 @@ func _process(delta: float) -> void:
     
     if Input.is_action_just_pressed("reset"):
         get_tree().reload_current_scene()
+        return
         
     if Input.is_action_just_pressed("menu"):
         if Input.mouse_mode in [Input.MOUSE_MODE_CAPTURED, Input.MOUSE_MODE_HIDDEN]:

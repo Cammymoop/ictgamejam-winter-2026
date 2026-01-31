@@ -4,7 +4,7 @@ extends Node
 ## All sounds are routed through the SFX audio bus.
 
 ## Audio bus name for sound effects
-const SFX_BUS_NAME: String = "SFX"
+const SFX_BUS_NAME: String = "Sfx"
 const POOL_SIZE: int = 8
 const POOL_3D_SIZE: int = 16
 

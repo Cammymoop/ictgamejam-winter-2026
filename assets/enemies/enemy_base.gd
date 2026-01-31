@@ -3,22 +3,6 @@ extends CharacterBody3D
 ## Base class for all enemies with common behavior including state machine,
 ## EntityStats integration, and player targeting.
 ##
-## === BALANCE DOCUMENTATION ===
-## Base class defaults - subclasses override with specific balanced values.
-## Player Context: 5 HP, speed 10.0, bounds 4x3 units
-##
-## DEFAULT VALUES (for reference, typically overridden):
-## - move_speed: 4.0 (base movement, subclasses set their own)
-## - attack_range: 10.0 (default engagement distance)
-## - detection_range: 50.0 (when enemy becomes aware of player)
-##
-## ENEMY HEALTH (set in EntityStats child nodes in .tscn files):
-## - Recommend 3-5 HP for standard enemies (1-2 weapon hits to kill)
-## - Higher HP enemies should have longer attack cooldowns as compensation
-##
-## WAVE TIMING TARGET: 15-30 seconds per checkpoint wave
-## SURVIVAL TARGET: Skilled player should survive first attempt with 50%+ HP
-## =========================
 
 signal enemy_activated
 signal enemy_died
@@ -32,17 +16,26 @@ enum State { IDLE, ACTIVE, ATTACKING, DYING }
 ## Optional checkpoint ID - if set, enemy starts IDLE and waits for checkpoint activation
 @export var checkpoint_id: String = ""
 
+@export_group("Animations")
+@export var flash_animator: AnimationPlayer
+@export var death_animator: AnimationPlayer
+
 ## Current state of the enemy
 var state: State = State.IDLE
 ## Cached reference to the player node
 var _player_ref: Node3D = null
-var _hit_flash_tween: Tween = null
 
 ## Reference to EntityStats child node
 @onready var entity_stats: Node = $EntityStats  # EntityStats
 
+@export var add_mesh_instances: Array[MeshInstance3D] = []
+var mesh_instances: Array[MeshInstance3D] = []
 
 func _ready() -> void:
+	for mesh_instance in add_mesh_instances:
+		if not mesh_instance:
+			continue
+		mesh_instances.append(mesh_instance)
 	_connect_entity_stats_signals()
 	# Enemies with a checkpoint_id remain IDLE until checkpoint triggers activation
 	# Enemies without checkpoint_id activate based on distance (existing behavior)
@@ -98,56 +91,26 @@ func _on_entity_stats_got_hit() -> void:
 func _on_entity_stats_out_of_health() -> void:
 	state = State.DYING
 	enemy_died.emit()
-	_play_death_effect()
+	_play_death_anim()
 
 
-## Play a visual hit flash effect.
-## Override in subclasses for custom flash behavior.
 func _play_hit_flash() -> void:
-	# Default implementation uses a tween on material if available
-	var mesh_instance := _find_mesh_instance()
-	if not mesh_instance:
+	if not flash_animator:
 		return
-
-	var material := mesh_instance.get_surface_override_material(0)
-	if not material or not material is StandardMaterial3D:
-		return
-
-	var std_mat := material as StandardMaterial3D
-	var original_emission := std_mat.emission
-	var original_enabled := std_mat.emission_enabled
-
-	std_mat.emission_enabled = true
-	std_mat.emission = Color.WHITE
-
-	_hit_flash_tween = create_tween()
-	_hit_flash_tween.tween_property(std_mat, "emission", original_emission, 0.3)
-	_hit_flash_tween.tween_callback(func(): std_mat.emission_enabled = original_enabled)
-
-
-## Find the first MeshInstance3D child for visual effects
-func _find_mesh_instance() -> MeshInstance3D:
-	for child in get_children():
-		if child is MeshInstance3D:
-			return child
-	return null
+	if flash_animator.is_playing():
+		flash_animator.stop()
+	flash_animator.play("flash")
 
 
 ## Play death animation or effect.
-## Override in subclasses for custom death behavior.
-func _play_death_effect() -> void:
-	# Kill any active hit flash tween to prevent material errors
-	if _hit_flash_tween and _hit_flash_tween.is_valid():
-		_hit_flash_tween.kill()
-	# Hide meshes immediately to prevent rendering issues
-	for child in get_children():
-		if child is MeshInstance3D:
-			child.visible = false
-	# Default implementation: queue_free after a short delay
-	var tween := create_tween()
-	tween.tween_interval(0.1)
-	tween.tween_callback(queue_free)
-
+func _play_death_anim() -> void:
+	if not death_animator:
+		return
+	if death_animator.is_playing():
+		death_animator.stop()
+	death_animator.play("death")
+	if flash_animator and flash_animator.has_animation("flash_death"):
+		flash_animator.play("flash_death")
 
 ## Returns true if this enemy is linked to a checkpoint
 func has_checkpoint() -> bool:
