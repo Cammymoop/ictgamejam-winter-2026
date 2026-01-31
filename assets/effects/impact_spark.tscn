@@ -1,8 +1,12 @@
 [gd_scene format=3 uid="uid://cvi3thltlctxy"]
 
 [ext_resource type="Texture2D" uid="uid://3cgsbhc2amw7" path="res://assets/textures/scratch.png" id="1_52q7i"]
+[ext_resource type="Script" uid="uid://cidkyjdcwwhmt" path="res://assets/effects/spark_random_variation.gd" id="2_rsrry"]
+[ext_resource type="Texture2D" uid="uid://dwdk3mtnwgy7l" path="res://assets/textures/scratch_2.png" id="3_hhug2"]
+[ext_resource type="Texture2D" uid="uid://c8qkvfapu4lgq" path="res://assets/textures/scratch_3.png" id="4_57d67"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wysl4"]
+resource_local_to_scene = true
 transparency = 2
 alpha_scissor_threshold = 0.372
 alpha_antialiasing_mode = 0
@@ -13,6 +17,7 @@ billboard_mode = 1
 billboard_keep_scale = true
 
 [sub_resource type="QuadMesh" id="QuadMesh_rsrry"]
+size = Vector2(4, 4)
 
 [sub_resource type="Animation" id="Animation_wysl4"]
 length = 0.001
@@ -38,7 +43,7 @@ tracks/0/path = NodePath("MeshInstance3D:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.40000004),
+"times": PackedFloat32Array(0, 0.13333333),
 "transitions": PackedFloat32Array(4.2870927, 1),
 "update": 0,
 "values": [Vector3(1, 1, 1), Vector3(0, 0, 0)]
@@ -50,7 +55,7 @@ tracks/1/path = NodePath(".")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0.43333334),
+"times": PackedFloat32Array(0.16666663),
 "transitions": PackedFloat32Array(1),
 "values": [{
 "args": [],
@@ -69,9 +74,11 @@ _data = {
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2120926932]
 material_override = SubResource("StandardMaterial3D_wysl4")
 mesh = SubResource("QuadMesh_rsrry")
+script = ExtResource("2_rsrry")
+texture_variants = Array[Texture]([ExtResource("1_52q7i"), ExtResource("3_hhug2"), ExtResource("4_57d67")])
 
 [node name="AutoDespawn" type="Timer" parent="." unique_id=1248328965]
-wait_time = 0.154
+wait_time = 0.05
 one_shot = true
 autostart = true
 

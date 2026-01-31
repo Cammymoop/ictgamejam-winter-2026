@@ -1,6 +1,7 @@
 extends RigidBody3D
 
-var impact_scn: PackedScene = preload("res://assets/effects/impact_sphere.tscn")
+var hit_impact_scn: PackedScene = preload("res://assets/effects/impact_sphere.tscn")
+var non_hit_impact_scn: PackedScene = preload("res://assets/effects/impact_spark.tscn")
 
 @export var damage: float = 10.0
 @export var speed: float = 30.0
@@ -66,15 +67,23 @@ func _on_body_entered(body: Node) -> void:
         hit_something = true
     
     if hit_something:
-        show_imact()
+        show_hit_imact()
+    else:
+        show_non_hit_imact()
 
     _destroy()
 
 func _on_lifetime_expired() -> void:
     _destroy()
 
-func show_imact() -> void:
-    var impact := impact_scn.instantiate()
+func show_hit_imact() -> void:
+    var impact := hit_impact_scn.instantiate()
+    get_parent().add_child(impact)
+    impact.global_position = global_position
+    impact.scale = Vector3.ONE * impace_scale
+
+func show_non_hit_imact() -> void:
+    var impact := non_hit_impact_scn.instantiate()
     get_parent().add_child(impact)
     impact.global_position = global_position
     impact.scale = Vector3.ONE * impace_scale

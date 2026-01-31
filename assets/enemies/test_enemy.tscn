@@ -44,7 +44,6 @@ detail_uv_layer = 1
 detail_albedo = SubResource("NoiseTexture2D_diy82")
 uv2_scale = Vector3(0.05, 0.2, 0.05)
 uv2_triplanar = true
-uv2_world_triplanar = true
 
 [sub_resource type="PrismMesh" id="PrismMesh_qsxe3"]
 size = Vector3(4, 4, 8)

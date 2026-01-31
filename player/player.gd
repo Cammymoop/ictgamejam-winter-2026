@@ -2,11 +2,29 @@ extends CharacterBody3D
 
 @export var speed: float = 10.0
 @export var bounds: Vector2 = Vector2(4, 3)  # X/Z movement limits
+@export var iframe_duration: float = 2.2
 
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
+@onready var flash_animator: AnimationPlayer = $FlashAnimator
+
+var move_velocity: Vector3 = Vector3.ZERO
+var iframe_timer: Timer = null
 
 var target_world_position: Vector3 = Vector3.ZERO
 var local_offset: Vector3 = Vector3.ZERO
+@onready var entity_stats: EntityStats = $EntityStats
+
+func _ready() -> void:
+	assert(entity_stats, "Player EntityStats not found")
+	entity_stats.out_of_health.connect(_on_entity_stats_out_of_health)
+	entity_stats.got_hit.connect(_on_entity_stats_got_hit)
+	
+	iframe_timer = Timer.new()
+	iframe_timer.wait_time = iframe_duration
+	iframe_timer.one_shot = true
+	iframe_timer.timeout.connect(iframe_timeout)
+	add_child(iframe_timer)
+
 
 func _physics_process(delta: float) -> void:
 	var camera := get_viewport().get_camera_3d()
@@ -53,3 +71,13 @@ func _on_entity_stats_out_of_health() -> void:
 	level_path.slow_to_stop()
 	await get_tree().create_timer(3).timeout
 	get_tree().reload_current_scene()
+
+func _on_entity_stats_got_hit() -> void:
+	if iframe_duration > 0:
+		entity_stats.can_be_hit = false
+		flash_animator.play("flash")
+		iframe_timer.start()
+
+func iframe_timeout() -> void:
+	entity_stats.can_be_hit = true
+	flash_animator.stop()
