@@ -3,7 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://bloabf7ru74em" path="res://assets/world_scene.tscn" id="1_qmwpp"]
 [ext_resource type="PackedScene" uid="uid://cgtjcig0iej8n" path="res://assets/main_camera.tscn" id="2_wpvyo"]
 [ext_resource type="Script" uid="uid://bu8s18bawijbh" path="res://player/cursor_manager.gd" id="3_cursor"]
-[ext_resource type="PackedScene" uid="uid://enemy001" path="res://player/enemy.tscn" id="4_enemy"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qmwpp"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -52,12 +51,3 @@ cursor_color_enemy = Color(1, 0.27450982, 0, 0.91764706)
 [node name="CursorSprite" type="Sprite2D" parent="CursorLayer" unique_id=2084466331]
 modulate = Color(0.3764706, 1, 1, 0.49803922)
 texture = SubResource("GradientTexture2D_uaptj")
-
-[node name="Enemy1" parent="." unique_id=1704982411 instance=ExtResource("4_enemy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 20)
-
-[node name="Enemy2" parent="." unique_id=495449601 instance=ExtResource("4_enemy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, 15)
-
-[node name="Enemy3" parent="." unique_id=1796703053 instance=ExtResource("4_enemy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 0, 25)

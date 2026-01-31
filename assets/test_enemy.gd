@@ -8,6 +8,8 @@ var projectile_scene: PackedScene = preload("res://assets/enemies/test_projectil
 @export var delay_base_time: float = 1.4
 @export var active_distance: float = 57
 
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+
 var player_ref: Node3D = null
 
 var delay_timer: Timer = null
@@ -75,3 +77,9 @@ func fire() -> void:
     var projectile = projectile_scene.instantiate()
     get_parent().add_child(projectile)
     projectile.look_at_from_position(global_position, player_ref.global_position, Vector3.UP)
+
+func _on_entity_stats_got_hit() -> void:
+    animation_player.play("flash")
+
+func _on_entity_stats_out_of_health() -> void:
+    queue_free()

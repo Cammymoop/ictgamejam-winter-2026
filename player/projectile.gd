@@ -7,7 +7,11 @@ var impact_scn: PackedScene = preload("res://assets/effects/impact_sphere.tscn")
 @export var speed: float = 30.0
 @export var lifetime: float = 5.0
 
+@export var anim_modulate: Color = Color.WHITE
+
 @onready var mesh: MeshInstance3D = $MeshInstance3D
+
+var bullet_color: Color = Color.WHITE
 
 func _ready() -> void:
     # Start lifetime timer
@@ -17,17 +21,30 @@ func _ready() -> void:
     # Connect body entered signal
     body_entered.connect(_on_body_entered)
 
+func _process(_delta: float) -> void:
+    update_mesh_color()
+
 func set_direction(direction: Vector3) -> void:
     linear_velocity = direction * speed
+    basis = Basis.looking_at(direction, Vector3.UP)
 
 func _on_body_entered(body: Node) -> void:
     print("projectile hit body: %s" % body.get_path())
     if Util.check_coll_layer(body, "Player"):
         return  # Don't hit the player who fired
 
-    if body.has_method("take_damage"):
+    var hit_something = false
+    var entity = EntityManager.get_entity_from_coll_object(body)
+    if entity:
+        print("projectile hit entity: %s" % entity.get_path())
+        EntityManager.hit_entity(entity, damage)
+        hit_something = true
+    elif body.has_method("take_damage"):
         body.take_damage(damage)
-    show_imact()
+        hit_something = true
+    
+    if hit_something:
+        show_imact()
 
     _destroy()
 
@@ -43,6 +60,9 @@ func _destroy() -> void:
     queue_free()
 
 func set_color(color: Color) -> void:
+    bullet_color = color
+
+func update_mesh_color() -> void:
     if mesh and mesh.mesh:
-        var mat := mesh.material_override
-        mat.albedo_color = color
+        var mat := mesh.material_override as StandardMaterial3D
+        mat.emission = bullet_color * anim_modulate

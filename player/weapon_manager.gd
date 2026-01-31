@@ -10,6 +10,10 @@ var current_weapon_index: int = 0
 var can_fire: bool = true
 var target_position: Vector3 = Vector3.ZERO
 
+@export var weapon_colors: Array[Color] = [
+	Color.WHITE, Color.BLUE, Color.RED
+]
+
 @onready var muzzle: Marker3D = $Muzzle
 
 func _ready() -> void:
@@ -24,7 +28,7 @@ func _setup_weapons() -> void:
 	pistol.projectile_speed = 40.0
 	pistol.damage = 15.0
 	pistol.projectile_count = 1
-	pistol.projectile_color = Color(1.0, 0.8, 0.2)  # Yellow
+	pistol.projectile_color = weapon_colors[0]
 	weapons.append(pistol)
 
 	# Weapon 2: Shotgun - spread
@@ -35,7 +39,7 @@ func _setup_weapons() -> void:
 	shotgun.damage = 8.0
 	shotgun.projectile_count = 5
 	shotgun.spread_angle = 15.0
-	shotgun.projectile_color = Color(1.0, 0.3, 0.1)  # Orange
+	shotgun.projectile_color = weapon_colors[1]
 	weapons.append(shotgun)
 
 	# Weapon 3: Rapid Fire - fast
@@ -46,7 +50,7 @@ func _setup_weapons() -> void:
 	rapid.damage = 5.0
 	rapid.projectile_count = 1
 	rapid.projectile_scale = 0.7
-	rapid.projectile_color = Color(0.2, 0.8, 1.0)  # Cyan
+	rapid.projectile_color = weapon_colors[2]
 	weapons.append(rapid)
 
 func _process(_delta: float) -> void:

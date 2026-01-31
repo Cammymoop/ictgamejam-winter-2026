@@ -2,6 +2,7 @@ extends Node
 class_name EntityStats
 
 signal health_changed(new_health: float)
+signal got_hit()
 signal out_of_health()
 
 var base_node: Node3D
@@ -13,10 +14,14 @@ var base_node: Node3D
 func _ready() -> void:
     base_node = get_parent() as Node3D
     assert(base_node != null, "EntityStats must be a child of a Node3D")
+    
+    await get_tree().process_frame
+    EntityManager.register_entity(base_node, self)
 
 func get_hit(amount: float) -> void:
     if not can_be_hit or health <= 0:
         return
+    got_hit.emit()
     health = clampf(health - amount, 0, max_health)
     health_changed.emit(health)
     if health <= 0:

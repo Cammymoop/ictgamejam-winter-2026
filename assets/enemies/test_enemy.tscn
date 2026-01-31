@@ -1,15 +1,78 @@
 [gd_scene format=3 uid="uid://dnffch5xjp5by"]
 
 [ext_resource type="Script" uid="uid://cc34hukncrwip" path="res://assets/test_enemy.gd" id="1_2yjhm"]
+[ext_resource type="Script" uid="uid://byxnatvcndpcu" path="res://assets/general/entity_stats.gd" id="2_qsxe3"]
 
 [sub_resource type="PrismMesh" id="PrismMesh_qsxe3"]
 size = Vector3(4, 4, 8)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6o7wi"]
+resource_local_to_scene = true
 albedo_color = Color(0.840419, 0.28326923, 0.5273993, 1)
+emission = Color(0.50928617, 0.50928617, 0.50928617, 1)
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_2yjhm"]
 data = PackedVector3Array(0, 2, 4, 2, -2, 4, -2, -2, 4, 0, 2, -4, -2, -2, -4, 2, -2, -4, 0, 2, 4, 0, 2, -4, 2, -2, 4, 0, 2, -4, 2, -2, -4, 2, -2, 4, 0, 2, -4, 0, 2, 4, -2, -2, -4, 0, 2, 4, -2, -2, 4, -2, -2, -4, -2, -2, 4, 2, -2, 4, -2, -2, -4, 2, -2, 4, 2, -2, -4, -2, -2, -4)
+
+[sub_resource type="Animation" id="Animation_qsxe3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:surface_material_override/0:emission_enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MeshInstance3D:surface_material_override/0:emission")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.50928617, 0.50928617, 0.50928617, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_6o7wi"]
+resource_name = "flash"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:surface_material_override/0:emission_enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MeshInstance3D:surface_material_override/0:emission")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0.50928617, 0.50928617, 0.50928617, 1), Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_diy82"]
+_data = {
+&"RESET": SubResource("Animation_qsxe3"),
+&"flash": SubResource("Animation_6o7wi")
+}
 
 [node name="Enemy" type="Node3D" unique_id=1300767209]
 script = ExtResource("1_2yjhm")
@@ -26,3 +89,14 @@ collision_mask = 5
 [node name="CollisionShape3D" type="CollisionShape3D" parent="AnimatableBody3D" unique_id=996633677]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 4, 4.371139e-08)
 shape = SubResource("ConcavePolygonShape3D_2yjhm")
+
+[node name="EntityStats" type="Node" parent="." unique_id=181974756]
+script = ExtResource("2_qsxe3")
+health = 20.0
+metadata/_custom_type_script = "uid://byxnatvcndpcu"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2014065352]
+libraries/ = SubResource("AnimationLibrary_diy82")
+
+[connection signal="got_hit" from="EntityStats" to="." method="_on_entity_stats_got_hit"]
+[connection signal="out_of_health" from="EntityStats" to="." method="_on_entity_stats_out_of_health"]
