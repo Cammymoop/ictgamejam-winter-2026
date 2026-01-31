@@ -39,7 +39,7 @@ func test_enemy_spawner_spawn_wave_creates_enemies() -> void:
 		return
 
 	# Load the test enemy scene
-	var enemy_scene = load("res://assets/enemies/test_enemy.tscn")
+	var enemy_scene = load("res://assets/enemies/laser_enemy.tscn")
 	assert_not_null(enemy_scene, "Test enemy scene should load")
 
 	# Configure spawner with 2 enemy scenes (fewer than spawn positions)
@@ -65,7 +65,7 @@ func test_enemy_spawner_spawn_count_matches_minimum() -> void:
 		fail_test("Could not load EnemySpawner")
 		return
 
-	var enemy_scene = load("res://assets/enemies/test_enemy.tscn")
+	var enemy_scene = load("res://assets/enemies/laser_enemy.tscn")
 
 	# Add more enemy scenes than spawn positions (3 positions, 5 scenes)
 	var scenes: Array[PackedScene] = [enemy_scene, enemy_scene, enemy_scene, enemy_scene, enemy_scene]
@@ -86,7 +86,7 @@ func test_enemy_spawner_emits_wave_spawned_signal() -> void:
 		fail_test("Could not load EnemySpawner")
 		return
 
-	var enemy_scene = load("res://assets/enemies/test_enemy.tscn")
+	var enemy_scene = load("res://assets/enemies/laser_enemy.tscn")
 	var scenes: Array[PackedScene] = [enemy_scene]
 	spawner.enemy_scenes = scenes
 	spawner.spawn_delay = 0.0
@@ -108,7 +108,7 @@ func test_enemy_spawner_emits_wave_cleared_when_all_enemies_die() -> void:
 		fail_test("Could not load EnemySpawner")
 		return
 
-	var enemy_scene = load("res://assets/enemies/test_enemy.tscn")
+	var enemy_scene = load("res://assets/enemies/laser_enemy.tscn")
 	var scenes: Array[PackedScene] = [enemy_scene]
 	spawner.enemy_scenes = scenes
 	spawner.spawn_delay = 0.0
@@ -118,13 +118,18 @@ func test_enemy_spawner_emits_wave_cleared_when_all_enemies_die() -> void:
 
 	watch_signals(spawner)
 
-	# Kill the enemy by finding its EntityStats and depleting health
+	# Kill the enemy by triggering death without visual effects
+	# (bypasses _play_death_effect which causes material errors in headless mode)
 	var enemy = enemies[0]
 	var stats = enemy.find_child("EntityStats", true, false)
 	assert_not_null(stats, "Enemy should have EntityStats")
 
-	# Deal enough damage to kill it
-	stats.get_hit(stats.health)
+	# Disconnect the enemy's death handler to prevent _play_death_effect
+	if stats.out_of_health.is_connected(enemy._on_entity_stats_out_of_health):
+		stats.out_of_health.disconnect(enemy._on_entity_stats_out_of_health)
+
+	# Emit out_of_health - spawner listens to this signal directly
+	stats.out_of_health.emit()
 	await get_tree().process_frame
 
 	assert_signal_emitted(spawner, "wave_cleared")
@@ -136,7 +141,7 @@ func test_enemy_spawner_positions_enemies_at_markers() -> void:
 		fail_test("Could not load EnemySpawner")
 		return
 
-	var enemy_scene = load("res://assets/enemies/test_enemy.tscn")
+	var enemy_scene = load("res://assets/enemies/laser_enemy.tscn")
 	var scenes: Array[PackedScene] = [enemy_scene, enemy_scene]
 	spawner.enemy_scenes = scenes
 	spawner.spawn_delay = 0.0
