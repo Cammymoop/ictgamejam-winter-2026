@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://clavjdk8n0pxq"]
+
+[ext_resource type="Script" path="res://player/game_stats.gd" id="1_stats"]
+
+[node name="GameStats" type="Control" unique_id=1353800329]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_stats")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=179002370]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BlankSpace1" type="Control" parent="HBoxContainer" unique_id=289848877]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=455953010]
+layout_mode = 2
+
+[node name="BlankSpace2" type="Control" parent="HBoxContainer/VBoxContainer" unique_id=1774308963]
+layout_mode = 2
+
+[node name="HealthDisplay" type="HSlider" parent="HBoxContainer/VBoxContainer" unique_id=124396728]
+custom_minimum_size = Vector2(200, 20)
+layout_mode = 2
+value = 100.0
