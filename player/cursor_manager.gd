@@ -8,7 +8,7 @@ extends CanvasLayer
 
 var world_position: Vector3 = Vector3.ZERO
 var player: CharacterBody3D = null
-var weapon_manager: Node3D = null  # WeaponManager
+var weapon_manager: WeaponManager = null
 var hovered_enemy: Node3D = null
 
 var aim_cast_mask: int
@@ -17,10 +17,10 @@ func _ready() -> void:
     # Hide the default OS cursor
     Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
     
-    var enemy_coll_layer: int = Util.get_phys_layer_by_name("Enemies")
+    var enemy_coll_layer: = Util.get_phys_layer_by_name("Enemies")
     assert(enemy_coll_layer != -1, "Enemy collision layer not found")
     
-    var ground_coll_layer: int = Util.get_phys_layer_by_name("Ground")
+    var ground_coll_layer: = Util.get_phys_layer_by_name("Ground")
     assert(ground_coll_layer != -1, "Ground collision layer not found")
     aim_cast_mask = Util.layer_to_bit(enemy_coll_layer) | Util.layer_to_bit(ground_coll_layer)
     

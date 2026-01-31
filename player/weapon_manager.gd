@@ -1,15 +1,13 @@
 extends Node3D
 class_name WeaponManager
 
-const WeaponDataClass = preload("res://player/weapon_data.gd")
-
-signal weapon_changed(weapon_index: int, weapon_data: Resource)
+signal weapon_changed(weapon_index: int, weapon_data: WeaponData)
 
 @export var projectile_scene: PackedScene
 
 @export var speed_factor: float = 1.0
 
-var weapons: Array = []  # Array[WeaponData]
+var weapons: Array[WeaponData] = []
 var current_weapon_index: int = 0
 var can_fire: bool = true
 var target_position: Vector3 = Vector3.ZERO
@@ -26,7 +24,7 @@ func _ready() -> void:
 
 func _setup_weapons() -> void:
     # Weapon 1: Pistol - balanced
-    var pistol := WeaponDataClass.new()
+    var pistol := WeaponData.new()
     pistol.name = "Pistol"
     pistol.fire_rate = 0.7
     pistol.projectile_speed = 40.0
@@ -38,7 +36,7 @@ func _setup_weapons() -> void:
     weapons.append(pistol)
 
     # Weapon 2: Shotgun - spread
-    var shotgun := WeaponDataClass.new()
+    var shotgun := WeaponData.new()
     shotgun.name = "Shotgun"
     shotgun.fire_rate = 1.2
     shotgun.projectile_speed = 25.0
@@ -51,7 +49,7 @@ func _setup_weapons() -> void:
     weapons.append(shotgun)
 
     # Weapon 3: Rapid Fire - fast
-    var rapid := WeaponDataClass.new()
+    var rapid := WeaponData.new()
     rapid.name = "Rapid Fire"
     rapid.fire_rate = 0.1
     rapid.projectile_speed = 70.0
@@ -71,14 +69,14 @@ func _process(_delta: float) -> void:
         look_target.y = global_position.y  # Keep weapon level
         if look_target.distance_to(global_position) > 0.1:
             look_at(look_target, Vector3.UP)
-
+    
     if Input.is_action_just_pressed("weapon_1"):
         switch_weapon(0)
     elif Input.is_action_just_pressed("weapon_2"):
         switch_weapon(1)
     elif Input.is_action_just_pressed("weapon_3"):
         switch_weapon(2)
-
+    
     if Input.is_action_pressed("shoot"):
         try_fire()
 
@@ -102,7 +100,7 @@ func try_fire() -> void:
     fire()
 
 func fire() -> void:
-    var weapon = weapons[current_weapon_index]
+    var weapon := weapons[current_weapon_index]
     var spawn_pos := muzzle.global_position if muzzle else global_position
     # Use weapon's forward direction (already rotated toward target via look_at)
     var base_direction := -global_transform.basis.z
@@ -130,7 +128,7 @@ func fire() -> void:
     var timer := get_tree().create_timer(weapon.fire_rate)
     timer.timeout.connect(func(): can_fire = true)
 
-func _spawn_projectile(pos: Vector3, direction: Vector3, weapon: Resource) -> void:  # weapon is WeaponData
+func _spawn_projectile(pos: Vector3, direction: Vector3, weapon: WeaponData) -> void:
     var projectile: = projectile_scene.instantiate()
     projectile.is_enemy_projectile = false
 
@@ -153,5 +151,5 @@ func _spawn_projectile(pos: Vector3, direction: Vector3, weapon: Resource) -> vo
 func set_target(world_pos: Vector3) -> void:
     target_position = world_pos
 
-func get_current_weapon() -> Resource:  # Returns WeaponData
+func get_current_weapon() -> WeaponData:
     return weapons[current_weapon_index]

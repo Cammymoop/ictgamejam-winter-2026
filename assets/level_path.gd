@@ -18,7 +18,7 @@ var is_moving: bool = false
 var is_stopping: bool = false
 
 func _ready() -> void:
-    pass
+    SplineMath.update_cardinal_spline_curve3d(path_3d.curve, 0.5)
 
 
 func start() -> void:
