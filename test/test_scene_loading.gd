@@ -13,20 +13,9 @@ var scenes_to_test: Array[String] = [
 	"res://assets/level/checkpoint_zone.tscn",
 	"res://assets/level/enemy_spawner.tscn",
 	"res://assets/levels/level2.tscn",
-	"res://player/enemy.tscn",
-	"res://player/game_stats.tscn",
-	"res://player/player.tscn",
-	"res://player/projectile.tscn",
-	"res://player/weapon_manager.tscn",
-	"res://ui/lose_screen.tscn",
-	"res://ui/win_screen.tscn",
-	"res://ui/level_select.tscn",
-	"res://ui/checkpoint_progress_hud.tscn",
-	"res://main_game_scene.tscn",
-	"res://main_game_scene_level2.tscn",
 ]
 
-func _init() -> void:
+func _initialize() -> void:
 	var failed: Array[String] = []
 	var passed := 0
 

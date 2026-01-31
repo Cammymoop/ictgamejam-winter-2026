@@ -25,6 +25,8 @@ signal enemy_died
 
 enum State { IDLE, ACTIVE, ATTACKING, DYING }
 
+var _hit_flash_tween: Tween = null
+
 ## Common enemy properties
 @export var move_speed: float = 4.0
 @export var attack_range: float = 10.0
@@ -121,9 +123,9 @@ func _play_hit_flash() -> void:
 	std_mat.emission_enabled = true
 	std_mat.emission = Color.WHITE
 
-	var tween := create_tween()
-	tween.tween_property(std_mat, "emission", original_emission, 0.3)
-	tween.tween_callback(func(): std_mat.emission_enabled = original_enabled)
+	_hit_flash_tween = create_tween()
+	_hit_flash_tween.tween_property(std_mat, "emission", original_emission, 0.3)
+	_hit_flash_tween.tween_callback(func(): std_mat.emission_enabled = original_enabled)
 
 
 ## Find the first MeshInstance3D child for visual effects
@@ -137,6 +139,13 @@ func _find_mesh_instance() -> MeshInstance3D:
 ## Play death animation or effect.
 ## Override in subclasses for custom death behavior.
 func _play_death_effect() -> void:
+	# Kill any active hit flash tween to prevent material errors
+	if _hit_flash_tween and _hit_flash_tween.is_valid():
+		_hit_flash_tween.kill()
+	# Hide meshes immediately to prevent rendering issues
+	for child in get_children():
+		if child is MeshInstance3D:
+			child.visible = false
 	# Default implementation: queue_free after a short delay
 	var tween := create_tween()
 	tween.tween_interval(0.1)

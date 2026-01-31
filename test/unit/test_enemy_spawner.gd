@@ -56,7 +56,7 @@ func test_enemy_spawner_spawn_wave_creates_enemies() -> void:
 
 	# Clean up spawned enemies
 	for enemy in enemies:
-		enemy.queue_free()
+		destroy_enemy_safely(enemy)
 
 
 func test_enemy_spawner_spawn_count_matches_minimum() -> void:
@@ -77,7 +77,7 @@ func test_enemy_spawner_spawn_count_matches_minimum() -> void:
 	assert_eq(enemies.size(), 3, "Should spawn only 3 enemies (limited by spawn positions)")
 
 	for enemy in enemies:
-		enemy.queue_free()
+		destroy_enemy_safely(enemy)
 
 
 func test_enemy_spawner_emits_wave_spawned_signal() -> void:
@@ -99,7 +99,7 @@ func test_enemy_spawner_emits_wave_spawned_signal() -> void:
 	assert_signal_emitted(spawner, "wave_spawned")
 
 	for enemy in enemies:
-		enemy.queue_free()
+		destroy_enemy_safely(enemy)
 
 
 func test_enemy_spawner_emits_wave_cleared_when_all_enemies_die() -> void:
@@ -131,6 +131,7 @@ func test_enemy_spawner_emits_wave_cleared_when_all_enemies_die() -> void:
 	# Emit out_of_health - spawner listens to this signal directly
 	stats.out_of_health.emit()
 	await get_tree().process_frame
+	_handle_headless_errors()
 
 	assert_signal_emitted(spawner, "wave_cleared")
 
@@ -157,7 +158,7 @@ func test_enemy_spawner_positions_enemies_at_markers() -> void:
 			"Enemy %d should be at spawn position %d" % [i, i])
 
 	for enemy in enemies:
-		enemy.queue_free()
+		destroy_enemy_safely(enemy)
 
 
 func test_enemy_spawner_has_signals() -> void:

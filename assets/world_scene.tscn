@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://b18ag448mcsam" path="res://assets/level_path.gd" id="1_fvgax"]
 [ext_resource type="PackedScene" uid="uid://5euivoegl7lv" path="res://assets/bg_meshes.tscn" id="2_oo5y3"]
-[ext_resource type="PackedScene" uid="uid://dnffch5xjp5by" path="res://assets/enemies/test_enemy.tscn" id="3_ctr7f"]
+[ext_resource type="PackedScene" path="res://assets/enemies/laser_enemy.tscn" id="3_ctr7f"]
 
 [sub_resource type="Animation" id="Animation_ctr7f"]
 length = 0.001

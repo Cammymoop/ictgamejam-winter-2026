@@ -6,54 +6,36 @@
 [ext_resource type="PackedScene" uid="uid://c4h2y3mspawn" path="res://assets/level/enemy_spawner.tscn" id="4_enemy_spawner"]
 [ext_resource type="PackedScene" path="res://assets/enemies/laser_enemy.tscn" id="6_laser_enemy"]
 
-# Ground material - sandy brown color
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ground"]
 albedo_color = Color(0.72, 0.52, 0.35, 1)
 
-# Checkpoint marker material - subtle darker ring
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_checkpoint_marker"]
 albedo_color = Color(0.45, 0.35, 0.25, 1)
 
-# Narrow path material - slightly different shade
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_narrow"]
 albedo_color = Color(0.65, 0.48, 0.32, 1)
 
-# ============================================================================
-# Ground Collision Shapes
-# ============================================================================
-
-# Large combat area collision (20x20)
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_large"]
 points = PackedVector3Array(-10, 0, -10, -10, 0, 10, 10, 0, -10, 10, 0, 10)
 
-# Medium ground collision (10x10)
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_medium"]
 points = PackedVector3Array(-5, 0, -5, -5, 0, 5, 5, 0, -5, 5, 0, 5)
 
-# Narrow path collision (5x10)
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_narrow"]
 points = PackedVector3Array(-2.5, 0, -5, -2.5, 0, 5, 2.5, 0, -5, 2.5, 0, 5)
 
-# ============================================================================
-# Ground Meshes
-# ============================================================================
-
-# Large combat area mesh (20x20)
 [sub_resource type="QuadMesh" id="QuadMesh_large"]
 size = Vector2(20, 20)
 orientation = 1
 
-# Medium ground mesh (10x10)
 [sub_resource type="QuadMesh" id="QuadMesh_medium"]
 size = Vector2(10, 10)
 orientation = 1
 
-# Narrow path mesh (5x10)
 [sub_resource type="QuadMesh" id="QuadMesh_narrow"]
 size = Vector2(5, 10)
 orientation = 1
 
-# Checkpoint boundary ring mesh (torus-like using cylinder)
 [sub_resource type="CylinderMesh" id="CylinderMesh_checkpoint_ring"]
 top_radius = 12.0
 bottom_radius = 12.0
@@ -67,12 +49,6 @@ bottom_radius = 10.0
 height = 0.15
 radial_segments = 32
 rings = 1
-
-# ============================================================================
-# Camera Path - Total length approximately 160 units
-# Path goes: Start -> Checkpoint1 (combat) -> Narrow -> Checkpoint2 (combat)
-#         -> Narrow -> Checkpoint3 (combat) -> Narrow -> Checkpoint4 (final)
-# ============================================================================
 
 [sub_resource type="Curve3D" id="Curve3D_level2"]
 _data = {
@@ -95,15 +71,8 @@ _data = {
 }
 point_count = 13
 
-# ============================================================================
-# Scene Tree
-# ============================================================================
-
 [node name="Level2" type="Node3D"]
 
-# ----------------------------------------------------------------------------
-# Level Path - Camera follows this path
-# ----------------------------------------------------------------------------
 [node name="LevelPath" type="Node3D" parent="." node_paths=PackedStringArray("remote_transform")]
 script = ExtResource("1_levelpath")
 remote_transform = NodePath("Path3D/PathFollow3D/RemoteTransform3D")
@@ -119,14 +88,9 @@ tilt_enabled = false
 
 [node name="RemoteTransform3D" type="RemoteTransform3D" parent="LevelPath/Path3D/PathFollow3D"]
 
-# Default look_here - will be updated by checkpoints
 [node name="LookHere" type="Node3D" parent="LevelPath"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 
-# ----------------------------------------------------------------------------
-# Checkpoint 1 - First combat area (Tutorial wave)
-# Position: (0, 0, -35) - Wide open area for learning mechanics
-# ----------------------------------------------------------------------------
 [node name="Checkpoint1" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -35)
 
@@ -139,17 +103,14 @@ surface_material_override/0 = SubResource("StandardMaterial3D_ground")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Checkpoint1/Ground/StaticBody3D"]
 shape = SubResource("ConvexPolygonShape3D_large")
 
-# Checkpoint visual boundary - outer ring
 [node name="BoundaryRing" type="MeshInstance3D" parent="Checkpoint1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
 mesh = SubResource("CylinderMesh_checkpoint_ring")
 surface_material_override/0 = SubResource("StandardMaterial3D_checkpoint_marker")
 
-# Look here marker for camera
 [node name="LookHere1" type="Marker3D" parent="Checkpoint1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
-# Spawn position markers for enemies
 [node name="SpawnPoint1" type="Marker3D" parent="Checkpoint1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -5)
 
@@ -159,7 +120,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, -5)
 [node name="SpawnPoint3" type="Marker3D" parent="Checkpoint1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
-# CheckpointZone1 - Tutorial wave: 3 LaserEnemies
 [node name="CheckpointZone1" parent="Checkpoint1" instance=ExtResource("3_checkpoint_zone")]
 checkpoint_id = "checkpoint_1"
 trigger_radius = 8.0
@@ -178,9 +138,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, -5)
 [node name="SpawnPos3" type="Marker3D" parent="Checkpoint1/EnemySpawner1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
-# ----------------------------------------------------------------------------
-# Narrow Section 1 - Between Checkpoint 1 and 2
-# ----------------------------------------------------------------------------
 [node name="NarrowSection1" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22, 0, -35)
 
@@ -203,10 +160,6 @@ surface_material_override/0 = SubResource("StandardMaterial3D_narrow")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NarrowSection1/Ground2/StaticBody3D"]
 shape = SubResource("ConvexPolygonShape3D_narrow")
 
-# ----------------------------------------------------------------------------
-# Checkpoint 2 - Mixed wave combat area
-# Position: (45, 0, -60) - Medium sized arena with some cover angles
-# ----------------------------------------------------------------------------
 [node name="Checkpoint2" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45, 0, -60)
 
@@ -219,7 +172,6 @@ surface_material_override/0 = SubResource("StandardMaterial3D_ground")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Checkpoint2/Ground/StaticBody3D"]
 shape = SubResource("ConvexPolygonShape3D_large")
 
-# Secondary ground tile for larger area
 [node name="Ground2" type="MeshInstance3D" parent="Checkpoint2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -15)
 mesh = SubResource("QuadMesh_medium")
@@ -250,7 +202,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -12)
 [node name="SpawnPoint4" type="Marker3D" parent="Checkpoint2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -12)
 
-# CheckpointZone2 - Mixed wave: 4 LaserEnemies
 [node name="CheckpointZone2" parent="Checkpoint2" instance=ExtResource("3_checkpoint_zone")]
 checkpoint_id = "checkpoint_2"
 trigger_radius = 8.0
@@ -272,9 +223,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -12)
 [node name="SpawnPos4" type="Marker3D" parent="Checkpoint2/EnemySpawner2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -12)
 
-# ----------------------------------------------------------------------------
-# Narrow Section 2 - Between Checkpoint 2 and 3
-# ----------------------------------------------------------------------------
 [node name="NarrowSection2" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, -85)
 
@@ -307,10 +255,6 @@ surface_material_override/0 = SubResource("StandardMaterial3D_narrow")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NarrowSection2/Ground3/StaticBody3D"]
 shape = SubResource("ConvexPolygonShape3D_narrow")
 
-# ----------------------------------------------------------------------------
-# Checkpoint 3 - Challenge wave combat area
-# Position: (-10, 0, -110) - Larger arena for intense combat
-# ----------------------------------------------------------------------------
 [node name="Checkpoint3" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 0, -110)
 
@@ -369,7 +313,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
 [node name="SpawnPoint6" type="Marker3D" parent="Checkpoint3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 0)
 
-# CheckpointZone3 - Challenge wave: 6 LaserEnemies
 [node name="CheckpointZone3" parent="Checkpoint3" instance=ExtResource("3_checkpoint_zone")]
 checkpoint_id = "checkpoint_3"
 trigger_radius = 10.0
@@ -397,9 +340,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
 [node name="SpawnPos6" type="Marker3D" parent="Checkpoint3/EnemySpawner3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 0)
 
-# ----------------------------------------------------------------------------
-# Narrow Section 3 - Between Checkpoint 3 and 4 (Final approach)
-# ----------------------------------------------------------------------------
 [node name="NarrowSection3" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, -130)
 
@@ -422,10 +362,6 @@ surface_material_override/0 = SubResource("StandardMaterial3D_narrow")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="NarrowSection3/Ground2/StaticBody3D"]
 shape = SubResource("ConvexPolygonShape3D_narrow")
 
-# ----------------------------------------------------------------------------
-# Checkpoint 4 - Final boss area
-# Position: (30, 0, -125) - Large arena for final confrontation
-# ----------------------------------------------------------------------------
 [node name="Checkpoint4" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 30, 0, -125)
 
@@ -490,12 +426,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, 0)
 [node name="SpawnPoint8" type="Marker3D" parent="Checkpoint4"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 0)
 
-# CheckpointZone4 - Final wave: Multiple enemies with staggered spawns (2 waves)
 [node name="CheckpointZone4" parent="Checkpoint4" instance=ExtResource("3_checkpoint_zone")]
 checkpoint_id = "checkpoint_4"
 trigger_radius = 10.0
 
-# First wave spawner - immediate spawn
 [node name="EnemySpawner4a" parent="Checkpoint4" instance=ExtResource("4_enemy_spawner")]
 enemy_scenes = [ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy")]
 spawn_delay = 0.3
@@ -513,7 +447,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, 8)
 [node name="SpawnPos4" type="Marker3D" parent="Checkpoint4/EnemySpawner4a"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 8)
 
-# Second wave spawner - staggered spawn (higher delay)
 [node name="EnemySpawner4b" parent="Checkpoint4" instance=ExtResource("4_enemy_spawner")]
 enemy_scenes = [ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy")]
 spawn_delay = 0.5
@@ -531,12 +464,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12, 0, 0)
 [node name="SpawnPos4" type="Marker3D" parent="Checkpoint4/EnemySpawner4b"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, 0)
 
-# ----------------------------------------------------------------------------
-# Connecting ground tiles between areas
-# ----------------------------------------------------------------------------
 [node name="ConnectingGround" type="Node3D" parent="."]
 
-# Start area to Checkpoint 1
 [node name="Start1" type="MeshInstance3D" parent="ConnectingGround"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10)
 mesh = SubResource("QuadMesh_medium")
@@ -557,7 +486,6 @@ surface_material_override/0 = SubResource("StandardMaterial3D_ground")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ConnectingGround/Start2/StaticBody3D"]
 shape = SubResource("ConvexPolygonShape3D_medium")
 
-# Start position ground
 [node name="Start0" type="MeshInstance3D" parent="ConnectingGround"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("QuadMesh_medium")
@@ -568,27 +496,14 @@ surface_material_override/0 = SubResource("StandardMaterial3D_ground")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="ConnectingGround/Start0/StaticBody3D"]
 shape = SubResource("ConvexPolygonShape3D_medium")
 
-# ----------------------------------------------------------------------------
-# Background meshes (distant scenery)
-# ----------------------------------------------------------------------------
 [node name="BG" parent="." instance=ExtResource("2_bgmesh")]
 
-# ----------------------------------------------------------------------------
-# Signal Connections - Checkpoint Zones to Enemy Spawners
-# ----------------------------------------------------------------------------
-# Checkpoint 1: Connect zone to spawner (tutorial wave)
 [connection signal="checkpoint_entered" from="Checkpoint1/CheckpointZone1" to="Checkpoint1/EnemySpawner1" method="spawn_wave"]
 [connection signal="wave_spawned" from="Checkpoint1/EnemySpawner1" to="Checkpoint1/CheckpointZone1" method="link_enemies"]
-
-# Checkpoint 2: Connect zone to spawner (mixed wave)
 [connection signal="checkpoint_entered" from="Checkpoint2/CheckpointZone2" to="Checkpoint2/EnemySpawner2" method="spawn_wave"]
 [connection signal="wave_spawned" from="Checkpoint2/EnemySpawner2" to="Checkpoint2/CheckpointZone2" method="link_enemies"]
-
-# Checkpoint 3: Connect zone to spawner (challenge wave)
 [connection signal="checkpoint_entered" from="Checkpoint3/CheckpointZone3" to="Checkpoint3/EnemySpawner3" method="spawn_wave"]
 [connection signal="wave_spawned" from="Checkpoint3/EnemySpawner3" to="Checkpoint3/CheckpointZone3" method="link_enemies"]
-
-# Checkpoint 4: Connect zone to both spawners (staggered waves)
 [connection signal="checkpoint_entered" from="Checkpoint4/CheckpointZone4" to="Checkpoint4/EnemySpawner4a" method="spawn_wave"]
 [connection signal="checkpoint_entered" from="Checkpoint4/CheckpointZone4" to="Checkpoint4/EnemySpawner4b" method="spawn_wave"]
 [connection signal="wave_spawned" from="Checkpoint4/EnemySpawner4a" to="Checkpoint4/CheckpointZone4" method="link_enemies"]

@@ -288,6 +288,6 @@ func _play_hit_flash() -> void:
 	std_mat.emission_enabled = true
 	std_mat.emission = Color.WHITE
 
-	var tween := create_tween()
-	tween.tween_property(std_mat, "emission", original_emission, 0.3)
-	tween.tween_callback(func(): std_mat.emission_enabled = original_enabled)
+	_hit_flash_tween = create_tween()
+	_hit_flash_tween.tween_property(std_mat, "emission", original_emission, 0.3)
+	_hit_flash_tween.tween_callback(func(): std_mat.emission_enabled = original_enabled)
