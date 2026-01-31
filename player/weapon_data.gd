@@ -16,7 +16,7 @@ class_name WeaponData
 @export var projectile_color: Color = Color.WHITE
 @export var projectile_color_variance: float = 0.4
 @export var projectile_lifetime: float = 5.0
-@export var impace_scale: float = 1.0
+@export var impact_scale: float = 1.0
 
 func make_projectiles() -> Array[Node3D]:
     var projectiles: Array[Node3D] = []
@@ -31,7 +31,7 @@ func make_projectiles() -> Array[Node3D]:
         projectile.damage = damage
         projectile.set_color(projectile_color.darkened(randf() * projectile_color_variance))
         projectile.lifetime = projectile_lifetime
-        projectile.impace_scale = impace_scale
+        projectile.impact_scale = impact_scale
         projectiles.append(projectile)
     
     return projectiles

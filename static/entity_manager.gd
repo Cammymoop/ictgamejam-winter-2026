@@ -16,12 +16,12 @@ func get_entity_from_coll_object(coll_object: CollisionObject3D) -> Node3D:
         return entity_coll_objects[coll_object]
     return null
 
-func hit_entity(entity: Node3D, amount: float) -> void:
+func hit_entity(entity: Node3D, amount: float) -> bool:
     if not entity in entities:
         print_debug("Entity not found in entity manager: %s" % entity.get_path())
         push_warning("Entity not found in entity manager: %s" % entity.get_path())
-        return
-    entity_stats[entity].get_hit(amount)
+        return false
+    return entity_stats[entity].get_hit(amount)
 
 func recursive_collect_nodes(at_node: Node, node_class: String) -> Array[Node]:
     var nodes: Array[Node] = []

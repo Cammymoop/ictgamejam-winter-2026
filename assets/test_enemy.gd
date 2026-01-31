@@ -7,19 +7,21 @@ var projectile_scene: PackedScene = preload("res://assets/new_projectile.tscn")
 @export var show_warning_time: float = 0.3
 
 @export var move_speed: float = 4
-@export var fire_rate: float = 0.8
+@export var fire_rate: float = 0.2
 @export var delay_ratio: float = 0.2
-@export var delay_base_time: float = 1.4
+@export var delay_base_time: float = 2.0
 @export var active_distance: float = 57
 
 @export var use_shield: bool = true
+@export var shield_on_when_inactive: bool = true
 
 @export var show_before_shoot: Node3D
 @onready var flash_animator: AnimationPlayer = find_child("FlashAnimator")
 @onready var active_animator: AnimationPlayer = find_child("ActiveAnimator")
 
 @onready var shield_mesh: MeshInstance3D = find_child("Shield")
-@onready var shield_collider: CollisionShape3D = shield_mesh.find_child("CollisionShape3D")
+@onready var shield_body: CollisionObject3D = shield_mesh.get_node("StaticBody3D")
+@onready var shield_collider: CollisionShape3D = shield_body.get_node("CollisionShape3D")
 
 @onready var shake_offset: Node3D = find_child("Shake")
 
@@ -28,7 +30,7 @@ var projectile_scene: PackedScene = preload("res://assets/new_projectile.tscn")
 @export var bullet_color: Color = Color.ORANGE
 
 @export var innacuracy: float = TAU / 32
-@export_exp_easing var innacuracy_curve_param: float
+@export_exp_easing var innacuracy_curve_param: float = 1
 
 @export var shake_strength: float = 0.2
 
@@ -71,6 +73,9 @@ func _ready() -> void:
     active_check_timer.timeout.connect(active_check_ready)
     add_child(active_check_timer)
     
+    if (not use_shield or not shield_on_when_inactive) and is_shield_active():
+        turn_off_shield()
+    
     entity_stats = $EntityStats
     if use_shield:
         entity_stats.check_can_be_hit = can_enemy_be_hit
@@ -89,6 +94,10 @@ func _ready() -> void:
         
         if not starting_active:
             active_animator.play("RESET_inactive")
+    
+    var los_checker: = find_child("LineOfSightChecker") as ShapeCast3D
+    if los_checker:
+        los_checker.add_exception(shield_body)
 
 func can_enemy_be_hit() -> bool:
     return not is_shield_active()
@@ -97,13 +106,20 @@ func is_shield_active() -> bool:
     return shield_mesh.visible
 
 func turn_on_shield() -> void:
-    shield_mesh.visible = true
+    var anim: = shield_mesh.get_node("AnimationPlayer") as AnimationPlayer
+    if anim:
+        anim.play("show")
+    else:
+        shield_mesh.visible = true
     shield_collider.set_deferred("disabled", false)
 
 func turn_off_shield() -> void:
-    shield_mesh.visible = false
+    var anim: = shield_mesh.get_node("AnimationPlayer") as AnimationPlayer
+    if anim:
+        anim.play("hide")
+    else:
+        shield_mesh.visible = false
     shield_collider.set_deferred("disabled", true)
-
 
 func disable() -> void:
     is_enabled = false
@@ -114,9 +130,13 @@ func random_delay() -> void:
     reload_timeleft = show_warning_time
     delay_timer.wait_time = delay_base_time * randf_range(.8, 1.5)
     delay_timer.start()
+    if use_shield and not is_shield_active():
+        turn_on_shield()
 
 func delay_over() -> void:
     is_shooting = true
+    if use_shield and is_shield_active():
+        turn_off_shield()
 
 func active_check_ready() -> void:
     active_check_waiting = false
@@ -162,6 +182,8 @@ func activate_done() -> void:
 func deactivate() -> void:
     is_active = false
     active_animator.play("deactivate")
+    if use_shield and shield_on_when_inactive:
+        turn_on_shield()
 
 func _process(delta: float) -> void:
     if show_before_shoot:
@@ -209,6 +231,7 @@ func fire() -> void:
     var player_pos_estimated = player_ref.global_position + (Global.player_velocity * (dist_to_player / bullet_speed))
 
     var projectile = projectile_scene.instantiate()
+    PhysicsServer3D.body_add_collision_exception(projectile.get_rid(), shield_body.get_rid())
     projectile.set_color(bullet_color)
 
     projectile.speed = bullet_speed
@@ -238,6 +261,7 @@ func draw_debug_path(start_pos: Vector3, end_pos: Vector3) -> void:
     debug_path.queue_free()
 
 func _on_entity_stats_got_hit() -> void:
+    print("enemy got hit")
     if flash_animator.is_playing():
         flash_animator.stop()
     flash_animator.play("flash")
@@ -292,7 +316,7 @@ func _spawn_random_impact() -> bool:
         return false
 
     var impact: = preload("res://assets/effects/impact_sphere.tscn").instantiate()
-    impact.scale = Vector3.ONE * randf_range(0.7, 1.3)
+    impact.scale = Vector3.ONE * randf_range(1.5, 2.6)
     get_parent().add_child(impact)
     
     impact.global_position = ray_cast_result.position

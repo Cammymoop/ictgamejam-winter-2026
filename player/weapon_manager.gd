@@ -59,7 +59,7 @@ func _setup_weapons() -> void:
     rapid.projectile_color = weapon_colors[2] * 1.3
     rapid.projectile_lifetime = 2.8
     rapid.spread_angle = 1.2
-    rapid.impace_scale = 0.6
+    rapid.impact_scale = 0.6
     weapons.append(rapid)
 
 func _process(_delta: float) -> void:
@@ -139,7 +139,7 @@ func _spawn_projectile(pos: Vector3, direction: Vector3, weapon: WeaponData) -> 
     projectile.damage = weapon.damage
     projectile.set_color(weapon.projectile_color.darkened(randf() * 0.4))
     projectile.lifetime = weapon.projectile_lifetime
-    projectile.impace_scale = weapon.impace_scale
+    projectile.impace_scale = weapon.impact_scale
 
     get_tree().current_scene.add_child(projectile)
 

@@ -77,10 +77,10 @@ func _on_entity_stats_out_of_health() -> void:
 
 func _on_entity_stats_got_hit() -> void:
 	if iframe_duration > 0:
-		entity_stats.can_be_hit = false
+		entity_stats._can_be_hit = false
 		flash_animator.play("flash")
 		iframe_timer.start()
 
 func iframe_timeout() -> void:
-	entity_stats.can_be_hit = true
+	entity_stats._can_be_hit = true
 	flash_animator.stop()

@@ -20,9 +20,9 @@ func _ready() -> void:
     await get_tree().process_frame
     EntityManager.register_entity(base_node, self)
 
-func get_hit(amount: float) -> void:
+func get_hit(amount: float) -> bool:
     if not can_i_be_hit() or health <= 0:
-        return
+        return false
     var prev_health = health
     got_hit.emit()
     got_hit_damage.emit(amount, amount / max_health, prev_health, prev_health / max_health)
@@ -30,6 +30,7 @@ func get_hit(amount: float) -> void:
     health_changed.emit(health)
     if health <= 0:
         out_of_health.emit()
+    return true
 
 func get_health_ratio() -> float:
     return clampf(health / max_health, 0, 1)

@@ -64,6 +64,96 @@ radial_segments = 5
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_qsxe3"]
 points = PackedVector3Array(-1.9972185, -5, 0.648625, -1.2343811, -5, -1.6989356, -0.00039076805, -5, 2.1, -1.9972185, 5, 0.648625, 1.2339903, -5, -1.6989356, -1.2343811, 5, -1.6989356, 1.996828, -5, 0.648625, -0.00039076805, 5, 2.1, 1.2339903, 5, -1.6989356, 1.996828, 5, 0.648625)
 
+[sub_resource type="Animation" id="Animation_fajaq"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_xlf1e"]
+resource_name = "hide"
+length = 0.16666667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.16666667),
+"transitions": PackedFloat32Array(1.62, 1.624505),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(1, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.16666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_35451"]
+resource_name = "show"
+length = 0.16666667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.16666667),
+"transitions": PackedFloat32Array(1.624505, 1),
+"update": 0,
+"values": [Vector3(1, 0, 1), Vector3(1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xlf1e"]
+_data = {
+&"RESET": SubResource("Animation_fajaq"),
+&"hide": SubResource("Animation_xlf1e"),
+&"show": SubResource("Animation_35451")
+}
+
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_diy82"]
 points = PackedVector3Array(-1.902113, -4, 0.6177381, -1.175601, -4, -1.618034, -0.0003721714, -4, 1.9999996, -1.902113, 4, 0.6177381, 1.1752291, -4, -1.618034, -1.175601, 4, -1.618034, 1.9017408, -4, 0.6177381, -0.0003721714, 4, 1.9999996, 1.1752291, 4, -1.618034, 1.9017408, 4, 0.6177381)
 
@@ -75,14 +165,86 @@ radius = 1.0
 
 [sub_resource type="Animation" id="Animation_qsxe3"]
 length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Offset/Shake/MeshInstance3D:material_override:emission_enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Offset/Shake/MeshInstance3D:material_override:emission")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.50928617, 0.50928617, 0.50928617, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_6o7wi"]
 resource_name = "flash"
 length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Offset/Shake/MeshInstance3D:material_override:emission_enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Offset/Shake/MeshInstance3D:material_override:emission")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1.5691684, 1),
+"update": 0,
+"values": [Color(0.6187021, 0.46343356, 0.43606433, 1), Color(0, 0, 0, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_diy82"]
 resource_name = "flash_death"
 length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Offset/Shake/MeshInstance3D:material_override:emission_enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Offset/Shake/MeshInstance3D:material_override:emission")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1.5691684),
+"update": 0,
+"values": [Color(0.38956866, 0.27445075, 0.25452647, 1)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_diy82"]
 _data = {
@@ -284,6 +446,9 @@ collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Offset/Shake/Shield/StaticBody3D" unique_id=1114802031]
 shape = SubResource("ConvexPolygonShape3D_qsxe3")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Offset/Shake/Shield" unique_id=1511042519]
+libraries/ = SubResource("AnimationLibrary_xlf1e")
 
 [node name="AnimatableBody3D" type="AnimatableBody3D" parent="Offset/Shake" unique_id=330800293]
 collision_layer = 4
