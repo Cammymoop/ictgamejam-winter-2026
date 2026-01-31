@@ -25,21 +25,18 @@ signal enemy_died
 
 enum State { IDLE, ACTIVE, ATTACKING, DYING }
 
-var _hit_flash_tween: Tween = null
-
 ## Common enemy properties
 @export var move_speed: float = 4.0
 @export var attack_range: float = 10.0
 @export var detection_range: float = 50.0
-
 ## Optional checkpoint ID - if set, enemy starts IDLE and waits for checkpoint activation
 @export var checkpoint_id: String = ""
 
 ## Current state of the enemy
 var state: State = State.IDLE
-
 ## Cached reference to the player node
 var _player_ref: Node3D = null
+var _hit_flash_tween: Tween = null
 
 ## Reference to EntityStats child node
 @onready var entity_stats: Node = $EntityStats  # EntityStats

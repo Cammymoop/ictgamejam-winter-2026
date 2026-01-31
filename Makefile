@@ -2,19 +2,15 @@
 
 # Godot executable path (adjust for your system)
 GODOT ?= godot
-
+all:verify
 # Verification target for swiss-cheese workflow
 verify: lint test-scenes test
 	@echo "All verification checks passed"
 
-# Run GDScript linter (requires gdlint: pip install gdtoolkit)
+# Run GDScript linter (uses uvx to run gdtoolkit)
 lint:
 	@echo "Running GDScript linter..."
-	@if command -v gdlint >/dev/null 2>&1; then \
-		gdlint . --exclude=.worktrees --exclude=.godot || true; \
-	else \
-		echo "Warning: gdlint not installed (pip install gdtoolkit)"; \
-	fi
+	@find . -name "*.gd" -not -path "./.worktrees/*" -not -path "./.godot/*" | xargs uvx --from gdtoolkit gdlint || true
 
 # Run Godot unit tests via GUT or fallback runner
 test:
