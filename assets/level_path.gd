@@ -5,6 +5,8 @@ class_name LevelPath
 @onready var path_3d: Path3D = $Path3D
 @onready var path_follow: PathFollow3D = path_3d.get_node("PathFollow3D")
 
+@onready var look_here: Node3D = $LookHere
+
 @export var base_speed: float = 4
 
 var delay_time: float = 1.4
@@ -36,6 +38,13 @@ func _process(delta: float) -> void:
     if not is_moving:
         return
 
+    var old_pos: Vector3 = path_follow.global_position
+
     path_follow.progress += delta * base_speed
     if path_follow.progress_ratio >= 1:
         is_moving = false
+    
+    if old_pos.distance_squared_to(path_follow.global_position) > 0.01:
+        Global.player_velocity = (path_follow.global_position - old_pos) / delta
+    else:
+        Global.player_velocity = Vector3.ZERO

@@ -1,5 +1,4 @@
 extends RigidBody3D
-class_name Projectile
 
 var impact_scn: PackedScene = preload("res://assets/effects/impact_sphere.tscn")
 
@@ -10,6 +9,18 @@ var impact_scn: PackedScene = preload("res://assets/effects/impact_sphere.tscn")
 @export var anim_modulate: Color = Color.WHITE
 
 @onready var mesh: MeshInstance3D = $MeshInstance3D
+
+var is_enemy_projectile: bool = false:
+    set(value):
+        is_enemy_projectile = value
+        var enemy_coll_layer: = Util.get_phys_layer_by_name("Enemies")
+        var player_coll_layer: = Util.get_phys_layer_by_name("Player")
+        if is_enemy_projectile:
+            set_collision_mask_value(enemy_coll_layer, false)
+            set_collision_mask_value(player_coll_layer, true)
+        else:
+            set_collision_mask_value(enemy_coll_layer, true)
+            set_collision_mask_value(player_coll_layer, false)
 
 var bullet_color: Color = Color.WHITE
 
@@ -30,8 +41,8 @@ func set_direction(direction: Vector3) -> void:
 
 func _on_body_entered(body: Node) -> void:
     print("projectile hit body: %s" % body.get_path())
-    if Util.check_coll_layer(body, "Player"):
-        return  # Don't hit the player who fired
+    #if Util.check_coll_layer(body, "Player"):
+        #return  # Don't hit the player who fired
 
     var hit_something = false
     var entity = EntityManager.get_entity_from_coll_object(body)

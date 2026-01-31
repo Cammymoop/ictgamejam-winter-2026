@@ -26,7 +26,7 @@ points = PackedVector3Array(-5, 0, -5, -5, 0, 5, 5, 0, -5, 5, 0, 5)
 [sub_resource type="Curve3D" id="Curve3D_q24km"]
 closed = true
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 13.283602, 14.70947, 22.419273, 0, 0, 0, 0, 0, 0, 8.6514, 9.427879, 5.958379, 0, 0, 0, 0, 0, 0, 5.4445558, 12.702268, -6.9116855, 0, 0, 0, 0, 0, 0, 0.7231941, 14.024141, -33.838577, 0, 0, 0, 0, 0, 0, -7.748645, 10.725056, -43.64782, 0, 0, 0, 0, 0, 0, -12.775811, 12.691288, -69.22198, 0, 0, 0, 0, 0, 0, 10.548577, 15.116587, -85.86483, 0, 0, 0, 0, 0, 0, 27.584778, 17.328217, -72.26388, 0, 0, 0, 0, 0, 0, 40.6298, 9.214958, -17.791946, 0, 0, 0, 0, 0, 0, 28.724335, 15.866194, 22.3079),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 13.283602, 14.70947, 22.419273, 0, 0, 0, 0, 0, 0, 8.6514, 9.427879, 5.958379, 0, 0, 0, 0, 0, 0, 5.4445558, 12.702268, -6.9116855, 0, 0, 0, 0, 0, 0, -21.115385, 14.024141, -35.474876, 0, 0, 0, 0, 0, 0, -31.940733, 10.725056, -73.50351, 0, 0, 0, 0, 0, 0, -17.313755, 12.691296, -96.45974, 0, 0, 0, 0, 0, 0, 18.100159, 15.116587, -94.17051, 0, 0, 0, 0, 0, 0, 56.714386, 17.328217, -97.993576, 0, 0, 0, 0, 0, 0, 46.217857, 9.214958, -22.643433, 0, 0, 0, 0, 0, 0, 28.724335, 15.866194, 22.3079),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
 point_count = 10
@@ -78,14 +78,19 @@ remote_transform = NodePath("Path3D/PathFollow3D/RemoteTransform3D")
 base_speed = 7.0
 
 [node name="Path3D" type="Path3D" parent="LevelPath" unique_id=1165247603]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.160447, -1.9073486e-06, 48.825333)
+transform = Transform3D(0.9972047, 0, 0.074717656, 0, 1, 0, -0.074717656, 0, 0.9972047, -11.148768, -1.9073486e-06, 42.04453)
 curve = SubResource("Curve3D_q24km")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="LevelPath/Path3D" unique_id=1948369827]
-transform = Transform3D(0.9626106, -0.07993927, 0.25882062, 0, 0.95546025, 0.2951047, -0.27088484, -0.2840705, 0.91973954, 13.283602, 14.70947, 22.419273)
+transform = Transform3D(0.99999887, 0, 0, 0, 0.9999953, 0, 0, 0, 0.99999785, 13.283602, 14.70947, 22.419273)
+rotation_mode = 0
+use_model_front = true
 tilt_enabled = false
 
 [node name="RemoteTransform3D" type="RemoteTransform3D" parent="LevelPath/Path3D/PathFollow3D" unique_id=1483016685]
+
+[node name="LookHere" type="Node3D" parent="LevelPath" unique_id=416328864]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.523979, 0, -5.5038967)
 
 [node name="BG" parent="." unique_id=1845397069 instance=ExtResource("2_oo5y3")]
 
@@ -93,10 +98,11 @@ tilt_enabled = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
 
 [node name="Enemy3" parent="." unique_id=1850575307 instance=ExtResource("3_ctr7f")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 6.7317734, 0)
+show_debug_path = true
 
 [node name="Enemy4" parent="." unique_id=851438947 instance=ExtResource("3_ctr7f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, -9)
 
 [node name="Enemy2" parent="." unique_id=818737262 instance=ExtResource("3_ctr7f")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.715805, 0, -1.7281103)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.715805, 0, -20.781796)

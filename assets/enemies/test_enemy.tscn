@@ -74,8 +74,16 @@ _data = {
 &"flash": SubResource("Animation_6o7wi")
 }
 
-[node name="Enemy" type="Node3D" unique_id=1300767209]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qsxe3"]
+albedo_color = Color(0.20511743, 0.20511743, 0.20511743, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_6o7wi"]
+radius = 1.0
+height = 2.0
+
+[node name="Enemy" type="Node3D" unique_id=1300767209 node_paths=PackedStringArray("shoot_from")]
 script = ExtResource("1_2yjhm")
+shoot_from = NodePath("MeshInstance3D2")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=873037277]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 4, 4.371139e-08)
@@ -97,6 +105,11 @@ metadata/_custom_type_script = "uid://byxnatvcndpcu"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2014065352]
 libraries/ = SubResource("AnimationLibrary_diy82")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=574068161]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -0.7024983)
+material_override = SubResource("StandardMaterial3D_qsxe3")
+mesh = SubResource("SphereMesh_6o7wi")
 
 [connection signal="got_hit" from="EntityStats" to="." method="_on_entity_stats_got_hit"]
 [connection signal="out_of_health" from="EntityStats" to="." method="_on_entity_stats_out_of_health"]

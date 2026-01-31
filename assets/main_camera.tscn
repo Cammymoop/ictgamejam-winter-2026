@@ -3,12 +3,24 @@
 [ext_resource type="PackedScene" uid="uid://player001" path="res://player/player.tscn" id="1_aftc5"]
 [ext_resource type="Script" uid="uid://dsier5i5qqku" path="res://assets/main_camera.gd" id="1_yyo2i"]
 
+[sub_resource type="Curve3D" id="Curve3D_yyo2i"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
 [node name="MainCamera" type="Node3D" unique_id=944365240]
 transform = Transform3D(0.87758255, -0.22984886, 0.42073548, 0, 0.87758255, 0.47942555, -0.47942555, -0.4207355, 0.77015114, 0, 0, 0)
 script = ExtResource("1_yyo2i")
 
 [node name="CameraTarget" type="Node3D" parent="." unique_id=2114645445]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 2.9802322e-08, 0, 1, -2.3841858e-07, -4.7683716e-07, 10)
+
+[node name="Path3D" type="Path3D" parent="." unique_id=1556309333]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 2.9802322e-08, 0, 1, 0, 0, 0)
+curve = SubResource("Curve3D_yyo2i")
+debug_custom_color = Color(0.95437187, 0, 0.021673854, 1)
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=983139188]
 transform = Transform3D(0.87758255, -0.22984886, 0.42073548, 0, 0.87758255, 0.47942555, -0.47942555, -0.4207355, 0.77015114, 4.207355, 4.7942557, 7.7015114)

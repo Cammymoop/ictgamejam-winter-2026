@@ -39,7 +39,9 @@ environment = SubResource("Environment_s4q73")
 
 [node name="World" parent="." unique_id=1982225913 instance=ExtResource("1_qmwpp")]
 
-[node name="MainCamera" parent="." unique_id=944365240 instance=ExtResource("2_wpvyo")]
+[node name="CameraDrag" type="Node3D" parent="." unique_id=183972685]
+
+[node name="MainCamera" parent="CameraDrag" unique_id=944365240 instance=ExtResource("2_wpvyo")]
 transform = Transform3D(0.87758255, -0.22984886, 0.4207355, 0, 0.87758255, 0.47942555, -0.47942555, -0.4207355, 0.77015114, 16.933674, 19.295818, 30.99688)
 
 [node name="CursorLayer" type="CanvasLayer" parent="." unique_id=2101360869]

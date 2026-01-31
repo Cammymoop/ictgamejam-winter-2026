@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://weapon001"]
 
-[ext_resource type="Script" path="res://player/weapon_manager.gd" id="1_weapon"]
-[ext_resource type="PackedScene" uid="uid://projectile001" path="res://player/projectile.tscn" id="2_projectile"]
+[ext_resource type="Script" uid="uid://bvaopgyo5k7gc" path="res://player/weapon_manager.gd" id="1_weapon"]
+[ext_resource type="PackedScene" uid="uid://x3cdtgoi7224" path="res://assets/new_projectile.tscn" id="2_416j7"]
 
-[node name="WeaponManager" type="Node3D"]
+[node name="WeaponManager" type="Node3D" unique_id=1076480021]
 script = ExtResource("1_weapon")
-projectile_scene = ExtResource("2_projectile")
+projectile_scene = ExtResource("2_416j7")
 
-[node name="Muzzle" type="Marker3D" parent="."]
+[node name="Muzzle" type="Marker3D" parent="." unique_id=1354708861]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.6)

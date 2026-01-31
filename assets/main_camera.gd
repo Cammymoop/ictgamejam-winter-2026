@@ -13,7 +13,7 @@ func _ready() -> void:
         return
     
     var remote_transform = level_path.remote_transform
-    remote_transform.remote_path = remote_transform.get_path_to(self)
+    remote_transform.remote_path = remote_transform.get_path_to(get_parent())
     
     level_path.start()
 
@@ -31,5 +31,7 @@ func _process(delta: float) -> void:
         else:
             debug_cam.current = true
             camera.current = false
+
+    set_deferred("global_basis", Basis.looking_at(level_path.look_here.global_position - global_position, Vector3.UP))
     
 
