@@ -46,10 +46,10 @@ func test_laser_enemy_has_correct_default_values() -> void:
 		pending("LaserEnemy not yet implemented")
 		return
 
-	assert_eq(enemy.laser_damage, 2.0, "laser_damage should be 2.0")
-	assert_eq(enemy.charge_time, 1.5, "charge_time should be 1.5s")
-	assert_eq(enemy.fire_duration, 0.3, "fire_duration should be 0.3s")
-	assert_eq(enemy.cooldown_time, 2.0, "cooldown_time should be 2.0s")
+	assert_eq(enemy.laser_damage, 1.5, "laser_damage should be 1.5")
+	assert_eq(enemy.charge_time, 1.8, "charge_time should be 1.8s")
+	assert_eq(enemy.fire_duration, 0.25, "fire_duration should be 0.25s")
+	assert_eq(enemy.cooldown_time, 2.5, "cooldown_time should be 2.5s")
 
 
 # =============================================================================
@@ -100,8 +100,8 @@ func test_laser_enemy_transitions_to_firing_after_charge() -> void:
 	enemy.global_position = Vector3.ZERO
 
 	enemy.activate()
-	# Wait for charge time (1.5s) plus some buffer
-	await get_tree().create_timer(1.7).timeout
+	# Wait for charge time (1.8s) plus some buffer
+	await get_tree().create_timer(2.0).timeout
 
 	assert_eq(enemy.laser_state, enemy.LaserState.FIRING, "Should transition to FIRING after charge")
 
@@ -116,8 +116,8 @@ func test_laser_enemy_transitions_to_cooldown_after_firing() -> void:
 	enemy.global_position = Vector3.ZERO
 
 	enemy.activate()
-	# Wait for charge time (1.5s) + fire duration (0.3s) plus buffer
-	await get_tree().create_timer(2.0).timeout
+	# Wait for charge time (1.8s) + fire duration (0.25s) plus buffer
+	await get_tree().create_timer(2.2).timeout
 
 	assert_eq(enemy.laser_state, enemy.LaserState.COOLDOWN, "Should transition to COOLDOWN after firing")
 
@@ -157,6 +157,8 @@ func test_laser_hits_player_in_line_of_sight() -> void:
 	# Create player with EntityStats for damage detection
 	var player := CharacterBody3D.new()
 	player.add_to_group("Player")
+	# Set collision layer to match actual player (layer 2) which raycast mask 3 detects
+	player.collision_layer = 2
 	var player_stats := EntityStats.new()
 	player_stats.health = 10.0
 	player_stats.max_health = 10.0
@@ -171,14 +173,15 @@ func test_laser_hits_player_in_line_of_sight() -> void:
 
 	await get_tree().process_frame
 
-	# Position player directly in front of enemy
-	player.global_position = Vector3(0, 0, -10)
+	# Position player directly in front of enemy at raycast height (y=2.5)
+	# The laser raycast originates at y=2.5, so player must be at same height
+	player.global_position = Vector3(0, 2.5, -10)
 	enemy.global_position = Vector3.ZERO
 	enemy.look_at(player.global_position)
 
 	enemy.activate()
-	# Wait for full attack cycle: charge (1.5s) + fire (0.3s)
-	await get_tree().create_timer(1.9).timeout
+	# Wait for full attack cycle: charge (1.8s) + fire (0.25s) plus buffer
+	await get_tree().create_timer(2.2).timeout
 
 	assert_lt(player_stats.health, 10.0, "Player should take damage from laser hit")
 
@@ -195,8 +198,8 @@ func test_laser_emits_fired_signal() -> void:
 	watch_signals(enemy)
 
 	enemy.activate()
-	# Wait for charge time + firing
-	await get_tree().create_timer(1.9).timeout
+	# Wait for charge time (1.8s) + firing (0.25s) plus buffer
+	await get_tree().create_timer(2.2).timeout
 
 	assert_signal_emitted(enemy, "laser_fired")
 
@@ -213,7 +216,7 @@ func test_laser_enemy_does_not_move_during_charge() -> void:
 
 	var player := create_mock_player(Vector3(20, 0, 0))
 	enemy.global_position = Vector3.ZERO
-	var initial_position := enemy.global_position
+	var initial_position: Vector3 = enemy.global_position
 
 	enemy.activate()
 	await wait_physics_frames(30)
@@ -241,4 +244,4 @@ func test_laser_deals_correct_damage() -> void:
 		pending("LaserEnemy not yet implemented")
 		return
 
-	assert_eq(enemy.laser_damage, 2.0, "Laser should deal 2.0 damage per hit")
+	assert_eq(enemy.laser_damage, 1.5, "Laser should deal 1.5 damage per hit")

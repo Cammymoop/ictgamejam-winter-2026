@@ -148,9 +148,13 @@ func _throw_projectile() -> void:
 	var projectile := arc_projectile_scene.instantiate() as ArcProjectile
 	if projectile:
 		projectile.damage = throw_damage
-		get_tree().current_scene.add_child(projectile)
-		projectile.global_position = _get_throw_position()
-		projectile.launch(launch_velocity)
+		var parent := get_tree().current_scene if get_tree() else null
+		if parent:
+			parent.add_child(projectile)
+			projectile.global_position = _get_throw_position()
+			projectile.launch(launch_velocity)
+		else:
+			projectile.queue_free()
 
 	projectile_thrown.emit()
 
@@ -266,6 +270,12 @@ func _create_trajectory_preview() -> void:
 	if not _preview_projectile:
 		return
 
+	# Only add child if we're in the scene tree
+	if not is_inside_tree():
+		_preview_projectile.queue_free()
+		_preview_projectile = null
+		return
+
 	# Add temporarily to scene tree so it can access project settings
 	add_child(_preview_projectile)
 	_preview_projectile.visible = false
@@ -274,8 +284,10 @@ func _create_trajectory_preview() -> void:
 	var launch_velocity := calculate_launch_velocity(target_pos)
 	var spawn_pos := _get_throw_position()
 
-	_trajectory_preview = _preview_projectile.create_trajectory_preview(
-		spawn_pos, launch_velocity, get_tree().current_scene)
+	var scene_root := get_tree().current_scene if get_tree() else null
+	if scene_root:
+		_trajectory_preview = _preview_projectile.create_trajectory_preview(
+			spawn_pos, launch_velocity, scene_root)
 
 
 ## Update the trajectory preview to track player movement during wind-up

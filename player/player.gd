@@ -18,7 +18,7 @@ func _ready() -> void:
 	assert(entity_stats, "Player EntityStats not found")
 	entity_stats.out_of_health.connect(_on_entity_stats_out_of_health)
 	entity_stats.got_hit.connect(_on_entity_stats_got_hit)
-	
+
 	iframe_timer = Timer.new()
 	iframe_timer.wait_time = iframe_duration
 	iframe_timer.one_shot = true
@@ -58,19 +58,24 @@ func set_target_position(world_pos: Vector3) -> void:
 func _on_entity_stats_out_of_health() -> void:
 	set_physics_process(false)
 	visible = false
-	collision_shape.set_deferred("disabled", true)
-	for i in 10:
-		var impact := preload("res://assets/effects/impact_sphere.tscn").instantiate()
-		impact.scale = Vector3.ONE * randf_range(0.5, 0.65)
-		impact.position = position + Vector3(randf_range(-0.3, 0.3), randf_range(-1, 1), 0)
-		var parent: = get_parent()
-		var s_timer: = get_tree().create_timer(randf_range(0.01, 0.5))
-		s_timer.timeout.connect(func(): parent.add_child(impact))
 
-	var level_path: = get_node("/root/Game").find_child("LevelPath")
-	level_path.slow_to_stop()
-	await get_tree().create_timer(3).timeout
-	get_tree().reload_current_scene()
+	# Try to notify game manager for proper lose screen handling
+	var game_manager := _find_game_manager()
+	if game_manager and game_manager.has_method("trigger_lose"):
+		await get_tree().create_timer(0.5).timeout
+		game_manager.trigger_lose()
+	else:
+		# Fallback: reload scene directly if no game manager
+		await get_tree().create_timer(1).timeout
+		get_tree().reload_current_scene()
+
+
+## Find the GameManager in the scene tree
+func _find_game_manager() -> Node:
+	var root := get_tree().current_scene
+	if root:
+		return root.find_child("GameManager", true, false)
+	return null
 
 func _on_entity_stats_got_hit() -> void:
 	if iframe_duration > 0:

@@ -138,7 +138,8 @@ func test_enemy_spawner_sets_checkpoint_id_on_spawned_enemies() -> void:
 
 	# Load enemy scene
 	var enemy_scene = load("res://assets/enemies/enemy_base.tscn")
-	spawner.enemy_scenes = [enemy_scene]
+	var scenes: Array[PackedScene] = [enemy_scene]
+	spawner.enemy_scenes = scenes
 
 	# Re-collect markers since we added one
 	spawner.spawn_positions.clear()
@@ -171,7 +172,8 @@ func test_spawned_enemy_stays_idle_until_checkpoint_activates() -> void:
 
 	# Load enemy scene and set up spawner
 	var enemy_scene = load("res://assets/enemies/enemy_base.tscn")
-	spawner.enemy_scenes = [enemy_scene]
+	var scenes: Array[PackedScene] = [enemy_scene]
+	spawner.enemy_scenes = scenes
 	spawner.spawn_positions.clear()
 	for child in spawner.get_children():
 		if child is Marker3D:
