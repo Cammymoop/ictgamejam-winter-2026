@@ -79,7 +79,10 @@ func test_exploding_enemy_explodes_when_reaching_player() -> void:
 		pending("ExplodingEnemy not yet implemented")
 		return
 
-	watch_signals(enemy)
+	# Track signal using array (reference type) since enemy will be freed after explosion
+	# GUT's watch_signals doesn't work well with objects that get freed
+	var signal_state := [false]
+	enemy.exploded.connect(func(): signal_state[0] = true)
 
 	var player := create_mock_player(Vector3(2, 0, 0))
 	enemy.global_position = Vector3.ZERO
@@ -92,7 +95,7 @@ func test_exploding_enemy_explodes_when_reaching_player() -> void:
 	# At 60 FPS: 0.7s = 42 frames, add buffer for safety
 	await wait_physics_frames(60)
 
-	assert_signal_emitted(enemy, "exploded")
+	assert_true(signal_state[0], "Enemy should emit 'exploded' signal when reaching player")
 
 
 func test_exploding_enemy_explodes_on_death() -> void:

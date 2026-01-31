@@ -1,0 +1,50 @@
+[gd_scene load_steps=2 format=3 uid="uid://checkpoint_progress_hud_001"]
+
+[ext_resource type="Script" path="res://ui/checkpoint_progress_hud.gd" id="1_script"]
+
+[node name="CheckpointProgressHUD" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 300.0
+offset_bottom = 100.0
+script = ExtResource("1_script")
+
+[node name="Container" type="PanelContainer" parent="." unique_name_in_owner=true]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -220.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 120.0
+grow_horizontal = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="Container"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Container/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CheckpointLabel" type="Label" parent="Container/MarginContainer/VBoxContainer" unique_name_in_owner=true]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Checkpoint 1/4"
+horizontal_alignment = 1
+
+[node name="EnemiesLabel" type="Label" parent="Container/MarginContainer/VBoxContainer" unique_name_in_owner=true]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Enemies: 3"
+horizontal_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="Container/MarginContainer/VBoxContainer" unique_name_in_owner=true]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+value = 0.0
+show_percentage = false

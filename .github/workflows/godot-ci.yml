@@ -57,7 +57,7 @@ jobs:
 
       - name: Run GUT tests
         run: godot --headless -s test/run_tests.gd
-        continue-on-error: true
+        continue-on-error: false
 
   export-web:
     name: Export Web Build
