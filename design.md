@@ -227,3 +227,146 @@ Projectile (RigidBody3D) [Layer 4, Mask 2,3]
 - **Enemy Hurtbox**: layer=4 (layer 3), mask=8 (projectiles)
 - **Projectile**: layer=8 (layer 4), mask=6 (ground+enemies)
 - **Cursor Raycast**: mask=6 (ground+enemies)
+
+---
+
+## 10. Procedural Music System
+
+### Architecture Overview
+```
+MusicTheory (Autoload)
+       |
+GenreDefinition (Resource)
+       |
+CompositionGenerator
+       |
+Composition (generated)
+       |
+CompositionPlayer -> VoiceSynth nodes
+```
+
+### Music Theory (music/gdscript/music_theory.gd)
+- Note frequency calculation (A4 = 440Hz)
+- Scales: major, minor, pentatonic, blues, dorian, mixolydian, harmonic/melodic minor
+- Chord types: major, minor, dim, aug, 7ths, sus, add9
+- Chord voicings: root, inversions, spread, wide
+- Progressions: I-IV-V-I, I-V-vi-IV, ii-V-I, 12-bar blues
+
+### Composition Generation
+- GenreDefinition: tempo range, scales, progressions, rhythm patterns, instruments
+- CompositionGenerator: creates tracks per voice role (melody, harmony, bass, rhythm)
+- Arpeggiator: pattern-based melody generation
+- RhythmPattern: beat patterns with velocity/duration
+
+### Voice Roles
+| Role | Description | Octave |
+|------|-------------|--------|
+| melody | Arpeggiated or scale-based lead | 4 |
+| harmony | Sustained chord pads | 3 |
+| bass | Chord root notes with rhythm | 2 |
+| rhythm | Percussion using noise frequencies | N/A |
+
+### C++ Synth Extension (music/cpp/)
+- VoiceSynthNode: AudioStreamPlayer-based polyphonic synth
+- Waveforms: sine, square, saw, triangle, noise
+- ADSR envelope per voice
+- Vibrato and detune parameters
+- Requires building with godot-cpp (see build instructions)
+
+### Build Instructions
+```bash
+# Clone godot-cpp (if not present)
+cd music && git clone --depth 1 --branch 4.2 https://github.com/godotengine/godot-cpp.git
+
+# Build godot-cpp bindings
+cd music/godot-cpp && scons platform=macos
+
+# Build synth extension
+cd music/cpp && scons platform=macos
+```
+
+### Files
+| Path | Purpose |
+|------|---------|
+| music/gdscript/music_theory.gd | Core scales, chords, progressions |
+| music/gdscript/composition_generator.gd | Creates Composition from GenreDefinition |
+| music/gdscript/composition.gd | Data structure for tracks and notes |
+| music/gdscript/composition_player.gd | Playback via VoiceSynth nodes |
+| music/gdscript/genre_definition.gd | Genre resource with music parameters |
+| music/gdscript/arpeggiator.gd | Arpeggio pattern generator |
+| music/gdscript/rhythm_pattern.gd | Beat patterns |
+| music/gdscript/instrument_preset.gd | Synth voice settings |
+| music/cpp/voice_synth_node.* | C++ polyphonic synthesizer |
+| music/cpp/synth.gdextension | GDExtension configuration |
+
+---
+
+## 11. Level 2 Enemy System
+
+### Enemy Architecture
+
+All enemies extend `EnemyBase` (CharacterBody3D) which provides:
+- State machine: IDLE → ACTIVE → ATTACKING → DYING
+- EntityStats integration for health/damage
+- Player targeting utilities
+- Checkpoint-based activation support
+- Hit flash and death effects
+
+### Enemy Types
+
+| Enemy | Behavior | Damage | Counterplay |
+|-------|----------|--------|-------------|
+| ExplodingEnemy | Rushes player, detonates on contact or death | 2.0 (40% HP) | Kite sideways, kill before detonation range |
+| LaserEnemy | Charges 1.8s, fires instant beam | 1.5 (30% HP) | Move perpendicular during charge telegraph |
+| ThrowingEnemy | Lobs arcing projectiles with trajectory preview | 1.0 (20% HP) | Watch orange preview line, sidestep impact zone |
+
+### Balance Documentation
+
+Player context for all balance decisions:
+- **Player HP**: 5
+- **Player Speed**: 10.0 units/s
+- **Play Bounds**: 4×3 units
+
+Design targets:
+- Wave timing: 15-30 seconds per checkpoint
+- Survival: 50%+ HP on first skilled attempt
+
+### Checkpoint System
+
+```
+CheckpointZone (Area3D)
+├── Triggers when PathFollow3D enters
+├── Pauses camera movement (LevelPath)
+├── Activates linked enemies
+└── Resumes camera when all enemies defeated
+
+EnemySpawner (Node3D)
+├── Marker3D children define spawn positions
+├── Spawns enemies with checkpoint_id
+└── Links spawned enemies to CheckpointZone
+```
+
+### Level 2 Files
+
+| Path | Purpose |
+|------|---------|
+| `assets/enemies/enemy_base.gd` | Base class for all enemies |
+| `assets/enemies/exploding_enemy.gd` | Rush + detonate enemy |
+| `assets/enemies/laser_enemy.gd` | Charge + beam enemy |
+| `assets/enemies/throwing_enemy.gd` | Arc projectile enemy |
+| `assets/enemies/arc_projectile.gd` | Physics projectile with trajectory |
+| `assets/level/checkpoint_zone.gd` | Checkpoint trigger area |
+| `assets/level/enemy_spawner.gd` | Wave spawning system |
+| `static/sfx_manager.gd` | Procedural sound effects |
+
+### Procedural SFX
+
+SFXManager generates placeholder sounds procedurally:
+- **Tick**: Square wave beeps (exploding enemy approach)
+- **Boom**: Filtered noise burst (explosions)
+- **Charge Whine**: Rising pitch tone (laser charge)
+- **Zap**: Sawtooth burst (laser fire)
+- **Grunt**: Low noise burst (throwing enemy)
+- **Thud**: Impact noise (projectile landing)
+- **Chime**: Bell tone (checkpoint activation)
+- **Fanfare**: Ascending arpeggio (checkpoint cleared)
