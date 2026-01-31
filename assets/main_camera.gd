@@ -1,12 +1,12 @@
 extends Node3D
 
-var level_path: LevelPath
+var level_path: Node3D  # LevelPath
 @onready var camera: Camera3D = $Camera3D
 @onready var camera_target: Node3D = $CameraTarget
 @onready var debug_cam: Camera3D = find_child("DebugCam").get_node("Camera3D")
 
 func _ready() -> void:
-    level_path = get_node("/root/Game/World/LevelPath") as LevelPath
+    level_path = get_node("/root/Game/World/LevelPath")
     if not level_path:
         print_debug("Level path not found")
         push_error("Level path not found")

@@ -13,7 +13,7 @@ func get_player_ref() -> Node3D:
 
 var phys_coll_layer_names: Dictionary[String, int] = {}
 func get_all_phys_layer_names() -> void:
-    for i in 32:
+    for i in range(1, 33):
         var layer_num: = i + 1
         var layer_name_str: String = "layer_names/3d_physics/layer_%d" % layer_num
         var layer_name: Variant = ProjectSettings.get_setting_with_override(layer_name_str)
