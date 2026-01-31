@@ -4,9 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://5euivoegl7lv" path="res://assets/bg_meshes.tscn" id="2_bgmesh"]
 [ext_resource type="PackedScene" uid="uid://bcheckpointzone1" path="res://assets/level/checkpoint_zone.tscn" id="3_checkpoint_zone"]
 [ext_resource type="PackedScene" uid="uid://c4h2y3mspawn" path="res://assets/level/enemy_spawner.tscn" id="4_enemy_spawner"]
-[ext_resource type="PackedScene" path="res://assets/enemies/exploding_enemy.tscn" id="5_exploding_enemy"]
 [ext_resource type="PackedScene" path="res://assets/enemies/laser_enemy.tscn" id="6_laser_enemy"]
-[ext_resource type="PackedScene" path="res://assets/enemies/throwing_enemy.tscn" id="7_throwing_enemy"]
 
 # Ground material - sandy brown color
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ground"]
@@ -161,13 +159,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, -5)
 [node name="SpawnPoint3" type="Marker3D" parent="Checkpoint1"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -8)
 
-# CheckpointZone1 - Tutorial wave: 3 ExplodingEnemies
+# CheckpointZone1 - Tutorial wave: 3 LaserEnemies
 [node name="CheckpointZone1" parent="Checkpoint1" instance=ExtResource("3_checkpoint_zone")]
 checkpoint_id = "checkpoint_1"
 trigger_radius = 8.0
 
 [node name="EnemySpawner1" parent="Checkpoint1" instance=ExtResource("4_enemy_spawner")]
-enemy_scenes = [ExtResource("5_exploding_enemy"), ExtResource("5_exploding_enemy"), ExtResource("5_exploding_enemy")]
+enemy_scenes = [ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy")]
 spawn_delay = 0.3
 checkpoint_id = "checkpoint_1"
 
@@ -252,13 +250,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, -12)
 [node name="SpawnPoint4" type="Marker3D" parent="Checkpoint2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -12)
 
-# CheckpointZone2 - Mixed wave: 2 LaserEnemies + 2 ThrowingEnemies
+# CheckpointZone2 - Mixed wave: 4 LaserEnemies
 [node name="CheckpointZone2" parent="Checkpoint2" instance=ExtResource("3_checkpoint_zone")]
 checkpoint_id = "checkpoint_2"
 trigger_radius = 8.0
 
 [node name="EnemySpawner2" parent="Checkpoint2" instance=ExtResource("4_enemy_spawner")]
-enemy_scenes = [ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy"), ExtResource("7_throwing_enemy"), ExtResource("7_throwing_enemy")]
+enemy_scenes = [ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy")]
 spawn_delay = 0.3
 checkpoint_id = "checkpoint_2"
 
@@ -371,13 +369,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
 [node name="SpawnPoint6" type="Marker3D" parent="Checkpoint3"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 0, 0)
 
-# CheckpointZone3 - Challenge wave: 1 LaserEnemy + 3 ExplodingEnemies + 2 ThrowingEnemies
+# CheckpointZone3 - Challenge wave: 6 LaserEnemies
 [node name="CheckpointZone3" parent="Checkpoint3" instance=ExtResource("3_checkpoint_zone")]
 checkpoint_id = "checkpoint_3"
 trigger_radius = 10.0
 
 [node name="EnemySpawner3" parent="Checkpoint3" instance=ExtResource("4_enemy_spawner")]
-enemy_scenes = [ExtResource("6_laser_enemy"), ExtResource("5_exploding_enemy"), ExtResource("5_exploding_enemy"), ExtResource("5_exploding_enemy"), ExtResource("7_throwing_enemy"), ExtResource("7_throwing_enemy")]
+enemy_scenes = [ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy")]
 spawn_delay = 0.4
 checkpoint_id = "checkpoint_3"
 
@@ -499,7 +497,7 @@ trigger_radius = 10.0
 
 # First wave spawner - immediate spawn
 [node name="EnemySpawner4a" parent="Checkpoint4" instance=ExtResource("4_enemy_spawner")]
-enemy_scenes = [ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy"), ExtResource("5_exploding_enemy"), ExtResource("5_exploding_enemy")]
+enemy_scenes = [ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy")]
 spawn_delay = 0.3
 checkpoint_id = "checkpoint_4"
 
@@ -517,7 +515,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, 8)
 
 # Second wave spawner - staggered spawn (higher delay)
 [node name="EnemySpawner4b" parent="Checkpoint4" instance=ExtResource("4_enemy_spawner")]
-enemy_scenes = [ExtResource("7_throwing_enemy"), ExtResource("7_throwing_enemy"), ExtResource("5_exploding_enemy"), ExtResource("5_exploding_enemy")]
+enemy_scenes = [ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy"), ExtResource("6_laser_enemy")]
 spawn_delay = 0.5
 checkpoint_id = "checkpoint_4"
 

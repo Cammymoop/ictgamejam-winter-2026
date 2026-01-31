@@ -1,10 +1,10 @@
-.PHONY: verify test lint format check-format install-gut test-file
+.PHONY: verify test lint format check-format install-gut test-file test-scenes
 
 # Godot executable path (adjust for your system)
 GODOT ?= godot
 
 # Verification target for swiss-cheese workflow
-verify: lint test
+verify: lint test-scenes test
 	@echo "All verification checks passed"
 
 # Run GDScript linter (requires gdlint: pip install gdtoolkit)
@@ -32,6 +32,11 @@ test:
 	else \
 		echo "Note: No test framework found. Skipping tests."; \
 	fi
+
+# Test that all scene files can be loaded (catches comment syntax errors, broken refs)
+test-scenes:
+	@echo "Testing scene loading..."
+	@$(GODOT) --headless -s test/test_scene_loading.gd
 
 # Install GUT testing framework (v9.5.1+ required for Godot 4.6)
 install-gut:
