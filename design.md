@@ -301,7 +301,7 @@ cd music/cpp && scons platform=macos
 
 ---
 
-## 11. Level 2 Enemy System
+## 11. Enemy System
 
 ### Enemy Architecture
 
@@ -309,7 +309,6 @@ All enemies extend `EnemyBase` (CharacterBody3D) which provides:
 - State machine: IDLE → ACTIVE → ATTACKING → DYING
 - EntityStats integration for health/damage
 - Player targeting utilities
-- Checkpoint-based activation support
 - Hit flash and death effects
 
 ### Enemy Types
@@ -327,26 +326,7 @@ Player context for all balance decisions:
 - **Player Speed**: 10.0 units/s
 - **Play Bounds**: 4×3 units
 
-Design targets:
-- Wave timing: 15-30 seconds per checkpoint
-- Survival: 50%+ HP on first skilled attempt
-
-### Checkpoint System
-
-```
-CheckpointZone (Area3D)
-├── Triggers when PathFollow3D enters
-├── Pauses camera movement (LevelPath)
-├── Activates linked enemies
-└── Resumes camera when all enemies defeated
-
-EnemySpawner (Node3D)
-├── Marker3D children define spawn positions
-├── Spawns enemies with checkpoint_id
-└── Links spawned enemies to CheckpointZone
-```
-
-### Level 2 Files
+### Enemy Files
 
 | Path | Purpose |
 |------|---------|
@@ -355,8 +335,6 @@ EnemySpawner (Node3D)
 | `assets/enemies/laser_enemy.gd` | Charge + beam enemy |
 | `assets/enemies/throwing_enemy.gd` | Arc projectile enemy |
 | `assets/enemies/arc_projectile.gd` | Physics projectile with trajectory |
-| `assets/level/checkpoint_zone.gd` | Checkpoint trigger area |
-| `assets/level/enemy_spawner.gd` | Wave spawning system |
 | `static/sfx_manager.gd` | Procedural sound effects |
 
 ### Procedural SFX
@@ -368,5 +346,3 @@ SFXManager generates placeholder sounds procedurally:
 - **Zap**: Sawtooth burst (laser fire)
 - **Grunt**: Low noise burst (throwing enemy)
 - **Thud**: Impact noise (projectile landing)
-- **Chime**: Bell tone (checkpoint activation)
-- **Fanfare**: Ascending arpeggio (checkpoint cleared)

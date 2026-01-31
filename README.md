@@ -42,7 +42,6 @@ make test
 
 ```
 ├── assets/enemies/     # Enemy types (exploding, laser, throwing)
-├── assets/level/       # Checkpoint and spawner systems
 ├── player/             # Player, weapons, projectiles
 ├── ui/                 # Win/lose screens, HUD
 ├── static/             # Utilities, SFX manager

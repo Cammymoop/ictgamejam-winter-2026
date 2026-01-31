@@ -42,7 +42,7 @@ var state: State = State.IDLE
 var _player_ref: Node3D = null
 
 ## Reference to EntityStats child node
-@onready var entity_stats: EntityStats = $EntityStats
+@onready var entity_stats: Node = $EntityStats  # EntityStats
 
 
 func _ready() -> void:

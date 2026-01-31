@@ -1,10 +1,10 @@
 extends Node
 
 var entities: Array[Node3D] = []
-var entity_stats: Dictionary[Node3D, EntityStats] = {}
+var entity_stats: Dictionary = {}  # Stores Node3D -> EntityStats
 var entity_coll_objects: Dictionary[CollisionObject3D, Node3D] = {}
 
-func register_entity(entity: Node3D, stats: EntityStats) -> void:
+func register_entity(entity: Node3D, stats: Node) -> void:  # stats is EntityStats
     entities.append(entity)
     entity_stats[entity] = stats
     var all_coll_objects: = recursive_collect_nodes(entity, "CollisionObject3D")

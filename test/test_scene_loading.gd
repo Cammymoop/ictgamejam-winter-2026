@@ -10,9 +10,6 @@ var scenes_to_test: Array[String] = [
 	"res://assets/effects/impact_sphere.tscn",
 	"res://assets/enemies/enemy_base.tscn",
 	"res://assets/enemies/laser_enemy.tscn",
-	"res://assets/level/checkpoint_zone.tscn",
-	"res://assets/level/enemy_spawner.tscn",
-	"res://assets/levels/level2.tscn",
 ]
 
 func _initialize() -> void:

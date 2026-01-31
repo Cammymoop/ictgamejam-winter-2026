@@ -17,8 +17,8 @@ var lifetime_timer: Timer = null
 var is_enemy_projectile: bool = false:
 	set(value):
 		is_enemy_projectile = value
-		var enemy_coll_layer: = Util.get_phys_layer_by_name("Enemies")
-		var player_coll_layer: = Util.get_phys_layer_by_name("Player")
+		var enemy_coll_layer: int = Util.get_phys_layer_by_name("Enemies")
+		var player_coll_layer: int = Util.get_phys_layer_by_name("Player")
 		if is_enemy_projectile:
 			set_collision_mask_value(enemy_coll_layer, false)
 			set_collision_mask_value(player_coll_layer, true)

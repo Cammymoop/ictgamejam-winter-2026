@@ -1,5 +1,5 @@
 class_name LaserEnemy
-extends EnemyBase
+extends "res://assets/enemies/enemy_base.gd"
 ## Enemy that charges and fires a powerful laser beam at the player.
 ## Attack sequence: charge (1.8s) -> fire (0.25s) -> cooldown (2.5s)
 ##
@@ -160,14 +160,14 @@ func _check_laser_hit() -> void:
 
 func _apply_laser_damage(target: Node) -> void:
 	# Try to find EntityStats on the target
-	var stats: EntityStats = null
+	var stats: Node = null  # EntityStats
 
 	if target.has_node("EntityStats"):
-		stats = target.get_node("EntityStats") as EntityStats
+		stats = target.get_node("EntityStats")
 	else:
 		# Search in children
 		for child in target.get_children():
-			if child is EntityStats:
+			if child.get_script() and child.get_script().get_global_name() == "EntityStats":
 				stats = child
 				break
 
