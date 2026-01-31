@@ -3,6 +3,8 @@ extends CharacterBody3D
 @export var speed: float = 10.0
 @export var bounds: Vector2 = Vector2(4, 3)  # X/Z movement limits
 
+@onready var collision_shape: CollisionShape3D = $CollisionShape3D
+
 var target_world_position: Vector3 = Vector3.ZERO
 var local_offset: Vector3 = Vector3.ZERO
 
@@ -38,5 +40,16 @@ func set_target_position(world_pos: Vector3) -> void:
 func _on_entity_stats_out_of_health() -> void:
 	set_physics_process(false)
 	visible = false
-	await get_tree().create_timer(1).timeout
+	collision_shape.set_deferred("disabled", true)
+	for i in 10:
+		var impact := preload("res://assets/effects/impact_sphere.tscn").instantiate()
+		impact.scale = Vector3.ONE * randf_range(0.5, 0.65)
+		impact.position = position + Vector3(randf_range(-0.3, 0.3), randf_range(-1, 1), 0)
+		var parent: = get_parent()
+		var s_timer: = get_tree().create_timer(randf_range(0.01, 0.5))
+		s_timer.timeout.connect(func(): parent.add_child(impact))
+
+	var level_path: = get_node("/root/Game").find_child("LevelPath")
+	level_path.slow_to_stop()
+	await get_tree().create_timer(3).timeout
 	get_tree().reload_current_scene()

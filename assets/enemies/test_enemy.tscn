@@ -3,23 +3,62 @@
 [ext_resource type="Script" uid="uid://cc34hukncrwip" path="res://assets/test_enemy.gd" id="1_2yjhm"]
 [ext_resource type="Script" uid="uid://byxnatvcndpcu" path="res://assets/general/entity_stats.gd" id="2_qsxe3"]
 
-[sub_resource type="PrismMesh" id="PrismMesh_qsxe3"]
-size = Vector3(4, 4, 8)
+[sub_resource type="Gradient" id="Gradient_qsxe3"]
+offsets = PackedFloat32Array(0.29802954, 0.48522168, 0.67241377, 1)
+colors = PackedColorArray(0.5689727, 0.56897277, 0.5689727, 1, 0.15127617, 0.15127605, 0.15127602, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_6o7wi"]
+noise_type = 2
+frequency = 0.0124
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_diy82"]
+noise = SubResource("FastNoiseLite_6o7wi")
+color_ramp = SubResource("Gradient_qsxe3")
+seamless = true
+invert = true
+
+[sub_resource type="Gradient" id="Gradient_g0tvj"]
+resource_local_to_scene = true
+interpolation_mode = 1
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_jw5tk"]
+frequency = 0.004
+fractal_type = 2
+fractal_lacunarity = 1.675
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_v522o"]
+resource_local_to_scene = true
+noise = SubResource("FastNoiseLite_jw5tk")
+color_ramp = SubResource("Gradient_g0tvj")
+seamless = true
+invert = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6o7wi"]
 resource_local_to_scene = true
-albedo_color = Color(0.840419, 0.28326923, 0.5273993, 1)
+albedo_color = Color(0.81871665, 0.46096766, 0.19233632, 1)
 emission = Color(0.50928617, 0.50928617, 0.50928617, 1)
+detail_enabled = true
+detail_mask = SubResource("NoiseTexture2D_v522o")
+detail_blend_mode = 2
+detail_uv_layer = 1
+detail_albedo = SubResource("NoiseTexture2D_diy82")
+uv2_scale = Vector3(0.05, 0.2, 0.05)
+uv2_triplanar = true
+uv2_world_triplanar = true
+
+[sub_resource type="PrismMesh" id="PrismMesh_qsxe3"]
+size = Vector3(4, 4, 8)
 
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_2yjhm"]
 data = PackedVector3Array(0, 2, 4, 2, -2, 4, -2, -2, 4, 0, 2, -4, -2, -2, -4, 2, -2, -4, 0, 2, 4, 0, 2, -4, 2, -2, 4, 0, 2, -4, 2, -2, -4, 2, -2, 4, 0, 2, -4, 0, 2, 4, -2, -2, -4, 0, 2, 4, -2, -2, 4, -2, -2, -4, -2, -2, 4, 2, -2, 4, -2, -2, -4, 2, -2, 4, 2, -2, -4, -2, -2, -4)
+backface_collision = true
 
 [sub_resource type="Animation" id="Animation_qsxe3"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D:surface_material_override/0:emission_enabled")
+tracks/0/path = NodePath("Offset/Shake/MeshInstance3D:material_override:emission_enabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -31,7 +70,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("MeshInstance3D:surface_material_override/0:emission")
+tracks/1/path = NodePath("Offset/Shake/MeshInstance3D:material_override:emission")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -43,10 +82,11 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_6o7wi"]
 resource_name = "flash"
+length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("MeshInstance3D:surface_material_override/0:emission_enabled")
+tracks/0/path = NodePath("Offset/Shake/MeshInstance3D:material_override:emission_enabled")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -58,20 +98,49 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("MeshInstance3D:surface_material_override/0:emission")
+tracks/1/path = NodePath("Offset/Shake/MeshInstance3D:material_override:emission")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
+"transitions": PackedFloat32Array(1.5691684, 1),
 "update": 0,
-"values": [Color(0.50928617, 0.50928617, 0.50928617, 1), Color(0, 0, 0, 1)]
+"values": [Color(0.6187021, 0.46343356, 0.43606433, 1), Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_diy82"]
+resource_name = "flash_death"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Offset/Shake/MeshInstance3D:material_override:emission_enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Offset/Shake/MeshInstance3D:material_override:emission")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1.5691684),
+"update": 0,
+"values": [Color(0.38956866, 0.27445075, 0.25452647, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_diy82"]
 _data = {
 &"RESET": SubResource("Animation_qsxe3"),
-&"flash": SubResource("Animation_6o7wi")
+&"flash": SubResource("Animation_6o7wi"),
+&"flash_death": SubResource("Animation_diy82")
 }
 
 [sub_resource type="SphereMesh" id="SphereMesh_qsxe3"]
@@ -88,42 +157,124 @@ albedo_color = Color(0.20511743, 0.20511743, 0.20511743, 1)
 radius = 1.0
 height = 2.0
 
+[sub_resource type="Animation" id="Animation_g0tvj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Offset:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_jw5tk"]
+resource_name = "death"
+length = 1.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Offset:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.4),
+"transitions": PackedFloat32Array(1.681793, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, -8.983122, 0)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.033333335, 0.06666667, 0.16666667, 0.23333335, 0.36666667, 0.53568274, 0.6333334, 0.79936075),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"values": [{
+"args": [],
+"method": &"spawn_random_impact"
+}, {
+"args": [],
+"method": &"spawn_random_impact"
+}, {
+"args": [],
+"method": &"spawn_random_impact"
+}, {
+"args": [],
+"method": &"spawn_random_impact"
+}, {
+"args": [],
+"method": &"spawn_random_impact"
+}, {
+"args": [],
+"method": &"spawn_random_impact"
+}, {
+"args": [],
+"method": &"spawn_random_impact"
+}, {
+"args": [],
+"method": &"spawn_random_impact"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_v522o"]
+_data = {
+&"RESET": SubResource("Animation_g0tvj"),
+&"death": SubResource("Animation_jw5tk")
+}
+
 [node name="Enemy" type="Node3D" unique_id=1300767209 node_paths=PackedStringArray("shoot_from", "show_before_shoot")]
 script = ExtResource("1_2yjhm")
-shoot_from = NodePath("MeshInstance3D2")
-show_before_shoot = NodePath("MeshInstance3D3")
+shoot_from = NodePath("Offset/Shake/MeshInstance3D2")
+show_before_shoot = NodePath("Offset/Shake/MeshInstance3D3")
 innacuracy = 0.157
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=873037277]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 4, 4.371139e-08)
-mesh = SubResource("PrismMesh_qsxe3")
-surface_material_override/0 = SubResource("StandardMaterial3D_6o7wi")
-
-[node name="AnimatableBody3D" type="AnimatableBody3D" parent="." unique_id=330800293]
-collision_layer = 4
-collision_mask = 5
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="AnimatableBody3D" unique_id=996633677]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 4, 4.371139e-08)
-shape = SubResource("ConcavePolygonShape3D_2yjhm")
 
 [node name="EntityStats" type="Node" parent="." unique_id=181974756]
 script = ExtResource("2_qsxe3")
-health = 20.0
+health = 30.0
+max_health = 30.0
 metadata/_custom_type_script = "uid://byxnatvcndpcu"
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2014065352]
+[node name="Offset" type="Node3D" parent="." unique_id=1979946848]
+
+[node name="Shake" type="Node3D" parent="Offset" unique_id=467974498]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Offset/Shake" unique_id=873037277]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 4, 4.371139e-08)
+material_override = SubResource("StandardMaterial3D_6o7wi")
+mesh = SubResource("PrismMesh_qsxe3")
+
+[node name="AnimatableBody3D" type="AnimatableBody3D" parent="Offset/Shake" unique_id=330800293]
+collision_layer = 4
+collision_mask = 5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Offset/Shake/AnimatableBody3D" unique_id=996633677]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 4, 4.371139e-08)
+shape = SubResource("ConcavePolygonShape3D_2yjhm")
+
+[node name="FlashAnimator" type="AnimationPlayer" parent="Offset/Shake" unique_id=2014065352]
+root_node = NodePath("../../..")
 libraries/ = SubResource("AnimationLibrary_diy82")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="." unique_id=704030985]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="Offset/Shake" unique_id=704030985]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.764829, -0.7024983)
 mesh = SubResource("SphereMesh_qsxe3")
 surface_material_override/0 = SubResource("StandardMaterial3D_diy82")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=574068161]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Offset/Shake" unique_id=574068161]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8, -0.7024983)
 material_override = SubResource("StandardMaterial3D_qsxe3")
 mesh = SubResource("SphereMesh_6o7wi")
+
+[node name="DeathAnimator" type="AnimationPlayer" parent="Offset/Shake" unique_id=1292172128]
+root_node = NodePath("../../..")
+libraries/ = SubResource("AnimationLibrary_v522o")
 
 [connection signal="got_hit" from="EntityStats" to="." method="_on_entity_stats_got_hit"]
 [connection signal="out_of_health" from="EntityStats" to="." method="_on_entity_stats_out_of_health"]

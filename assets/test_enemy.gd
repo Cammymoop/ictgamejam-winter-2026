@@ -13,13 +13,17 @@ var projectile_scene: PackedScene = preload("res://assets/new_projectile.tscn")
 @export var active_distance: float = 57
 
 @export var show_before_shoot: Node3D
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var flash_animator: AnimationPlayer = find_child("FlashAnimator")
+
+@onready var shake_offset: Node3D = find_child("Shake")
 
 @export var bullet_speed: float = 90
 @export var bullet_lifetime: float = 6
 @export var bullet_color: Color = Color.ORANGE
 
 @export var innacuracy: float = TAU / 32
+
+@export var shake_strength: float = 0.2
 
 @export var show_debug_path: bool = false
 
@@ -32,6 +36,7 @@ var reload_timeleft: float = 0
 
 var is_enabled: bool = true
 var is_active: bool = false
+var is_shaking: bool = false
 
 func _ready() -> void:
     if show_before_shoot:
@@ -48,7 +53,6 @@ func _ready() -> void:
 
 func disable() -> void:
     is_enabled = false
-    set_process(false)
 
 func random_delay() -> void:
     is_shooting = false
@@ -63,6 +67,11 @@ func delay_over() -> void:
 func _process(delta: float) -> void:
     if show_before_shoot:
         show_before_shoot.visible = false
+    if is_shaking:
+        if randf() < 0.4:
+            var rand_shake: = Vector3(randf() * shake_strength, randf() * shake_strength, randf() * shake_strength)
+            shake_offset.position = rand_shake * 2 - (Vector3.ONE * shake_strength)
+            
     if not is_enabled:
         return
     
@@ -131,7 +140,67 @@ func draw_debug_path(start_pos: Vector3, end_pos: Vector3) -> void:
     debug_path.queue_free()
 
 func _on_entity_stats_got_hit() -> void:
-    animation_player.play("flash")
+    if flash_animator.is_playing():
+        flash_animator.stop()
+    flash_animator.play("flash")
+    damage_anim_material()
 
 func _on_entity_stats_out_of_health() -> void:
+    if show_before_shoot:
+        show_before_shoot.visible = false
+    disable()
+    show_death_anim()
+    #queue_free()
+
+func damage_anim_material() -> void:
+    var entity_stats: = find_child("EntityStats") as EntityStats
+    if not entity_stats:
+        print_debug("Entity stats not found")
+        return
+    var health_ratio = entity_stats.health / entity_stats.max_health
+    var material: = find_child("MeshInstance3D").material_override as StandardMaterial3D
+    if not material:
+        print_debug("Material not found")
+        return
+    material.detail_enabled = health_ratio < 0.99
+    var mask_gradient: Gradient = material.detail_mask.color_ramp as Gradient
+    mask_gradient.set_offset(1, health_ratio)
+
+func show_death_anim() -> void:
+    is_shaking = true
+    flash_animator.play("flash_death")
+    var other_animator: = find_child("DeathAnimator") as AnimationPlayer
+    other_animator.animation_finished.connect(death_anim_over)
+    other_animator.play("death")
+
+func spawn_random_impact() -> void:
+    for i in 6:
+        _spawn_random_impact()
+
+func _spawn_random_impact() -> bool:
+    var ray_cast_origin: = shake_offset.global_position + (Vector3.UP * 3)
+    var ray_cast_direction: = Vector3.FORWARD.rotated(Vector3.RIGHT, (TAU/4) * ease(randf(), 2))
+    ray_cast_direction = ray_cast_direction.rotated(Vector3.UP, randf_range(0, TAU/4))
+    
+    var ray_cast_query: = PhysicsRayQueryParameters3D.new()
+    ray_cast_query.from = ray_cast_origin
+    ray_cast_query.to = ray_cast_origin + ray_cast_direction * 40
+    ray_cast_query.collision_mask = Util.layer_to_bit(Util.get_phys_layer_by_name("Enemies"))
+    ray_cast_query.hit_from_inside = true
+    var ray_cast_result: = get_world_3d().direct_space_state.intersect_ray(ray_cast_query)
+    
+    if not ray_cast_result:
+        #print_debug("No ray cast result")
+        return false
+
+    var impact: = preload("res://assets/effects/impact_sphere.tscn").instantiate()
+    impact.scale = Vector3.ONE * randf_range(0.7, 1.3)
+    get_parent().add_child(impact)
+    
+    impact.global_position = ray_cast_result.position
+    return true
+
+func death_anim_over(anim_name: String) -> void:
+    if anim_name != "death":
+        return
     queue_free()

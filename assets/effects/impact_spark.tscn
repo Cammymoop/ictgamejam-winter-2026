@@ -1,15 +1,18 @@
-[gd_scene format=3 uid="uid://dnrfvrxncgadk"]
+[gd_scene format=3 uid="uid://cvi3thltlctxy"]
+
+[ext_resource type="Texture2D" uid="uid://3cgsbhc2amw7" path="res://assets/textures/scratch.png" id="1_52q7i"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wysl4"]
-albedo_color = Color(0, 0, 0, 1)
+transparency = 2
+alpha_scissor_threshold = 0.372
+alpha_antialiasing_mode = 0
+albedo_texture = ExtResource("1_52q7i")
 emission_enabled = true
 emission = Color(1, 1, 1, 1)
+billboard_mode = 1
+billboard_keep_scale = true
 
-[sub_resource type="SphereMesh" id="SphereMesh_4p5ra"]
-radius = 0.75
-height = 1.5
-radial_segments = 12
-rings = 12
+[sub_resource type="QuadMesh" id="QuadMesh_rsrry"]
 
 [sub_resource type="Animation" id="Animation_wysl4"]
 length = 0.001
@@ -65,7 +68,7 @@ _data = {
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2120926932]
 material_override = SubResource("StandardMaterial3D_wysl4")
-mesh = SubResource("SphereMesh_4p5ra")
+mesh = SubResource("QuadMesh_rsrry")
 
 [node name="AutoDespawn" type="Timer" parent="." unique_id=1248328965]
 wait_time = 0.154

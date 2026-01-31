@@ -21,10 +21,6 @@ Util="*uid://cvyn3aer18w50"
 EntityManager="*res://static/entity_manager.gd"
 Global="*res://static/global.gd"
 
-[display]
-
-window/size/mode=2
-
 [global_group]
 
 Player=""

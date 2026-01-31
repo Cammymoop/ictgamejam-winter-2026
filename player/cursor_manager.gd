@@ -81,13 +81,7 @@ func raycast_to_world(screen_pos: Vector2) -> Dictionary:
     result_data.position = result.position
     var coll: CollisionObject3D = result.collider as CollisionObject3D
     if coll and coll is AnimatableBody3D:#Util.check_coll_layer(coll, "Enemies"):
-        print("hovering enemy")
         result_data.enemy = coll
-    elif coll:
-        prints("hovering not enemy", coll.get_path())
-    elif result.collider:
-        prints("hovering other collider", result.collider.get_class(), result.collider.get_path())
-    prints("hovering")
         
     return result_data
 
