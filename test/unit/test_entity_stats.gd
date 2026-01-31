@@ -92,7 +92,7 @@ func test_entity_stats_ignores_damage_when_disabled() -> void:
 	var stats := EntityStats.new()
 	stats.health = 10.0
 	stats.max_health = 10.0
-	stats.can_be_hit = false
+	stats._can_be_hit = false
 	parent.add_child(stats)
 
 	await get_tree().process_frame
