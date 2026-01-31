@@ -21,7 +21,7 @@ mesh = SubResource("CylinderMesh_g1dw6")
 shape = SubResource("ConvexPolygonShape3D_yw30f")
 
 [node name="WeaponManager" parent="." unique_id=1367059967 instance=ExtResource("2_weapon")]
-weapon_colors = Array[Color]([Color(0.6489241, 0.6994695, 0.1877679, 1), Color(0.6176714, 0.7088072, 0.9886326, 1), Color(0.97340816, 0.43606183, 1, 1)])
+weapon_colors = Array[Color]([Color(0.6489241, 0.6994695, 0.1877679, 1), Color(0.97340816, 0.43606183, 1, 1), Color(0.6176714, 0.7088072, 0.9886326, 1)])
 
 [node name="EntityStats" type="Node" parent="." unique_id=316789595]
 script = ExtResource("3_g1dw6")
