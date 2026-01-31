@@ -67,8 +67,22 @@ _data = {
 [sub_resource type="BoxMesh" id="BoxMesh_ctr7f"]
 size = Vector3(10, 10, 10)
 
+[sub_resource type="Gradient" id="Gradient_ctr7f"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0.17487685, 0.25862068, 0.82512313, 0.908867, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.65387076, 0.6538708, 0.6538708, 1, 0.427493, 0.42749307, 0.42749307, 1, 0.5890956, 0.5890956, 0.5890956, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_2orrn"]
+gradient = SubResource("Gradient_ctr7f")
+fill = 2
+fill_to = Vector2(0.9636752, 0.39529914)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fvgax"]
-albedo_color = Color(0.800883, 0.46875292, 0.25697276, 1)
+albedo_color = Color(0.76998013, 0.4783175, 0.43510342, 1)
+albedo_texture = SubResource("GradientTexture2D_2orrn")
+uv1_scale = Vector3(0.4, 0.4, 0.4)
+uv1_triplanar = true
+uv1_world_triplanar = true
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_2orrn"]
 points = PackedVector3Array(5, 5, 5, 5, 5, -5, -5, 5, 5, 5, -5, 5, 5, -5, -5, -5, 5, -5, -5, -5, 5, -5, -5, -5)
@@ -170,6 +184,7 @@ show_debug_path = true
 
 [node name="Enemy4" parent="." unique_id=851438947 instance=ExtResource("3_ctr7f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, -9)
+show_debug_path = true
 
 [node name="Enemy2" parent="." unique_id=818737262 instance=ExtResource("3_ctr7f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.715805, 0, -20.781796)

@@ -52,14 +52,14 @@ func set_direction(direction: Vector3) -> void:
     basis = Basis.looking_at(direction, Vector3.UP)
 
 func _on_body_entered(body: Node) -> void:
-    print("projectile hit body: %s" % body.get_path())
+    #print("projectile hit body: %s" % body.get_path())
     #if Util.check_coll_layer(body, "Player"):
         #return  # Don't hit the player who fired
 
     var hit_something = false
     var entity = EntityManager.get_entity_from_coll_object(body)
     if entity:
-        print("projectile hit entity: %s" % entity.get_path())
+        #print("projectile hit entity: %s" % entity.get_path())
         EntityManager.hit_entity(entity, damage)
         hit_something = true
     elif body.has_method("take_damage"):

@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://sd52aqoi6ilr" path="res://player/player.gd" id="1_player"]
 [ext_resource type="PackedScene" uid="uid://weapon001" path="res://player/weapon_manager.tscn" id="2_weapon"]
 [ext_resource type="Script" uid="uid://byxnatvcndpcu" path="res://assets/general/entity_stats.gd" id="3_g1dw6"]
+[ext_resource type="Script" uid="uid://bs7ml3uueuktr" path="res://player/hud.gd" id="4_qjkh3"]
+[ext_resource type="PackedScene" uid="uid://dim7prkslfxh5" path="res://player/health_ui.tscn" id="5_qjkh3"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g1dw6"]
 albedo_color = Color(0.9564864, 0.3347615, 0.3121374, 1)
@@ -76,4 +78,49 @@ metadata/_custom_type_script = "uid://byxnatvcndpcu"
 [node name="FlashAnimator" type="AnimationPlayer" parent="." unique_id=331563060]
 libraries/ = SubResource("AnimationLibrary_qjkh3")
 
-[connection signal="out_of_health" from="EntityStats" to="." method="_on_entity_stats_out_of_health"]
+[node name="HUDLayer" type="CanvasLayer" parent="." unique_id=165043491]
+layer = 2
+
+[node name="HUD" type="MarginContainer" parent="HUDLayer" unique_id=245386048 node_paths=PackedStringArray("player_stats")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+script = ExtResource("4_qjkh3")
+player_stats = NodePath("../../EntityStats")
+
+[node name="HUD" type="HBoxContainer" parent="HUDLayer/HUD" unique_id=1236746552]
+layout_mode = 2
+
+[node name="LeftSide" type="VBoxContainer" parent="HUDLayer/HUD/HUD" unique_id=526259918]
+layout_mode = 2
+
+[node name="Padding" type="Control" parent="HUDLayer/HUD/HUD/LeftSide" unique_id=534659133]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="Center" type="VBoxContainer" parent="HUDLayer/HUD/HUD" unique_id=340848787]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Padding" type="Control" parent="HUDLayer/HUD/HUD/Center" unique_id=1015031084]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="HealthUI" parent="HUDLayer/HUD/HUD/Center" unique_id=1591236862 instance=ExtResource("5_qjkh3")]
+layout_mode = 2
+
+[node name="RightSide" type="VBoxContainer" parent="HUDLayer/HUD/HUD" unique_id=1031836224]
+layout_mode = 2
+
+[node name="Padding" type="Control" parent="HUDLayer/HUD/HUD/RightSide" unique_id=490459236]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
