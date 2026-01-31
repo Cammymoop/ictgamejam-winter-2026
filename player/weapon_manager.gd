@@ -5,6 +5,8 @@ signal weapon_changed(weapon_index: int, weapon_data: WeaponData)
 
 @export var projectile_scene: PackedScene
 
+@export var speed_factor: float = 1.0
+
 var weapons: Array[WeaponData] = []
 var current_weapon_index: int = 0
 var can_fire: bool = true

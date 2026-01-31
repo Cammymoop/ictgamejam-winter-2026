@@ -24,6 +24,9 @@ func _ready() -> void:
 func _process(delta: float) -> void:
     camera.global_transform = camera.global_transform.interpolate_with(camera_target.global_transform, delta * 3.4)
     
+    if Input.mouse_mode != Input.MOUSE_MODE_HIDDEN and Input.is_action_just_pressed("shoot"):
+        Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
+
     if Input.is_action_just_pressed("debug_switch_cam"):
         if debug_cam.current:
             debug_cam.current = false
@@ -34,6 +37,12 @@ func _process(delta: float) -> void:
     
     if Input.is_action_just_pressed("reset"):
         get_tree().reload_current_scene()
+        
+    if Input.is_action_just_pressed("menu"):
+        if Input.mouse_mode in [Input.MOUSE_MODE_CAPTURED, Input.MOUSE_MODE_HIDDEN]:
+            Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+        else:
+            get_tree().quit()
 
     set_deferred("global_basis", Basis.looking_at(level_path.look_here.global_position - global_position, Vector3.UP))
     

@@ -102,6 +102,8 @@ func fire() -> void:
     var player_pos_estimated = player_ref.global_position + (Global.player_velocity * (dist_to_player / bullet_speed))
 
     var projectile = projectile_scene.instantiate()
+    projectile.set_color(bullet_color)
+
     projectile.speed = bullet_speed
     projectile.is_enemy_projectile = true
     var fire_dir: = (player_pos_estimated - start_pos).normalized()
