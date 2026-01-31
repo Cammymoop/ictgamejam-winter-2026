@@ -9,9 +9,7 @@ const EXIT_FAILURE := 1
 
 
 func _init() -> void:
-	# Wait for tree to be ready
-	await process_frame
-	run_tests()
+	call_deferred("run_tests")
 
 
 func run_tests() -> void:
