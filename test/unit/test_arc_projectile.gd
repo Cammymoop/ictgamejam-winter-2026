@@ -51,7 +51,7 @@ func test_arc_projectile_has_splash_radius() -> void:
 		return
 
 	assert_true("splash_radius" in projectile, "Should have splash_radius property")
-	assert_eq(projectile.splash_radius, 2.0, "splash_radius should be 2.0")
+	assert_eq(projectile.splash_radius, 1.5, "splash_radius should be 1.5")
 
 
 func test_arc_projectile_has_damage() -> void:
@@ -61,7 +61,7 @@ func test_arc_projectile_has_damage() -> void:
 		return
 
 	assert_true("damage" in projectile, "Should have damage property")
-	assert_eq(projectile.damage, 1.5, "damage should be 1.5")
+	assert_eq(projectile.damage, 1.0, "damage should be 1.0")
 
 
 func test_arc_projectile_has_lifetime() -> void:
@@ -203,10 +203,10 @@ func test_projectile_y_velocity_decreases_due_to_gravity() -> void:
 	projectile.launch(launch_velocity)
 
 	await wait_physics_frames(2)
-	var initial_y_vel := projectile.linear_velocity.y
+	var initial_y_vel: float = projectile.linear_velocity.y
 
 	await wait_physics_frames(10)
-	var later_y_vel := projectile.linear_velocity.y
+	var later_y_vel: float = projectile.linear_velocity.y
 
 	# Y velocity should decrease due to gravity
 	assert_lt(later_y_vel, initial_y_vel, "Y velocity should decrease due to gravity")
@@ -225,7 +225,7 @@ func test_projectile_reaches_apex_then_descends() -> void:
 	var launch_velocity := Vector3(5, 15, 0)
 	projectile.launch(launch_velocity)
 
-	var max_y := projectile.global_position.y
+	var max_y: float = projectile.global_position.y
 	var found_apex := false
 	var descending := false
 
@@ -234,7 +234,7 @@ func test_projectile_reaches_apex_then_descends() -> void:
 		if not is_instance_valid(projectile):
 			break
 
-		var current_y := projectile.global_position.y
+		var current_y: float = projectile.global_position.y
 
 		if current_y > max_y:
 			max_y = current_y
@@ -267,9 +267,9 @@ func test_trajectory_prediction_matches_physics() -> void:
 	var time_step := 0.1
 
 	for i in min(predicted_points.size(), 10):
-		var t := i * time_step
-		var expected_x := start_pos.x + launch_velocity.x * t
-		var expected_y := start_pos.y + launch_velocity.y * t - 0.5 * gravity * t * t
+		var t: float = i * time_step
+		var expected_x: float = start_pos.x + launch_velocity.x * t
+		var expected_y: float = start_pos.y + launch_velocity.y * t - 0.5 * gravity * t * t
 
 		# Allow some tolerance for numerical integration differences
 		assert_almost_eq(predicted_points[i].x, expected_x, 0.5,

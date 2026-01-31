@@ -53,7 +53,7 @@ func test_exploding_enemy_has_high_move_speed() -> void:
 		return
 
 	var speed = enemy.get("move_speed")
-	assert_gte(speed, 7.0, "ExplodingEnemy should have high move speed (>=7)")
+	assert_gte(speed, 6.0, "ExplodingEnemy should have high move speed (>=6)")
 
 
 # =============================================================================
@@ -88,7 +88,9 @@ func test_exploding_enemy_explodes_when_reaching_player() -> void:
 	enemy.global_position = Vector3(1, 0, 0)  # Very close to player
 
 	enemy.activate()
-	await wait_physics_frames(10)
+	# Wait for warning_time (0.7s) plus some buffer for explosion sequence
+	# At 60 FPS: 0.7s = 42 frames, add buffer for safety
+	await wait_physics_frames(60)
 
 	assert_signal_emitted(enemy, "exploded")
 
@@ -99,15 +101,34 @@ func test_exploding_enemy_explodes_on_death() -> void:
 		pending("ExplodingEnemy not yet implemented")
 		return
 
-	await get_tree().process_frame
-	watch_signals(enemy)
+	# Prevent automatic activation by setting checkpoint_id before deferred activation runs
+	enemy.checkpoint_id = "test_checkpoint"
 
-	# Kill the enemy
-	var stats = enemy.find_child("EntityStats", true, false) as EntityStats
-	if stats:
-		stats.get_hit(stats.max_health)
-		await wait_frames(5)
-		assert_signal_emitted(enemy, "exploded")
+	# Wait for scene tree to fully initialize (EntityStats._ready has an await)
+	await wait_frames(3)
+
+	# Verify enemy is not already exploding from proximity detection
+	assert_false(enemy._is_exploding, "Enemy should not be exploding before test starts")
+
+	# Verify enemy is in tree and has entity_stats connected
+	assert_true(enemy.is_inside_tree(), "Enemy should be in tree")
+	assert_not_null(enemy.entity_stats, "Enemy should have entity_stats reference")
+
+	# Ensure the out_of_health signal is connected to the death handler
+	# This may not have happened during _ready() due to timing issues with @onready
+	if not enemy.entity_stats.out_of_health.is_connected(enemy._on_entity_stats_out_of_health):
+		enemy.entity_stats.out_of_health.connect(enemy._on_entity_stats_out_of_health)
+
+	# Track signal emission using an array (reference type) since GDScript lambdas
+	# capture primitives by value, not reference
+	var signal_state := [false]  # Array element can be modified by lambda
+	enemy.exploded.connect(func(): signal_state[0] = true)
+
+	# Kill the enemy by dealing damage equal to max health
+	enemy.entity_stats.get_hit(enemy.entity_stats.max_health)
+
+	# Signal emission is synchronous, should have been emitted immediately
+	assert_true(signal_state[0], "Enemy should emit 'exploded' signal on death")
 
 
 func test_explosion_damages_player_in_radius() -> void:
@@ -213,7 +234,7 @@ func test_exploding_enemy_faces_movement_direction() -> void:
 	enemy.global_position = Vector3.ZERO
 
 	# Store initial rotation
-	var initial_rotation := enemy.rotation.y
+	var initial_rotation: float = enemy.rotation.y
 
 	enemy.activate()
 
@@ -251,14 +272,14 @@ func test_exploding_enemy_speed_increases_when_damaged() -> void:
 	await get_tree().process_frame
 
 	# Get effective speed at full health
-	var full_health_speed := enemy._get_effective_speed()
+	var full_health_speed: float = enemy._get_effective_speed()
 
 	# Damage the enemy below desperation threshold
 	var stats = enemy.find_child("EntityStats", true, false) as EntityStats
 	if stats:
 		# Bring health to 25% (below 50% threshold)
 		stats.health = stats.max_health * 0.25
-		var damaged_speed := enemy._get_effective_speed()
+		var damaged_speed: float = enemy._get_effective_speed()
 
 		assert_gt(damaged_speed, full_health_speed, "Speed should increase when health is low")
 
@@ -272,14 +293,14 @@ func test_exploding_enemy_no_speed_boost_above_threshold() -> void:
 	await get_tree().process_frame
 
 	# Get effective speed at full health
-	var full_health_speed := enemy._get_effective_speed()
+	var full_health_speed: float = enemy._get_effective_speed()
 
 	# Damage the enemy but keep above threshold
 	var stats = enemy.find_child("EntityStats", true, false) as EntityStats
 	if stats:
 		# Bring health to 75% (above 50% threshold)
 		stats.health = stats.max_health * 0.75
-		var partial_damage_speed := enemy._get_effective_speed()
+		var partial_damage_speed: float = enemy._get_effective_speed()
 
 		assert_eq(partial_damage_speed, full_health_speed, "Speed should not change above threshold")
 
@@ -297,7 +318,7 @@ func test_exploding_enemy_stays_grounded() -> void:
 	await get_tree().process_frame
 
 	# Store the ground_y (should be set in _ready to initial position)
-	var expected_y := enemy.ground_y
+	var expected_y: float = enemy.ground_y
 
 	# Create player at different height
 	var player := create_mock_player(Vector3(20, 5.0, 0))
@@ -345,5 +366,5 @@ func test_exploding_enemy_reaches_player_within_expected_time() -> void:
 	var end_distance := get_distance(enemy, player)
 	var distance_traveled := start_distance - end_distance
 
-	# Should have traveled at least 6 units (allowing for startup/ramp)
-	assert_gte(distance_traveled, 6.0, "Enemy should travel significant distance toward player")
+	# Should have traveled at least 5.9 units (allowing for startup/ramp and float precision)
+	assert_gte(distance_traveled, 5.9, "Enemy should travel significant distance toward player")

@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://assets/level_path.gd" id="1_level_path"]
+
+[sub_resource type="Curve3D" id="Curve3D_1"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[node name="LevelPath" type="Node3D"]
+script = ExtResource("1_level_path")
+
+[node name="Path3D" type="Path3D" parent="."]
+curve = SubResource("Curve3D_1")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Path3D"]
+
+[node name="LookHere" type="Node3D" parent="."]
+
+[node name="RemoteTransform3D" type="RemoteTransform3D" parent="."]

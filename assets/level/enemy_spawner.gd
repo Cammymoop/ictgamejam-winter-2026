@@ -27,6 +27,15 @@ func spawn_wave() -> Array[Node3D]:
 	spawned_enemies.clear()
 	remaining_enemies = 0
 
+	# Determine parent node for spawned enemies
+	var spawn_parent: Node = get_parent()
+	if not spawn_parent:
+		# Fallback to current scene if no parent
+		spawn_parent = get_tree().current_scene if get_tree() else null
+	if not spawn_parent:
+		push_warning("EnemySpawner: No valid parent to spawn enemies into")
+		return spawned_enemies
+
 	var count = mini(enemy_scenes.size(), spawn_positions.size())
 	for i in count:
 		if spawn_delay > 0 and i > 0:
@@ -36,7 +45,7 @@ func spawn_wave() -> Array[Node3D]:
 		# Set checkpoint_id before adding to tree so _ready() sees it
 		if not checkpoint_id.is_empty() and "checkpoint_id" in enemy:
 			enemy.checkpoint_id = checkpoint_id
-		get_parent().add_child(enemy)
+		spawn_parent.add_child(enemy)
 		enemy.global_position = spawn_positions[i].global_position
 		spawned_enemies.append(enemy)
 

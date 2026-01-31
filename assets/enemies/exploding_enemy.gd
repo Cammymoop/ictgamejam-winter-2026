@@ -25,8 +25,7 @@ signal exploded
 @export var explosion_damage: float = 2.0
 @export var warning_time: float = 0.7
 
-## Override base move_speed with higher value for rushing behavior
-@export var move_speed: float = 6.0
+## Note: move_speed inherited from EnemyBase, default 6.0 set in _ready()
 
 ## Desperation behavior: speed multiplier when health is low
 @export var desperation_speed_multiplier: float = 1.5
@@ -58,6 +57,8 @@ var _base_tick_interval: float = 0.5
 
 
 func _ready() -> void:
+	# Set ExplodingEnemy's higher move_speed (rushing behavior)
+	move_speed = 6.0
 	super._ready()
 	# Try to find NavigationAgent3D child for pathfinding
 	_nav_agent = find_child("NavigationAgent3D", false, false) as NavigationAgent3D
@@ -225,8 +226,12 @@ func _spawn_explosion_effect() -> void:
 	if effect:
 		# Scale up the effect for explosion
 		effect.scale = Vector3.ONE * (explosion_radius / 2.0)
-		get_tree().current_scene.add_child(effect)
-		effect.global_position = global_position
+		var parent := get_tree().current_scene if get_tree() else null
+		if parent:
+			parent.add_child(effect)
+			effect.global_position = global_position
+		else:
+			effect.queue_free()
 
 
 ## Damage the player if within explosion radius (does NOT damage other enemies)
@@ -272,7 +277,12 @@ func _setup_audio() -> void:
 	_tick_player = AudioStreamPlayer3D.new()
 	_tick_player.bus = "SFX"
 	_tick_player.max_distance = 30.0
-	add_child(_tick_player)
+	# Only add child if we're in the scene tree
+	if is_inside_tree():
+		add_child(_tick_player)
+	else:
+		# Defer until we're in the tree
+		call_deferred("add_child", _tick_player)
 
 	# Cache the sounds from SFXManager
 	if SFXManager:

@@ -3,6 +3,9 @@
 [ext_resource type="PackedScene" uid="uid://bloabf7ru74em" path="res://assets/world_scene.tscn" id="1_qmwpp"]
 [ext_resource type="PackedScene" uid="uid://cgtjcig0iej8n" path="res://assets/main_camera.tscn" id="2_wpvyo"]
 [ext_resource type="Script" uid="uid://bu8s18bawijbh" path="res://player/cursor_manager.gd" id="3_cursor"]
+[ext_resource type="Script" path="res://game_manager.gd" id="4_gamemanager"]
+[ext_resource type="PackedScene" uid="uid://win_screen_001" path="res://ui/win_screen.tscn" id="5_winscreen"]
+[ext_resource type="PackedScene" uid="uid://lose_screen_001" path="res://ui/lose_screen.tscn" id="6_losescreen"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qmwpp"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -53,3 +56,15 @@ cursor_color_enemy = Color(1, 0.27450982, 0, 0.91764706)
 [node name="CursorSprite" type="Sprite2D" parent="CursorLayer" unique_id=2084466331]
 modulate = Color(0.3764706, 1, 1, 0.49803922)
 texture = SubResource("GradientTexture2D_uaptj")
+
+[node name="GameManager" type="Node" parent="."]
+script = ExtResource("4_gamemanager")
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="WinScreen" parent="UILayer" instance=ExtResource("5_winscreen")]
+process_mode = 3
+
+[node name="LoseScreen" parent="UILayer" instance=ExtResource("6_losescreen")]
+process_mode = 3

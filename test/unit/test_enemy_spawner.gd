@@ -43,7 +43,8 @@ func test_enemy_spawner_spawn_wave_creates_enemies() -> void:
 	assert_not_null(enemy_scene, "Test enemy scene should load")
 
 	# Configure spawner with 2 enemy scenes (fewer than spawn positions)
-	spawner.enemy_scenes = [enemy_scene, enemy_scene]
+	var scenes: Array[PackedScene] = [enemy_scene, enemy_scene]
+	spawner.enemy_scenes = scenes
 	spawner.spawn_delay = 0.0  # No delay for faster tests
 
 	# Spawn the wave
@@ -67,7 +68,8 @@ func test_enemy_spawner_spawn_count_matches_minimum() -> void:
 	var enemy_scene = load("res://assets/enemies/test_enemy.tscn")
 
 	# Add more enemy scenes than spawn positions (3 positions, 5 scenes)
-	spawner.enemy_scenes = [enemy_scene, enemy_scene, enemy_scene, enemy_scene, enemy_scene]
+	var scenes: Array[PackedScene] = [enemy_scene, enemy_scene, enemy_scene, enemy_scene, enemy_scene]
+	spawner.enemy_scenes = scenes
 	spawner.spawn_delay = 0.0
 
 	var enemies = await spawner.spawn_wave()
@@ -85,7 +87,8 @@ func test_enemy_spawner_emits_wave_spawned_signal() -> void:
 		return
 
 	var enemy_scene = load("res://assets/enemies/test_enemy.tscn")
-	spawner.enemy_scenes = [enemy_scene]
+	var scenes: Array[PackedScene] = [enemy_scene]
+	spawner.enemy_scenes = scenes
 	spawner.spawn_delay = 0.0
 
 	watch_signals(spawner)
@@ -106,7 +109,8 @@ func test_enemy_spawner_emits_wave_cleared_when_all_enemies_die() -> void:
 		return
 
 	var enemy_scene = load("res://assets/enemies/test_enemy.tscn")
-	spawner.enemy_scenes = [enemy_scene]
+	var scenes: Array[PackedScene] = [enemy_scene]
+	spawner.enemy_scenes = scenes
 	spawner.spawn_delay = 0.0
 
 	var enemies = await spawner.spawn_wave()
@@ -133,7 +137,8 @@ func test_enemy_spawner_positions_enemies_at_markers() -> void:
 		return
 
 	var enemy_scene = load("res://assets/enemies/test_enemy.tscn")
-	spawner.enemy_scenes = [enemy_scene, enemy_scene]
+	var scenes: Array[PackedScene] = [enemy_scene, enemy_scene]
+	spawner.enemy_scenes = scenes
 	spawner.spawn_delay = 0.0
 
 	var enemies = await spawner.spawn_wave()

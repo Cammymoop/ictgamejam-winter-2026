@@ -32,7 +32,7 @@ func run_tests() -> void:
 	# Load and run GUT
 	var gut_script := load("res://addons/gut/gut.gd")
 	var gut = gut_script.new()
-	add_child(gut)
+	root.add_child(gut)
 
 	# Configure GUT
 	gut.add_directory("res://test/unit/")
@@ -45,8 +45,8 @@ func run_tests() -> void:
 		await process_frame
 
 	# Report results
-	var passed := gut.get_pass_count()
-	var failed := gut.get_fail_count()
+	var passed: int = gut.get_pass_count()
+	var failed: int = gut.get_fail_count()
 
 	print("\n" + "=" .repeat(60))
 	print("Results: %d passed, %d failed" % [passed, failed])

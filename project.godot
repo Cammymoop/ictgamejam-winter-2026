@@ -15,11 +15,16 @@ run/main_scene="res://main_game_scene.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
+[audio]
+
+buses/default_bus_layout="res://default_bus_layout.tres"
+
 [autoload]
 
 Util="*uid://cvyn3aer18w50"
 EntityManager="*res://static/entity_manager.gd"
 Global="*res://static/global.gd"
+SFXManager="*res://static/sfx_manager.gd"
 
 [display]
 

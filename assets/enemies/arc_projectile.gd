@@ -23,7 +23,7 @@ signal impacted(position: Vector3)
 @export var damage: float = 1.0
 @export var splash_radius: float = 1.5
 @export var lifetime: float = 5.0
-@export var gravity_scale: float = 1.0
+## Note: gravity_scale is inherited from RigidBody3D (default 1.0)
 
 ## Number of points to calculate for trajectory preview
 @export var trajectory_preview_points: int = 30
@@ -51,8 +51,7 @@ func _ready() -> void:
 	# Cache gravity value
 	_gravity = ProjectSettings.get_setting("physics/3d/default_gravity", 9.8) as float
 
-	# Set gravity scale
-	self.gravity_scale = gravity_scale
+	# gravity_scale uses RigidBody3D's built-in property (default 1.0)
 
 	# Configure collision for enemy projectile
 	_setup_collision_layers()
@@ -149,11 +148,20 @@ func create_trajectory_preview(
 	if points.size() < 2:
 		return null
 
+	# Create material for the trajectory line first (to pass to surface_begin)
+	var material := StandardMaterial3D.new()
+	material.albedo_color = Color(1.0, 0.5, 0.0, 0.7)  # Orange, semi-transparent
+	material.emission_enabled = true
+	material.emission = Color(1.0, 0.5, 0.0)
+	material.emission_energy_multiplier = 0.5
+	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+
 	# Create immediate mesh for the line
 	var immediate_mesh := ImmediateMesh.new()
 
-	# Begin drawing line strip
-	immediate_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP)
+	# Begin drawing line strip with the material
+	immediate_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, material)
 
 	for point in points:
 		# Convert to local coordinates if we have a parent
@@ -167,23 +175,16 @@ func create_trajectory_preview(
 	# Create mesh instance
 	_trajectory_line = MeshInstance3D.new()
 	_trajectory_line.mesh = immediate_mesh
-
-	# Create material for the trajectory line
-	var material := StandardMaterial3D.new()
-	material.albedo_color = Color(1.0, 0.5, 0.0, 0.7)  # Orange, semi-transparent
-	material.emission_enabled = true
-	material.emission = Color(1.0, 0.5, 0.0)
-	material.emission_energy_multiplier = 0.5
-	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	_trajectory_line.material_override = material
 
 	# Add to parent or scene
 	if parent:
 		parent.add_child(_trajectory_line)
-	elif is_inside_tree():
+	elif is_inside_tree() and get_tree().current_scene:
 		get_tree().current_scene.add_child(_trajectory_line)
 		_trajectory_line.global_position = Vector3.ZERO
+	# If not in tree and no parent provided, the mesh is still created and returned
+	# but not added to any scene - caller is responsible for adding it
 
 	return _trajectory_line
 
@@ -197,9 +198,19 @@ func update_trajectory_preview(start_pos: Vector3, initial_velocity: Vector3) ->
 	if points.size() < 2:
 		return
 
+	# Get the existing material from the trajectory line (or create a default)
+	var material: Material = _trajectory_line.material_override
+	if not material:
+		material = StandardMaterial3D.new()
+		var std_mat := material as StandardMaterial3D
+		std_mat.albedo_color = Color(1.0, 0.5, 0.0, 0.7)
+		std_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		std_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		_trajectory_line.material_override = material
+
 	# Recreate the mesh with updated points
 	var immediate_mesh := ImmediateMesh.new()
-	immediate_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP)
+	immediate_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP, material)
 
 	var parent := _trajectory_line.get_parent() as Node3D
 	for point in points:
@@ -221,9 +232,26 @@ func _clear_trajectory_preview() -> void:
 
 ## Get the predicted landing position for the given launch parameters
 func get_predicted_landing_position(start_pos: Vector3, initial_velocity: Vector3) -> Vector3:
-	var points := calculate_trajectory(start_pos, initial_velocity)
+	# Use more points and longer time step to ensure we reach ground level
+	# For a projectile starting at y=10 with upward velocity, we need more simulation time
+	var points := calculate_trajectory(start_pos, initial_velocity, 100, 0.05)
 	if points.size() > 0:
-		return points[points.size() - 1]
+		var last_point := points[points.size() - 1]
+		# If trajectory didn't reach ground, calculate analytically
+		if last_point.y > 0.5:
+			# Use physics equation to find time to ground: y = y0 + vy*t - 0.5*g*t^2
+			# Solve for t when y = 0
+			var g := _gravity * gravity_scale
+			var y0 := start_pos.y
+			var vy := initial_velocity.y
+			# Quadratic formula: t = (vy + sqrt(vy^2 + 2*g*y0)) / g
+			var discriminant := vy * vy + 2 * g * y0
+			if discriminant >= 0:
+				var t := (vy + sqrt(discriminant)) / g
+				var landing_x := start_pos.x + initial_velocity.x * t
+				var landing_z := start_pos.z + initial_velocity.z * t
+				return Vector3(landing_x, 0.0, landing_z)
+		return last_point
 	return start_pos
 
 
@@ -272,10 +300,12 @@ func _apply_splash_damage() -> void:
 
 func _spawn_impact_effect() -> void:
 	var effect := _impact_effect_scene.instantiate() as Node3D
-	if effect and is_inside_tree():
+	if effect and is_inside_tree() and get_tree() and get_tree().current_scene:
 		effect.scale = Vector3.ONE * (splash_radius / 2.0)
 		get_tree().current_scene.add_child(effect)
 		effect.global_position = global_position
+	elif effect:
+		effect.queue_free()
 
 
 func _on_lifetime_expired() -> void:

@@ -38,5 +38,21 @@ func set_target_position(world_pos: Vector3) -> void:
 func _on_entity_stats_out_of_health() -> void:
 	set_physics_process(false)
 	visible = false
-	await get_tree().create_timer(1).timeout
-	get_tree().reload_current_scene()
+
+	# Try to notify game manager for proper lose screen handling
+	var game_manager := _find_game_manager()
+	if game_manager and game_manager.has_method("trigger_lose"):
+		await get_tree().create_timer(0.5).timeout
+		game_manager.trigger_lose()
+	else:
+		# Fallback: reload scene directly if no game manager
+		await get_tree().create_timer(1).timeout
+		get_tree().reload_current_scene()
+
+
+## Find the GameManager in the scene tree
+func _find_game_manager() -> Node:
+	var root := get_tree().current_scene
+	if root:
+		return root.find_child("GameManager", true, false)
+	return null
