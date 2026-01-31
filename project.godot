@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 Util="*uid://cvyn3aer18w50"
 EntityManager="*res://static/entity_manager.gd"
 Global="*res://static/global.gd"
+SfxManager="*uid://bhxpnr87aqkum"
 
 [global_group]
 

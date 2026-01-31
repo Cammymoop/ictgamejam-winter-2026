@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bhxpnr87aqkum"]
+
+[ext_resource type="Script" uid="uid://c28x83k26qoky" path="res://static/sfx_manager.gd" id="1_1ovey"]
+
+[node name="SFXManagerClass" type="Node" unique_id=1303911859]
+script = ExtResource("1_1ovey")
+metadata/_custom_type_script = "uid://c28x83k26qoky"

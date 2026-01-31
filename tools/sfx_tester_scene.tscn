@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://dqslnk2sdw7cp"]
+
+[ext_resource type="Script" uid="uid://dft5bhb3uoay0" path="res://tools/sfx_tester_scene.gd" id="1_7ssbc"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_7ssbc"]
+sky_top_color = Color(0.4859727, 0.56006813, 0.6589613, 1)
+sky_horizon_color = Color(0.74841547, 0.79476786, 0.7981357, 1)
+ground_bottom_color = Color(0.091878735, 0.20319298, 0.11777113, 1)
+ground_horizon_color = Color(0.74841547, 0.79476786, 0.7981357, 1)
+energy_multiplier = 1.3
+
+[sub_resource type="Sky" id="Sky_74myy"]
+sky_material = SubResource("ProceduralSkyMaterial_7ssbc")
+
+[sub_resource type="Environment" id="Environment_1swlu"]
+background_mode = 2
+sky = SubResource("Sky_74myy")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7ssbc"]
+albedo_color = Color(0.86036915, 0.8603692, 0.8603692, 1)
+
+[sub_resource type="TextMesh" id="TextMesh_74myy"]
+text = "..."
+font_size = 40
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1swlu"]
+albedo_color = Color(0.31119612, 0.13526562, 0.40214625, 1)
+
+[sub_resource type="TextMesh" id="TextMesh_nq1rn"]
+text = "Sound Test"
+font_size = 40
+
+[node name="SFXTesterScene" type="Node3D" unique_id=2063230490]
+transform = Transform3D(1, 0, 0, 0, 0.98379445, 0.17930014, 0, -0.17930014, 0.98379445, 0, 0, 0)
+script = ExtResource("1_7ssbc")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1397147395]
+environment = SubResource("Environment_1swlu")
+
+[node name="MeshLabel" type="MeshInstance3D" parent="." unique_id=38324518]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.044999957, 0)
+material_override = SubResource("StandardMaterial3D_7ssbc")
+mesh = SubResource("TextMesh_74myy")
+
+[node name="MeshLabel2" type="MeshInstance3D" parent="." unique_id=1191107586]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5413928, 0)
+material_override = SubResource("StandardMaterial3D_1swlu")
+mesh = SubResource("TextMesh_nq1rn")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=2000266538]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.9457765)
