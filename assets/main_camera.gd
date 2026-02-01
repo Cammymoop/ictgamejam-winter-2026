@@ -5,23 +5,30 @@ var level_path: LevelPath
 @onready var camera_target: Node3D = $CameraTarget
 @onready var debug_cam: Camera3D = find_child("DebugCam").get_node("Camera3D")
 
+@onready var starting_basis: Basis = global_basis
+
+var main_game: Node3D
+
 func _ready() -> void:
-    level_path = get_node("/root/Game/World/LevelPath") as LevelPath
-    if not level_path:
-        print_debug("Level path not found")
-        push_error("Level path not found")
-        return
+    main_game = get_node("/root/Game")
+    main_game.loaded_new_world.connect(on_world_loaded)
+    
+    on_world_loaded()
+
+
+func on_world_loaded() -> void:
+    level_path = main_game.current_world.get_node("LevelPath") as LevelPath
+    assert(level_path, "Level path not found")
+    global_basis = starting_basis
     
     var remote_transform = level_path.remote_transform
     var parent: = get_parent()
     remote_transform.remote_path = remote_transform.get_path_to(parent)
-    parent.global_transform = remote_transform.global_transform
+    parent.global_position = remote_transform.global_position
     
     level_path.start()
 
     global_position = level_path.path_follow.global_position
-
-    await get_tree().process_frame
     camera.global_transform = camera_target.global_transform
 
 func _process(delta: float) -> void:
@@ -49,6 +56,6 @@ func _process(delta: float) -> void:
         else:
             get_tree().quit()
 
-    set_deferred("global_basis", Basis.looking_at(level_path.look_here.global_position - global_position, Vector3.UP))
+    global_basis = Basis.looking_at(level_path.look_here.global_position - global_position, Vector3.UP)
     
 

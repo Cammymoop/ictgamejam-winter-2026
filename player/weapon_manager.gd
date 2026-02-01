@@ -140,7 +140,7 @@ func _spawn_projectile(pos: Vector3, direction: Vector3, weapon: WeaponData) -> 
     projectile.lifetime = weapon.projectile_lifetime
     projectile.impace_scale = weapon.impact_scale
 
-    get_tree().current_scene.add_child(projectile)
+    SpawnInWorld.spawn(projectile, pos)
 
     projectile.global_position = pos
 

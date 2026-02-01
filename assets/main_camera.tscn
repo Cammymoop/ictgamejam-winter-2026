@@ -26,6 +26,7 @@ debug_custom_color = Color(0.95437187, 0, 0.021673854, 1)
 transform = Transform3D(0.87758255, -0.22984886, 0.42073548, 0, 0.87758255, 0.47942555, -0.47942555, -0.4207355, 0.77015114, 4.207355, 4.7942557, 7.7015114)
 top_level = true
 current = true
+fov = 54.5
 
 [node name="Player" parent="." unique_id=1524924709 instance=ExtResource("1_aftc5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 2.9802322e-08, 0, 1, 7.1525574e-07, -3.9999998, -2.3841858e-07)

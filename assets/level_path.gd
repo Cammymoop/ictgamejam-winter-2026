@@ -27,6 +27,7 @@ func start() -> void:
     delay_timer.one_shot = true
     delay_timer.autostart = true
     delay_timer.timeout.connect(start_moving)
+    path_follow.progress = 0
     add_child(delay_timer)
     delay_timer.start()
     

@@ -235,8 +235,7 @@ func fire() -> void:
     
     projectile.damage = 1
 
-    get_parent().add_child(projectile)
-    projectile.global_position = start_pos
+    SpawnInWorld.spawn(projectile, start_pos)
     
     if show_debug_path:
         draw_debug_path(start_pos, player_pos_estimated)

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://fexs7ywjowp8"]
 
-[ext_resource type="PackedScene" uid="uid://bloabf7ru74em" path="res://assets/world_scene.tscn" id="1_qmwpp"]
+[ext_resource type="Script" uid="uid://den5l0lqmqp0h" path="res://main_game_scene.gd" id="1_s4q73"]
 [ext_resource type="PackedScene" uid="uid://cgtjcig0iej8n" path="res://assets/main_camera.tscn" id="2_wpvyo"]
 [ext_resource type="Script" uid="uid://bu8s18bawijbh" path="res://player/cursor_manager.gd" id="3_cursor"]
 
@@ -89,6 +89,7 @@ _data = {
 }
 
 [node name="Game" type="Node3D" unique_id=520359190]
+script = ExtResource("1_s4q73")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2107545475]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
@@ -96,8 +97,6 @@ shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1253041843]
 environment = SubResource("Environment_s4q73")
-
-[node name="World" parent="." unique_id=1982225913 instance=ExtResource("1_qmwpp")]
 
 [node name="CameraDrag" type="Node3D" parent="." unique_id=183972685]
 
@@ -129,3 +128,5 @@ mouse_filter = 2
 [node name="AnimationPlayer" type="AnimationPlayer" parent="SceneFadeIn" unique_id=1519281817]
 libraries/ = SubResource("AnimationLibrary_wpvyo")
 autoplay = &"fade_in"
+
+[connection signal="loaded_new_world" from="." to="SceneFadeIn/AnimationPlayer" method="play" binds= ["fade_in"]]

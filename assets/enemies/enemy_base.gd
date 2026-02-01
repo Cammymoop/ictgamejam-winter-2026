@@ -98,7 +98,6 @@ func _play_hit_flash() -> void:
 		return
 	if flash_animator.is_playing():
 		flash_animator.stop()
-	prints("playing flash anim")
 	flash_animator.play("flash")
 
 
@@ -196,9 +195,7 @@ func _spawn_random_impact(size_min: float = 0.7, size_max: float = 1.9) -> bool:
 
 	var impact: = preload("res://assets/effects/impact_sphere.tscn").instantiate()
 	impact.scale = Vector3.ONE * randf_range(size_min, size_max)
-	get_parent().add_child(impact)
-	
-	impact.global_position = ray_cast_result.position
+	SpawnInWorld.spawn(impact, ray_cast_result.position)
 	return true
 
 
