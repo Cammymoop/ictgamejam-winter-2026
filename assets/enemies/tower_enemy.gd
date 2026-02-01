@@ -1,4 +1,4 @@
-extends Node3D
+extends EnemyBase
 
 var projectile_scene: PackedScene = preload("res://assets/general/projectile.tscn")
 
@@ -10,22 +10,12 @@ class Timers:
 
 @export var shoot_from: Node3D = null
 
-@export var show_warning_time: float = 0.3
-
-@export var move_speed: float = 4
-@export var fire_rate: float = 0.2
-@export var delay_chance: float = 0.2
-@export var min_time_before_shield: float = 1
-@export var delay_base_time: float = 2.0
 @export var active_distance: float = 57
 
 @export var use_shield: bool = true
 @export var shield_on_when_inactive: bool = true
 
 @export var show_before_shoot: Node3D
-@onready var timer_set: TimerSet = $TimerSet
-@onready var flash_animator: AnimationPlayer = find_child("FlashAnimator")
-@onready var active_animator: AnimationPlayer = find_child("ActiveAnimator")
 
 @onready var shield_mesh: MeshInstance3D = find_child("Shield")
 @onready var shield_body: CollisionObject3D = shield_mesh.get_node("StaticBody3D")
@@ -33,42 +23,45 @@ class Timers:
 
 @onready var shake_offset: Node3D = find_child("Shake")
 
+@export_group("Weapon Properties")
 @export var bullet_speed: float = 90
 @export var bullet_lifetime: float = 6
 @export var bullet_color: Color = Color.ORANGE
-
 @export var innacuracy: float = TAU / 32
 @export_exp_easing var innacuracy_curve_param: float = 1
 
-@export var shake_strength: float = 0.2
-
+@export_group("Timing")
+@export var fire_rate: float = 0.2
+@export var delay_chance: float = 0.2
+@export var min_time_before_shield: float = 1
+@export var delay_base_time: float = 2.0
 @export var active_check_interval: float = 0.5
 
+@export_group("Animations")
+@export var show_warning_time: float = 0.3
+@export var shake_strength: float = 0.2
+@onready var active_animator: AnimationPlayer = find_child("ActiveAnimator")
+
+@export_group("Debug")
 @export var show_debug_path: bool = false
 
 var active_check_waiting: bool = false
 
-var player_ref: Node3D = null
-var entity_stats: EntityStats = null
-
 var is_shooting: bool = false
-var is_reloading: bool = true
-var reload_timeleft: float = 0
 
 var is_enabled: bool = true
 var is_active: bool = false
 var is_shaking: bool = false
 
 func _ready() -> void:
+    super._ready()
     if show_before_shoot:
         show_before_shoot.visible = false
         show_before_shoot.material_override.albedo_color = bullet_color
     
-    prints("my global aabb", Util.get_enclosing_aabb_of_mesh_instances_approximate([shoot_from, find_child("MeshInstance3D")]))
+    active_animator.animation_finished.connect(_on_active_animator_animation_finished)
     
     show_warning_time = minf(show_warning_time, (1 / fire_rate) * 0.75)
-    
-    active_animator.animation_finished.connect(_on_active_animator_animation_finished)
     
     timer_set.add_timer(Timers.DELAY, delay_base_time, delay_over)
     timer_set.add_timer(Timers.ACTIVE_CHECK, active_check_interval, active_check_ready, true)
@@ -78,11 +71,10 @@ func _ready() -> void:
     if (not use_shield or not shield_on_when_inactive) and is_shield_active():
         turn_off_shield()
     
-    entity_stats = $EntityStats
     if use_shield:
         entity_stats.check_can_be_hit = can_enemy_be_hit
     
-    player_ref = Util.get_player_ref()
+    set_player_ref()
     if not player_ref:
         disable()
     else:
@@ -128,8 +120,6 @@ func disable() -> void:
 
 func random_delay() -> void:
     is_shooting = false
-    is_reloading = true
-    reload_timeleft = show_warning_time
     timer_set.start(Timers.DELAY, delay_base_time * randf_range(.8, 1.5))
     if use_shield and not is_shield_active():
         turn_on_shield()
@@ -156,7 +146,7 @@ func try_activate(recheck: bool = false) -> void:
         los_checker.visible = true
     
     los_checker.enabled = true
-    los_checker.target_position = los_checker.to_local(player_ref.global_position)
+    los_checker.target_position = los_checker.to_local(get_player_global_pos())
     los_checker.force_shapecast_update()
     
     if los_checker.is_colliding():
@@ -187,7 +177,7 @@ func deactivate() -> void:
     if use_shield and shield_on_when_inactive:
         turn_on_shield()
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
     if show_before_shoot:
         show_before_shoot.visible = false
     if is_shaking:
@@ -198,7 +188,7 @@ func _process(delta: float) -> void:
     if not is_enabled:
         return
     
-    var player_distance = global_position.distance_to(player_ref.global_position)
+    var player_distance = get_distance_to_player()
     if not is_active:
         if player_distance < active_distance and not active_check_waiting:
             try_activate()
@@ -226,8 +216,9 @@ func fire() -> void:
     if shoot_from:
         start_pos = shoot_from.global_position
 
-    var dist_to_player = start_pos.distance_to(player_ref.global_position)
-    var player_pos_estimated = player_ref.global_position + (Global.player_velocity * (dist_to_player / bullet_speed))
+    var player_pos = get_player_global_pos()
+    var dist_to_player = start_pos.distance_to(player_pos)
+    var player_pos_estimated = player_pos + (Global.player_velocity * (dist_to_player / bullet_speed))
 
     var projectile = projectile_scene.instantiate()
     PhysicsServer3D.body_add_collision_exception(projectile.get_rid(), shield_body.get_rid())
@@ -260,17 +251,16 @@ func draw_debug_path(start_pos: Vector3, end_pos: Vector3) -> void:
     debug_path.queue_free()
 
 func _on_entity_stats_got_hit() -> void:
-    if flash_animator.is_playing():
-        flash_animator.stop()
-    flash_animator.play("flash")
+    super._on_entity_stats_got_hit()
     damage_anim_material()
 
 func _on_entity_stats_out_of_health() -> void:
     if show_before_shoot:
         show_before_shoot.visible = false
-    disable()
-    show_death_anim()
-    #queue_free()
+        turn_off_shield()
+    is_shaking = true
+    is_enabled = false
+    super._on_entity_stats_out_of_health()
 
 func damage_anim_material() -> void:
     var health_ratio = entity_stats.health / entity_stats.max_health
@@ -281,45 +271,6 @@ func damage_anim_material() -> void:
     material.detail_enabled = health_ratio < 0.99
     var mask_gradient: Gradient = material.detail_mask.color_ramp as Gradient
     mask_gradient.set_offset(1, health_ratio)
-
-func show_death_anim() -> void:
-    is_shaking = true
-    flash_animator.play("flash_death")
-    var other_animator: = find_child("DeathAnimator") as AnimationPlayer
-    other_animator.animation_finished.connect(death_anim_over)
-    other_animator.play("death")
-
-func spawn_random_impact() -> void:
-    for i in 5:
-        _spawn_random_impact()
-
-func _spawn_random_impact() -> bool:
-    #var ray_cast_destination: = get_global_center_approx()
-    var ray_cast_destination: = shake_offset.global_position + (Vector3.UP * 5)
-    var ray_cast_direction: = Vector3.FORWARD.rotated(Vector3.RIGHT, (TAU/4) * ease(randf(), 2))
-    ray_cast_direction = ray_cast_direction.rotated(Vector3.UP, randf_range(0, TAU))
-    
-    var ray_cast_query: = PhysicsRayQueryParameters3D.new()
-    ray_cast_query.from = ray_cast_destination + ray_cast_direction * 4
-    ray_cast_query.to = ray_cast_destination
-    ray_cast_query.collision_mask = Util.get_phys_bitmask_from_layer_names(["Enemies"])
-    ray_cast_query.hit_from_inside = true
-    var ray_cast_result: = get_world_3d().direct_space_state.intersect_ray(ray_cast_query)
-    
-    if not ray_cast_result or not ray_cast_result.collider:
-        #print_debug("No ray cast result")
-        return false
-    var the_collider: = ray_cast_result.collider as CollisionObject3D
-    if not EntityManager.get_entity_from_coll_object(the_collider) == self:
-        print("explosion impact position check hit something else: %s" % the_collider.get_path())
-        return false
-
-    var impact: = preload("res://assets/effects/impact_sphere.tscn").instantiate()
-    impact.scale = Vector3.ONE * randf_range(0.7, 1.9)
-    get_parent().add_child(impact)
-    
-    impact.global_position = ray_cast_result.position
-    return true
 
 func death_anim_over(anim_name: String) -> void:
     if anim_name != "death":

@@ -103,10 +103,12 @@ _data = {
 &"flash_death": SubResource("Animation_xkaar")
 }
 
-[node name="EnemyBase" type="CharacterBody3D" unique_id=1209118854]
+[node name="EnemyBase" type="Node3D" unique_id=522834817]
 script = ExtResource("1_enemy_base")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=772181207]
+[node name="AnimatableBody3D" type="AnimatableBody3D" parent="." unique_id=546114546]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="AnimatableBody3D" unique_id=772181207]
 shape = SubResource("BoxShape3D_1")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1696282483]

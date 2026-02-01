@@ -175,16 +175,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.523979, 0, -5.5038967)
 
 [node name="BG" parent="." unique_id=1845397069 instance=ExtResource("2_oo5y3")]
 
-[node name="Enemy" parent="." unique_id=1300767209 instance=ExtResource("3_ctr7f")]
+[node name="TowerEnemy" parent="." unique_id=1300767209 instance=ExtResource("3_ctr7f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
 
-[node name="Enemy3" parent="." unique_id=1850575307 instance=ExtResource("3_ctr7f")]
+[node name="TowerEnemy2" parent="." unique_id=1850575307 instance=ExtResource("3_ctr7f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 6.7317734, 0)
 show_debug_path = true
 
-[node name="Enemy4" parent="." unique_id=851438947 instance=ExtResource("3_ctr7f")]
+[node name="TowerEnemy3" parent="." unique_id=851438947 instance=ExtResource("3_ctr7f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, -9)
 show_debug_path = true
 
-[node name="Enemy2" parent="." unique_id=818737262 instance=ExtResource("3_ctr7f")]
+[node name="TowerEnemy4" parent="." unique_id=818737262 instance=ExtResource("3_ctr7f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.715805, 0, -20.781796)

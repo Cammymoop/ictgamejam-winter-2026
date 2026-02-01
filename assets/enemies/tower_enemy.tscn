@@ -310,28 +310,28 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
 "values": [{
 "args": [],
-"method": &"spawn_random_impact"
+"method": &"spawn_random_impacts"
 }, {
 "args": [],
-"method": &"spawn_random_impact"
+"method": &"spawn_random_impacts"
 }, {
 "args": [],
-"method": &"spawn_random_impact"
+"method": &"spawn_random_impacts"
 }, {
 "args": [],
-"method": &"spawn_random_impact"
+"method": &"spawn_random_impacts"
 }, {
 "args": [],
-"method": &"spawn_random_impact"
+"method": &"spawn_random_impacts"
 }, {
 "args": [],
-"method": &"spawn_random_impact"
+"method": &"spawn_random_impacts"
 }, {
 "args": [],
-"method": &"spawn_random_impact"
+"method": &"spawn_random_impacts"
 }, {
 "args": [],
-"method": &"spawn_random_impact"
+"method": &"spawn_random_impacts"
 }]
 }
 
@@ -412,14 +412,17 @@ _data = {
 &"deactivate": SubResource("Animation_52q70")
 }
 
-[node name="Enemy" type="Node3D" unique_id=1300767209 node_paths=PackedStringArray("shoot_from", "show_before_shoot")]
+[node name="TowerEnemy" type="Node3D" unique_id=1836161491 node_paths=PackedStringArray("shoot_from", "show_before_shoot", "add_mesh_instances", "flash_animator", "death_animator")]
 script = ExtResource("1_2yjhm")
 shoot_from = NodePath("Offset/Shake/GunPos")
 show_warning_time = 0.45
-fire_rate = 0.4
 show_before_shoot = NodePath("Offset/Shake/AttackIndicator")
 bullet_speed = 110.0
 innacuracy = 0.098
+fire_rate = 0.4
+add_mesh_instances = [NodePath("Offset/Shake/MeshInstance3D"), NodePath("Offset/Shake/AttackIndicator"), NodePath("Offset/Shake/GunPos"), NodePath("Offset/Shake/Shield")]
+flash_animator = NodePath("Offset/Shake/FlashAnimator")
+death_animator = NodePath("Offset/Shake/DeathAnimator")
 
 [node name="EntityStats" type="Node" parent="." unique_id=181974756]
 script = ExtResource("2_qsxe3")
@@ -496,6 +499,3 @@ libraries/ = SubResource("AnimationLibrary_52q70")
 [node name="TimerSet" type="Node" parent="." unique_id=348021377]
 script = ExtResource("3_6o7wi")
 metadata/_custom_type_script = "uid://bar8gh3yeaipe"
-
-[connection signal="got_hit" from="EntityStats" to="." method="_on_entity_stats_got_hit"]
-[connection signal="out_of_health" from="EntityStats" to="." method="_on_entity_stats_out_of_health"]

@@ -54,6 +54,7 @@ var _zap_sound: AudioStreamWAV = null
 
 func _ready() -> void:
 	super._ready()
+	set_player_ref()
 	_hide_beam()
 	_hide_charge()
 	_setup_audio()
@@ -104,11 +105,10 @@ func _process_cooldown(delta: float) -> void:
 
 
 func _look_at_player() -> void:
-	var player := target_player()
-	if not player:
+	if not player_ref:
 		return
 
-	var direction := (player.global_position - global_position).normalized()
+	var direction := (player_ref.global_position - global_position).normalized()
 	if direction.length_squared() > 0.001:
 		target_direction = direction
 		# Look at player but keep upright
