@@ -1,6 +1,8 @@
 extends Node3D
 class_name LevelPath
 
+const SplineMath = preload("res://static/spline_math.gd")
+
 @export var remote_transform: RemoteTransform3D
 @onready var path_3d: Path3D = $Path3D
 @onready var path_follow: PathFollow3D = path_3d.get_node("PathFollow3D")

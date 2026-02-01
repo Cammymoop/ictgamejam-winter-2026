@@ -31,11 +31,11 @@ var bullet_color: Color = Color.WHITE
 func _ready() -> void:
 	# Start lifetime timer
 	lifetime_timer = Timer.new()
-    lifetime_timer.one_shot = true
-    lifetime_timer.wait_time = lifetime
+	lifetime_timer.one_shot = true
+	lifetime_timer.wait_time = lifetime
 	add_child(lifetime_timer)
-    lifetime_timer.start()
-    lifetime_timer.timeout.connect(_on_lifetime_expired)
+	lifetime_timer.start()
+	lifetime_timer.timeout.connect(_on_lifetime_expired)
 
 	# Connect body entered signal
 	body_entered.connect(_on_body_entered)
@@ -43,9 +43,9 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	update_mesh_color()
 
-    var anim_player: = $AnimationPlayer
-    if not anim_player.is_playing() and lifetime_timer.time_left <= 0.71:
-        anim_player.play("out")
+	var anim_player: = $AnimationPlayer
+	if not anim_player.is_playing() and lifetime_timer.time_left <= 0.71:
+		anim_player.play("out")
 
 func set_direction(direction: Vector3) -> void:
 	linear_velocity = direction * speed
@@ -59,8 +59,7 @@ func _on_body_entered(body: Node) -> void:
 	var hit_something = false
 	var entity = EntityManager.get_entity_from_coll_object(body)
 	if entity:
-		hit_something =
-		EntityManager.hit_entity(entity, damage)
+		hit_something = EntityManager.hit_entity(entity, damage)
 
 	elif body.has_method("take_damage"):
 		body.take_damage(damage)
@@ -68,8 +67,8 @@ func _on_body_entered(body: Node) -> void:
 
 	if hit_something:
 		show_hit_imact()
-    else:
-        show_non_hit_imact()
+	else:
+		show_non_hit_imact()
 
 	_destroy()
 
@@ -80,13 +79,13 @@ func show_hit_imact() -> void:
 	var impact := hit_impact_scn.instantiate()
 	get_parent().add_child(impact)
 	impact.global_position = global_position
-    impact.scale = Vector3.ONE * impace_scale
+	impact.scale = Vector3.ONE * impace_scale
 
 func show_non_hit_imact() -> void:
-    var impact := non_hit_impact_scn.instantiate()
-    get_parent().add_child(impact)
-    impact.global_position = global_position
-    impact.scale = Vector3.ONE * impace_scale
+	var impact := non_hit_impact_scn.instantiate()
+	get_parent().add_child(impact)
+	impact.global_position = global_position
+	impact.scale = Vector3.ONE * impace_scale
 
 func _destroy() -> void:
 	queue_free()

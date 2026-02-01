@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://dasygi206clwu"]
+
+[ext_resource type="Script" uid="uid://byxnatvcndpcu" path="res://assets/general/entity_stats.gd" id="1_entity"]
+[ext_resource type="Script" uid="uid://casw3xipe2xlc" path="res://assets/enemies/flight_enemy.gd" id="2_flight"]
+[ext_resource type="PackedScene" uid="uid://x3cdtgoi7224" path="res://assets/new_projectile.tscn" id="3_projectile"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
+resource_local_to_scene = true
+albedo_color = Color(0.4, 0.2, 0.6, 1)
+metallic = 0.3
+roughness = 0.7
+emission = Color(0.5, 0.3, 0.7, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_body"]
+height = 1.5
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_coll"]
+radius = 0.8
+
+[node name="FlightEnemyNode" type="CharacterBody3D" unique_id=361403220 node_paths=PackedStringArray("flash_animator", "death_animator")]
+collision_layer = 4
+collision_mask = 5
+script = ExtResource("2_flight")
+projectile_scene = ExtResource("3_projectile")
+flash_animator = NodePath("Animators/FlashAnimator")
+death_animator = NodePath("Animators/DeathAnimator")
+
+[node name="EntityStats" type="Node" parent="." unique_id=2014315709]
+script = ExtResource("1_entity")
+health = 20.0
+max_health = 20.0
+metadata/_custom_type_script = "uid://byxnatvcndpcu"
+
+[node name="Visual" type="Node3D" parent="." unique_id=210956206]
+
+[node name="Body" type="MeshInstance3D" parent="Visual" unique_id=33622026]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_body")
+mesh = SubResource("CapsuleMesh_body")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=705466686]
+shape = SubResource("SphereShape3D_coll")
+
+[node name="ProjectileSpawn" type="Node3D" parent="." unique_id=537837099]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.2)
+
+[node name="Animators" type="Node" parent="." unique_id=459607175]
+
+[node name="FlashAnimator" type="AnimationPlayer" parent="Animators" unique_id=294424520]
+root_node = NodePath("../..")
+
+[node name="FlashAnimator2" type="AnimationPlayer" parent="Animators" unique_id=279328637]
+
+[node name="DeathAnimator" type="AnimationPlayer" parent="Animators" unique_id=928105458]
+root_node = NodePath("../..")
+
+[node name="DeathAnimator2" type="AnimationPlayer" parent="Animators" unique_id=1263392838]
+
+[connection signal="got_hit" from="EntityStats" to="." method="_on_entity_stats_got_hit"]
+[connection signal="out_of_health" from="EntityStats" to="." method="_on_entity_stats_out_of_health"]

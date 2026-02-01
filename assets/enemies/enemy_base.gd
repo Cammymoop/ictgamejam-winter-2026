@@ -31,6 +31,7 @@ var _player_ref: Node3D = null
 @export var add_mesh_instances: Array[MeshInstance3D] = []
 var mesh_instances: Array[MeshInstance3D] = []
 
+
 func _ready() -> void:
 	for mesh_instance in add_mesh_instances:
 		if not mesh_instance:
@@ -111,6 +112,7 @@ func _play_death_anim() -> void:
 	death_animator.play("death")
 	if flash_animator and flash_animator.has_animation("flash_death"):
 		flash_animator.play("flash_death")
+
 
 ## Returns true if this enemy is linked to a checkpoint
 func has_checkpoint() -> bool:
