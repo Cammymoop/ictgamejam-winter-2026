@@ -28,6 +28,66 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(0.90000004, 0.2)
 metadata/_snap_enabled = true
 
+[sub_resource type="Animation" id="Animation_ctr7f"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.50534403, 0.5053441, 0.50534403, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_2orrn"]
+resource_name = "fade_in"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.06666667, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0.50534403, 0.5053441, 0.50534403, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.6666667),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wpvyo"]
+_data = {
+&"RESET": SubResource("Animation_ctr7f"),
+&"fade_in": SubResource("Animation_2orrn")
+}
+
 [node name="Game" type="Node3D" unique_id=520359190]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2107545475]
@@ -53,3 +113,19 @@ cursor_color_enemy = Color(1, 0.27450982, 0, 0.91764706)
 [node name="CursorSprite" type="Sprite2D" parent="CursorLayer" unique_id=2084466331]
 modulate = Color(0.3764706, 1, 1, 0.49803922)
 texture = SubResource("GradientTexture2D_uaptj")
+
+[node name="SceneFadeIn" type="CanvasLayer" parent="." unique_id=1713546932]
+layer = 5
+
+[node name="ColorRect" type="ColorRect" parent="SceneFadeIn" unique_id=2014637590]
+modulate = Color(0.50534403, 0.5053441, 0.50534403, 1)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="SceneFadeIn" unique_id=1519281817]
+libraries/ = SubResource("AnimationLibrary_wpvyo")
+autoplay = &"fade_in"
