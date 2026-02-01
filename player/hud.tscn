@@ -1,0 +1,76 @@
+[gd_scene format=3 uid="uid://d1wgcdynh4ewk"]
+
+[ext_resource type="Script" uid="uid://bs7ml3uueuktr" path="res://player/hud.gd" id="1_noril"]
+[ext_resource type="Theme" uid="uid://dul72sjhdo2gb" path="res://ui/font_theme.tres" id="2_qohvp"]
+[ext_resource type="Script" uid="uid://w46bp6tt35m1" path="res://ui/weapon_ui.gd" id="3_55pcc"]
+[ext_resource type="PackedScene" uid="uid://bnb7cgk37l42i" path="res://ui/weapon_control.tscn" id="4_sqelm"]
+[ext_resource type="PackedScene" uid="uid://dim7prkslfxh5" path="res://player/health_ui.tscn" id="5_bsb13"]
+
+[node name="HUD" type="MarginContainer" unique_id=1991211896]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+script = ExtResource("1_noril")
+
+[node name="HUD" type="HBoxContainer" parent="." unique_id=1315613611]
+layout_mode = 2
+
+[node name="LeftSide" type="VBoxContainer" parent="HUD" unique_id=1770537701]
+layout_mode = 2
+
+[node name="Padding" type="Control" parent="HUD/LeftSide" unique_id=207222437]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="WeaponUI" type="VBoxContainer" parent="HUD/LeftSide" unique_id=184741573]
+layout_mode = 2
+theme = ExtResource("2_qohvp")
+script = ExtResource("3_55pcc")
+
+[node name="WeaponControl" parent="HUD/LeftSide/WeaponUI" unique_id=340226482 instance=ExtResource("4_sqelm")]
+layout_mode = 2
+
+[node name="WeaponControl2" parent="HUD/LeftSide/WeaponUI" unique_id=1639096602 instance=ExtResource("4_sqelm")]
+layout_mode = 2
+
+[node name="WeaponControl3" parent="HUD/LeftSide/WeaponUI" unique_id=1185907448 instance=ExtResource("4_sqelm")]
+layout_mode = 2
+
+[node name="WeaponControl4" parent="HUD/LeftSide/WeaponUI" unique_id=465001147 instance=ExtResource("4_sqelm")]
+layout_mode = 2
+
+[node name="WeaponControl5" parent="HUD/LeftSide/WeaponUI" unique_id=138002471 instance=ExtResource("4_sqelm")]
+layout_mode = 2
+
+[node name="Padding2" type="Control" parent="HUD/LeftSide" unique_id=106773535]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+mouse_filter = 2
+
+[node name="Center" type="VBoxContainer" parent="HUD" unique_id=2137138659]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Padding" type="Control" parent="HUD/Center" unique_id=1506784697]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="HealthUI" parent="HUD/Center" unique_id=1591236862 instance=ExtResource("5_bsb13")]
+layout_mode = 2
+
+[node name="RightSide" type="VBoxContainer" parent="HUD" unique_id=1261619766]
+layout_mode = 2
+
+[node name="Padding" type="Control" parent="HUD/RightSide" unique_id=457674402]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2

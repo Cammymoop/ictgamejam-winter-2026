@@ -32,6 +32,10 @@ func get_hit(amount: float) -> bool:
         out_of_health.emit()
     return true
 
+func add_health(amount: float) -> void:
+    health = clampf(health + amount, 0, max_health)
+    health_changed.emit(health)
+
 func get_health_ratio() -> float:
     return clampf(health / max_health, 0, 1)
 

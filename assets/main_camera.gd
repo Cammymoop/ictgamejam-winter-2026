@@ -29,10 +29,16 @@ func on_world_loaded() -> void:
     level_path.start()
 
     global_position = level_path.path_follow.global_position
-    camera.global_transform = camera_target.global_transform
+    var cam_pos: = (camera_target.global_position - global_position + Vector3.DOWN * 9) * 2
+    cam_pos = cam_pos.rotated(Vector3.UP, deg_to_rad(180))
+    camera.global_position = global_position + cam_pos
+    camera.global_basis = Basis.looking_at(find_child("Player").global_position - cam_pos, Vector3.UP)
+    camera.global_basis = camera.global_basis.rotated(Vector3.UP, deg_to_rad(-20))
+    
+    level_path.path_started_moving.connect(find_child("Player").set.bind("ready_to_aim", true))
 
 func _process(delta: float) -> void:
-    var interp_factor: = 3.4 if level_path.is_moving else 0.1
+    var interp_factor: = 3.4 if level_path.is_moving else 0.01
     camera.global_transform = camera.global_transform.interpolate_with(camera_target.global_transform, delta * interp_factor)
     
     if Input.mouse_mode != Input.MOUSE_MODE_HIDDEN and Input.is_action_just_pressed("shoot"):

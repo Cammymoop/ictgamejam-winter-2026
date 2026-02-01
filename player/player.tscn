@@ -3,13 +3,58 @@
 [ext_resource type="Script" uid="uid://sd52aqoi6ilr" path="res://player/player.gd" id="1_player"]
 [ext_resource type="PackedScene" uid="uid://weapon001" path="res://player/weapon_manager.tscn" id="2_weapon"]
 [ext_resource type="Script" uid="uid://byxnatvcndpcu" path="res://assets/general/entity_stats.gd" id="3_g1dw6"]
-[ext_resource type="Script" uid="uid://bs7ml3uueuktr" path="res://player/hud.gd" id="4_qjkh3"]
-[ext_resource type="PackedScene" uid="uid://dim7prkslfxh5" path="res://player/health_ui.tscn" id="5_qjkh3"]
+[ext_resource type="PackedScene" uid="uid://d1wgcdynh4ewk" path="res://player/hud.tscn" id="4_yw30f"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g1dw6"]
 albedo_color = Color(0.9564864, 0.3347615, 0.3121374, 1)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_g1dw6"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yw30f"]
+albedo_color = Color(0.5489626, 0.5489626, 0.54896253, 1)
+metallic = 0.43
+roughness = 0.53
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_yw30f"]
+top_radius = 0.25
+bottom_radius = 0.25
+height = 0.8
+
+[sub_resource type="SphereMesh" id="SphereMesh_yw30f"]
+radius = 0.22
+height = 0.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qjkh3"]
+albedo_color = Color(0, 0, 0, 1)
+emission_enabled = true
+emission = Color(2.1493533, 1.436139, 0.88775736, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g6k8r"]
+cull_mode = 2
+albedo_color = Color(0.77953225, 0.16284952, 0.17455608, 1)
+metallic = 0.25
+roughness = 0.37
+
+[sub_resource type="QuadMesh" id="QuadMesh_boad6"]
+size = Vector2(0.9, 1.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_boad6"]
+cull_mode = 2
+albedo_color = Color(0.0025102918, 9.149554e-05, 0.00010845696, 1)
+metallic = 0.25
+
+[sub_resource type="QuadMesh" id="QuadMesh_rgyib"]
+size = Vector2(0.4, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rgyib"]
+albedo_color = Color(0.40677282, 0.47508347, 0.66698074, 1)
+metallic = 0.74
+roughness = 0.73
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_hg6s5"]
+top_radius = 0.1
+bottom_radius = 0.1
+height = 0.6
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_yw30f"]
 points = PackedVector3Array(-0.5, -1, 0, -0.49765074, -1, -0.049040705, -0.49765074, -1, 0.048942864, -0.5, 1, 0, -0.4904072, -1, -0.097592026, -0.49765074, 1, -0.049040705, -0.4904072, -1, 0.097494125, -0.49765074, 1, 0.048942864, -0.47856304, -1, -0.14516446, -0.4904072, 1, -0.097592026, -0.47856304, -1, 0.14506656, -0.4904072, 1, 0.097494125, -0.46202037, -1, -0.1913665, -0.47856304, 1, -0.14516446, -0.46202037, -1, 0.19126862, -0.47856304, 1, 0.14506656, -0.44097495, -1, -0.23570868, -0.46202037, 1, -0.1913665, -0.44097495, -1, 0.23561078, -0.46202037, 1, 0.19126862, -0.41581833, -1, -0.27779955, -0.44097495, 1, -0.23570868, -0.41581833, -1, 0.27770162, -0.44097495, 1, 0.23561078, -0.38655052, -1, -0.31724745, -0.41581833, 1, -0.27779955, -0.38655052, -1, 0.31714958, -0.41581833, 1, 0.27770162, -0.35356304, -1, -0.35356304, -0.38655052, 1, -0.31724745, -0.35356304, -1, 0.35346514, -0.38655052, 1, 0.31714958, -0.31724745, -1, -0.38655052, -0.35356304, 1, -0.35356304, -0.31724745, -1, 0.38645262, -0.35356304, 1, 0.35346514, -0.27779955, -1, -0.41581833, -0.31724745, 1, -0.38655052, -0.27779955, -1, 0.41572046, -0.31724745, 1, 0.38645262, -0.23570868, -1, -0.44097495, -0.27779955, 1, -0.41581833, -0.23570868, -1, 0.44087708, -0.27779955, 1, 0.41572046, -0.1913665, -1, -0.46202037, -0.23570868, 1, -0.44097495, -0.1913665, -1, 0.46192247, -0.23570868, 1, 0.44087708, -0.14516446, -1, -0.47856304, -0.1913665, 1, -0.46202037, -0.14516446, -1, 0.47846514, -0.1913665, 1, 0.46192247, -0.097592026, -1, -0.4904072, -0.14516446, 1, -0.47856304, -0.097592026, -1, 0.4903093, -0.14516446, 1, 0.47846514, -0.049040705, -1, -0.49765074, -0.097592026, 1, -0.4904072, -0.049040705, -1, 0.49755287, -0.097592026, 1, 0.4903093, 0, -1, -0.5, -0.049040705, 1, -0.49765074, 0, -1, 0.5, -0.049040705, 1, 0.49755287, 0.048942864, -1, -0.49765074, 0, 1, -0.5, 0.048942864, -1, 0.49755287, 0, 1, 0.5, 0.097494125, -1, -0.4904072, 0.048942864, 1, -0.49765074, 0.097494125, -1, 0.4903093, 0.048942864, 1, 0.49755287, 0.14506656, -1, -0.47856304, 0.097494125, 1, -0.4904072, 0.14506656, -1, 0.47846514, 0.097494125, 1, 0.4903093, 0.19126862, -1, -0.46202037, 0.14506656, 1, -0.47856304, 0.19126862, -1, 0.46192247, 0.14506656, 1, 0.47846514, 0.23561078, -1, -0.44097495, 0.19126862, 1, -0.46202037, 0.23561078, -1, 0.44087708, 0.19126862, 1, 0.46192247, 0.27770162, -1, -0.41581833, 0.23561078, 1, -0.44097495, 0.27770162, -1, 0.41572046, 0.23561078, 1, 0.44087708, 0.31714958, -1, -0.38655052, 0.27770162, 1, -0.41581833, 0.31714958, -1, 0.38645262, 0.27770162, 1, 0.41572046, 0.35346514, -1, -0.35356304, 0.31714958, 1, -0.38655052, 0.35346514, -1, 0.35346514, 0.31714958, 1, 0.38645262, 0.38645262, -1, -0.31724745, 0.35346514, 1, -0.35356304, 0.38645262, -1, 0.31714958, 0.35346514, 1, 0.35346514, 0.41572046, -1, -0.27779955, 0.38645262, 1, -0.31724745, 0.41572046, -1, 0.27770162, 0.38645262, 1, 0.31714958, 0.44087708, -1, -0.23570868, 0.41572046, 1, -0.27779955, 0.44087708, -1, 0.23561078, 0.41572046, 1, 0.27770162, 0.46192247, -1, -0.1913665, 0.44087708, 1, -0.23570868, 0.46192247, -1, 0.19126862, 0.44087708, 1, 0.23561078, 0.47846514, -1, -0.14516446, 0.46192247, 1, -0.1913665, 0.47846514, -1, 0.14506656, 0.46192247, 1, 0.19126862, 0.4903093, -1, -0.097592026, 0.47846514, 1, -0.14516446, 0.4903093, -1, 0.097494125, 0.47846514, 1, 0.14506656, 0.49755287, -1, -0.049040705, 0.4903093, 1, -0.097592026, 0.49755287, -1, 0.048942864, 0.4903093, 1, 0.097494125, 0.5, -1, 0, 0.49755287, 1, -0.049040705, 0.49755287, 1, 0.048942864, 0.5, 1, 0)
@@ -129,12 +174,50 @@ bounds = Vector2(5.5, 3.5)
 material_override = SubResource("StandardMaterial3D_g1dw6")
 mesh = SubResource("CylinderMesh_g1dw6")
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D" unique_id=1361979436]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25682485, 0.10813999, 0.6407249)
+material_override = SubResource("StandardMaterial3D_yw30f")
+mesh = SubResource("CylinderMesh_yw30f")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D/MeshInstance3D" unique_id=1806715885]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25409657, 0)
+mesh = SubResource("SphereMesh_yw30f")
+surface_material_override/0 = SubResource("StandardMaterial3D_qjkh3")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="MeshInstance3D" unique_id=1352283352]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.257, 0.108, 0.641)
+material_override = SubResource("StandardMaterial3D_yw30f")
+mesh = SubResource("CylinderMesh_yw30f")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="MeshInstance3D/MeshInstance3D2" unique_id=1507108037]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25409657, 0)
+mesh = SubResource("SphereMesh_yw30f")
+surface_material_override/0 = SubResource("StandardMaterial3D_qjkh3")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="MeshInstance3D" unique_id=243090958]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.46023667, -0.5084829)
+material_override = SubResource("StandardMaterial3D_g6k8r")
+mesh = SubResource("QuadMesh_boad6")
+
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="MeshInstance3D/MeshInstance3D3" unique_id=940280742]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36039126, -0.020036876)
+material_override = SubResource("StandardMaterial3D_boad6")
+mesh = SubResource("QuadMesh_rgyib")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="MeshInstance3D" unique_id=2113472094]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.19631839, -0.18105495, -0.79509544)
+material_override = SubResource("StandardMaterial3D_rgyib")
+mesh = SubResource("CylinderMesh_hg6s5")
+
+[node name="FirePos" type="Node3D" parent="MeshInstance3D" unique_id=1090739107]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.19631839, -0.18105495, -0.86718357)
+
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1922051178]
 shape = SubResource("ConvexPolygonShape3D_yw30f")
 
 [node name="WeaponManager" parent="." unique_id=1367059967 instance=ExtResource("2_weapon")]
 speed_factor = 2.6
-weapon_colors = Array[Color]([Color(0.6489241, 0.6994695, 0.1877679, 1), Color(0.97340816, 0.43606183, 1, 1), Color(0.6975584, 0.7718917, 0.9908648, 1)])
+weapon_colors = Array[Color]([Color(1.4338084, 0.37610084, 0.44128674, 1), Color(0.9080297, 0.5008431, 1, 1), Color(0.2704229, 0.3601619, 0.7267911, 1)])
 
 [node name="EntityStats" type="Node" parent="." unique_id=316789595]
 script = ExtResource("3_g1dw6")
@@ -153,46 +236,4 @@ libraries/ = SubResource("AnimationLibrary_rgyib")
 [node name="HUDLayer" type="CanvasLayer" parent="." unique_id=165043491]
 layer = 2
 
-[node name="HUD" type="MarginContainer" parent="HUDLayer" unique_id=245386048 node_paths=PackedStringArray("player_stats")]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 12
-theme_override_constants/margin_top = 12
-theme_override_constants/margin_right = 12
-theme_override_constants/margin_bottom = 12
-script = ExtResource("4_qjkh3")
-player_stats = NodePath("../../EntityStats")
-
-[node name="HUD" type="HBoxContainer" parent="HUDLayer/HUD" unique_id=1236746552]
-layout_mode = 2
-
-[node name="LeftSide" type="VBoxContainer" parent="HUDLayer/HUD/HUD" unique_id=526259918]
-layout_mode = 2
-
-[node name="Padding" type="Control" parent="HUDLayer/HUD/HUD/LeftSide" unique_id=534659133]
-layout_mode = 2
-size_flags_vertical = 3
-mouse_filter = 2
-
-[node name="Center" type="VBoxContainer" parent="HUDLayer/HUD/HUD" unique_id=340848787]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Padding" type="Control" parent="HUDLayer/HUD/HUD/Center" unique_id=1015031084]
-layout_mode = 2
-size_flags_vertical = 3
-mouse_filter = 2
-
-[node name="HealthUI" parent="HUDLayer/HUD/HUD/Center" unique_id=1591236862 instance=ExtResource("5_qjkh3")]
-layout_mode = 2
-
-[node name="RightSide" type="VBoxContainer" parent="HUDLayer/HUD/HUD" unique_id=1031836224]
-layout_mode = 2
-
-[node name="Padding" type="Control" parent="HUDLayer/HUD/HUD/RightSide" unique_id=490459236]
-layout_mode = 2
-size_flags_vertical = 3
-mouse_filter = 2
+[node name="HUD" parent="HUDLayer" unique_id=1991211896 instance=ExtResource("4_yw30f")]

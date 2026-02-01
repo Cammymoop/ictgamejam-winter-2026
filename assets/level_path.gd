@@ -1,6 +1,8 @@
 extends Node3D
 class_name LevelPath
 
+signal path_started_moving
+
 @export var remote_transform: RemoteTransform3D
 @onready var path_3d: Path3D = $Path3D
 @onready var path_follow: PathFollow3D = path_3d.get_node("PathFollow3D")
@@ -37,6 +39,8 @@ func start_moving() -> void:
     print_debug("Starting movement")
     path_follow.progress = 0
     is_moving = true
+    
+    path_started_moving.emit()
 
 func _process(delta: float) -> void:
     if not is_moving:

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dim7prkslfxh5"]
 
 [ext_resource type="Script" uid="uid://bp854ohy45ra3" path="res://ui/health_ui.gd" id="1_ta2hd"]
+[ext_resource type="Theme" uid="uid://dul72sjhdo2gb" path="res://ui/font_theme.tres" id="2_34mss"]
 
 [sub_resource type="Animation" id="Animation_qjkh3"]
 length = 0.001
@@ -79,6 +80,7 @@ bg_color = Color(0, 0, 0, 0.5568628)
 
 [node name="HealthUI" type="VBoxContainer" unique_id=1591236862]
 size_flags_horizontal = 4
+theme = ExtResource("2_34mss")
 theme_override_constants/separation = 0
 script = ExtResource("1_ta2hd")
 old_health_drop_speed = 0.28
@@ -98,6 +100,7 @@ horizontal_alignment = 1
 
 [node name="RightDecoration" type="Control" parent="Label" unique_id=1575833738]
 layout_mode = 1
+anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 grow_horizontal = 0
@@ -107,6 +110,7 @@ polygon = PackedVector2Array(0, 0, 20, 36, 0, 36)
 
 [node name="LeftDecoration" type="Control" parent="Label" unique_id=898829321]
 layout_mode = 1
+anchors_preset = 0
 scale = Vector2(-1, 1)
 
 [node name="Polygon2D" type="Polygon2D" parent="Label/LeftDecoration" unique_id=747118301]

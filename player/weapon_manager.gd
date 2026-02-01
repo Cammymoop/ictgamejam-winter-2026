@@ -7,6 +7,10 @@ signal weapon_changed(weapon_index: int, weapon_data: WeaponData)
 
 @export var speed_factor: float = 1.0
 
+@export var max_power: bool = false
+
+var fire_pos_node: Node3D = null
+
 var weapons: Array[WeaponData] = []
 var current_weapon_index: int = 0
 var can_fire: bool = true
@@ -25,11 +29,12 @@ func _ready() -> void:
 func _setup_weapons() -> void:
     # Weapon 1: Pistol - balanced
     var pistol := WeaponData.new()
-    pistol.name = "Pistol"
+    pistol.name = "Blaster"
     pistol.fire_rate = 0.7
-    pistol.projectile_speed = 40.0
+    pistol.projectile_speed = 190.0
     pistol.damage = 3
     pistol.projectile_count = 1
+    pistol.base_color = weapon_colors[0]
     pistol.projectile_color = weapon_colors[0] * 2
     pistol.projectile_lifetime = 4.0
     pistol.spread_angle = 0.1
@@ -37,27 +42,30 @@ func _setup_weapons() -> void:
 
     # Weapon 2: Shotgun - spread
     var shotgun := WeaponData.new()
-    shotgun.name = "Shotgun"
+    shotgun.name = "Scattershot"
     shotgun.fire_rate = 1.2
     shotgun.projectile_speed = 25.0
     shotgun.speed_variance = 0.2
     shotgun.damage = 1.2
     shotgun.projectile_count = 8
+    shotgun.projectile_scale = 0.5
     shotgun.spread_angle = 4.0
+    shotgun.base_color = weapon_colors[1]
     shotgun.projectile_color = weapon_colors[1] * 1.2
-    shotgun.projectile_lifetime = 1.9
+    shotgun.projectile_lifetime = 1.0
     weapons.append(shotgun)
 
     # Weapon 3: Rapid Fire - fast
     var rapid := WeaponData.new()
-    rapid.name = "Rapid Fire"
+    rapid.name = "Turbo Spiker"
     rapid.fire_rate = 0.1
-    rapid.projectile_speed = 70.0
+    rapid.projectile_speed = 74.0
     rapid.damage = 0.5
     rapid.projectile_count = 1
     rapid.projectile_scale = 0.7
-    rapid.projectile_color = weapon_colors[2] * 1.3
-    rapid.projectile_lifetime = 2.8
+    rapid.base_color = weapon_colors[2]
+    rapid.projectile_color = weapon_colors[2] * 2.5
+    rapid.projectile_lifetime = 3.2
     rapid.spread_angle = 1.2
     rapid.impact_scale = 0.6
     weapons.append(rapid)
@@ -100,8 +108,11 @@ func try_fire() -> void:
     fire()
 
 func fire() -> void:
+    if not fire_pos_node:
+        fire_pos_node = Util.get_player_ref().find_child("FirePos")
     var weapon := weapons[current_weapon_index]
     var spawn_pos := muzzle.global_position if muzzle else global_position
+    spawn_pos = fire_pos_node.global_position
     # Use weapon's forward direction (already rotated toward target via look_at)
     var base_direction := -global_transform.basis.z
 
@@ -136,6 +147,8 @@ func _spawn_projectile(pos: Vector3, direction: Vector3, weapon: WeaponData) -> 
     if weapon.speed_variance > 0:
         projectile.speed *=  1 + randf_range( -weapon.speed_variance, weapon.speed_variance)
     projectile.damage = weapon.damage
+    if max_power:
+        projectile.damage *= 6
     projectile.set_color(weapon.projectile_color.darkened(randf() * 0.4))
     projectile.lifetime = weapon.projectile_lifetime
     projectile.impace_scale = weapon.impact_scale

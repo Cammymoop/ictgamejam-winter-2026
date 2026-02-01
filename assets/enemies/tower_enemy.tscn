@@ -415,11 +415,11 @@ _data = {
 [node name="TowerEnemy" type="Node3D" unique_id=1836161491 node_paths=PackedStringArray("shoot_from", "show_before_shoot", "add_mesh_instances", "flash_animator", "death_animator")]
 script = ExtResource("1_2yjhm")
 shoot_from = NodePath("Offset/Shake/GunPos")
-show_warning_time = 0.45
 show_before_shoot = NodePath("Offset/Shake/AttackIndicator")
 bullet_speed = 110.0
-innacuracy = 0.098
+innacuracy = 0.08
 fire_rate = 0.4
+show_warning_time = 0.45
 add_mesh_instances = [NodePath("Offset/Shake/MeshInstance3D"), NodePath("Offset/Shake/AttackIndicator"), NodePath("Offset/Shake/GunPos"), NodePath("Offset/Shake/Shield")]
 flash_animator = NodePath("Offset/Shake/FlashAnimator")
 death_animator = NodePath("Offset/Shake/DeathAnimator")
@@ -454,7 +454,7 @@ shape = SubResource("ConvexPolygonShape3D_qsxe3")
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Offset/Shake/Shield" unique_id=1511042519]
 libraries/ = SubResource("AnimationLibrary_xlf1e")
 
-[node name="AnimatableBody3D" type="AnimatableBody3D" parent="Offset/Shake" unique_id=330800293]
+[node name="AnimatableBody3D" type="StaticBody3D" parent="Offset/Shake" unique_id=1390424422]
 collision_layer = 4
 collision_mask = 5
 

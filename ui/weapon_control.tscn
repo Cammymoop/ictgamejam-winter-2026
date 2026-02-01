@@ -1,0 +1,134 @@
+[gd_scene format=3 uid="uid://bnb7cgk37l42i"]
+
+[ext_resource type="Theme" uid="uid://dul72sjhdo2gb" path="res://ui/font_theme.tres" id="1_8x80v"]
+[ext_resource type="Script" uid="uid://dy4qqsri5w2eg" path="res://ui/weapon_control.gd" id="1_ccclm"]
+[ext_resource type="Script" uid="uid://dvbv2r40t75p0" path="res://player/psuedo_container.gd" id="1_q7nuj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_boad6"]
+resource_local_to_scene = true
+content_margin_left = 80.0
+content_margin_right = 28.0
+bg_color = Color(0.9567707, 0.38084337, 0.4198469, 1)
+border_color = Color(1, 1, 1, 1)
+
+[sub_resource type="Animation" id="Animation_8x80v"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-60, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:theme_override_styles/panel:border_width_right")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_mmtm0"]
+resource_name = "deselect"
+length = 0.4
+capture_included = true
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"update": 2,
+"values": [Vector2(-60, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:theme_override_styles/panel:border_width_right")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_klpw4"]
+resource_name = "select"
+length = 0.4
+capture_included = true
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"update": 2,
+"values": [Vector2(-24, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:theme_override_styles/panel:border_width_right")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [4]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_mmtm0"]
+_data = {
+&"RESET": SubResource("Animation_8x80v"),
+&"deselect": SubResource("Animation_mmtm0"),
+&"select": SubResource("Animation_klpw4")
+}
+
+[node name="WeaponControl" type="MarginContainer" unique_id=340226482]
+theme = ExtResource("1_8x80v")
+script = ExtResource("1_ccclm")
+
+[node name="PsuedoContainer" type="Control" parent="." unique_id=1232438191]
+custom_minimum_size = Vector2(218, 26)
+layout_mode = 2
+script = ExtResource("1_q7nuj")
+
+[node name="PanelContainer" type="PanelContainer" parent="PsuedoContainer" unique_id=132137385]
+layout_mode = 0
+offset_left = -60.0
+offset_right = 158.0
+offset_bottom = 26.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_boad6")
+
+[node name="WeaponNameLabel" type="RichTextLabel" parent="PsuedoContainer/PanelContainer" unique_id=228779564]
+custom_minimum_size = Vector2(110, 0)
+layout_mode = 2
+theme_override_colors/default_color = Color(0.4527791, 0.10180322, 0.060119085, 1)
+bbcode_enabled = true
+text = " [b]BLASTER[/b] "
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="PsuedoContainer/PanelContainer" unique_id=1000277668]
+libraries/ = SubResource("AnimationLibrary_mmtm0")

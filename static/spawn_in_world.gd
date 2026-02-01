@@ -3,6 +3,10 @@ extends Node
 var main_game: Node3D
 
 func _ready() -> void:
+    get_tree().scene_changed.connect(setup)
+    setup()
+
+func setup() -> void:
     main_game = get_tree().current_scene
 
 func spawn(instance: Node, global_position: Vector3, with_consistent_name: bool = false) -> void:

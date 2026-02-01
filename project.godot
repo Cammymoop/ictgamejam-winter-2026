@@ -23,6 +23,10 @@ Global="*res://static/global.gd"
 SFXManager="*res://static/sfx_manager.gd"
 SpawnInWorld="*uid://cdvagf1iuua8q"
 
+[display]
+
+window/size/mode=2
+
 [global_group]
 
 Player=""

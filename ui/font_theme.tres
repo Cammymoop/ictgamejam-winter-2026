@@ -1,0 +1,16 @@
+[gd_resource type="Theme" format=3 uid="uid://dul72sjhdo2gb"]
+
+[ext_resource type="FontFile" uid="uid://biqg6p1e0l6cg" path="res://assets/font/alte-haas-grotesk/R_AlteHaasGroteskRegular.ttf" id="2_xvpsb"]
+
+[resource]
+default_font = ExtResource("2_xvpsb")
+default_font_size = 26
+Label/font_sizes/font_size = 30
+RichTextLabel/colors/font_outline_color = Color(1, 1, 1, 1)
+RichTextLabel/constants/outline_size = 0
+RichTextLabel/font_sizes/bold_font_size = 22
+RichTextLabel/font_sizes/bold_italics_font_size = 30
+RichTextLabel/font_sizes/italics_font_size = 30
+RichTextLabel/font_sizes/mono_font_size = 30
+RichTextLabel/font_sizes/normal_font_size = 22
+RichTextLabel/fonts/bold_font = ExtResource("2_xvpsb")

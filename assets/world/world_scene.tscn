@@ -3,9 +3,13 @@
 [ext_resource type="Script" uid="uid://b18ag448mcsam" path="res://assets/level_path.gd" id="1_fvgax"]
 [ext_resource type="PackedScene" uid="uid://5euivoegl7lv" path="res://assets/bg_meshes.tscn" id="2_oo5y3"]
 [ext_resource type="PackedScene" uid="uid://dnffch5xjp5by" path="res://assets/enemies/tower_enemy.tscn" id="3_ctr7f"]
+[ext_resource type="Script" uid="uid://cwtpxftkgrymi" path="res://assets/world/special_spawner.gd" id="4_u3udp"]
+[ext_resource type="Script" uid="uid://deswlyv7u7sx1" path="res://assets/world/health_shootable.gd" id="5_dyoux"]
+[ext_resource type="Script" uid="uid://byxnatvcndpcu" path="res://assets/general/entity_stats.gd" id="6_mjoo4"]
+[ext_resource type="Script" uid="uid://bar8gh3yeaipe" path="res://assets/general/timer_set.gd" id="7_5uagc"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_ctr7f"]
-size = Vector3(10, 10, 10)
+size = Vector3(10, 12, 10)
 
 [sub_resource type="Gradient" id="Gradient_ctr7f"]
 interpolation_mode = 2
@@ -25,20 +29,216 @@ uv1_triplanar = true
 uv1_world_triplanar = true
 
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_2orrn"]
-points = PackedVector3Array(5, 5, 5, 5, 5, -5, -5, 5, 5, 5, -5, 5, 5, -5, -5, -5, 5, -5, -5, -5, 5, -5, -5, -5)
+points = PackedVector3Array(-5, -6, -5, -5, -6, 5, -5, 6, -5, 5, -6, -5, 5, -6, 5, -5, 6, 5, 5, 6, -5, 5, 6, 5)
 
 [sub_resource type="Curve3D" id="Curve3D_q24km"]
 closed = true
 _data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 13.283602, 14.70947, 22.419273, 0, 0, 0, 0, 0, 0, 8.6514, 9.427879, 5.958379, 0, 0, 0, 0, 0, 0, 5.4445558, 12.702268, -6.9116855, 0, 0, 0, 0, 0, 0, -21.115385, 14.024141, -35.474876, 0, 0, 0, 0, 0, 0, -31.940733, 10.725056, -73.50351, 0, 0, 0, 0, 0, 0, -17.313755, 12.691296, -96.45974, 0, 0, 0, 0, 0, 0, 18.100159, 15.116587, -94.17051, 0, 0, 0, 0, 0, 0, 56.714386, 17.328217, -97.993576, 0, 0, 0, 0, 0, 0, 46.217857, 9.214958, -22.643433, 0, 0, 0, 0, 0, 0, 28.724335, 15.866194, 22.3079),
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 13.52319, 14.70947, 19.221664, 0, 0, 0, 0, 0, 0, 8.6514, 9.427879, 5.958379, 0, 0, 0, 0, 0, 0, 5.4445558, 12.702268, -6.9116855, 0, 0, 0, 0, 0, 0, -21.115385, 14.024141, -35.474876, 0, 0, 0, 0, 0, 0, -31.940733, 10.725056, -73.50351, 0, 0, 0, 0, 0, 0, -17.27402, 12.691296, -102.77133, 0, 0, 0, 0, 0, 0, 4.8358536, 15.116587, -110.30635, 0, 0, 0, 0, 0, 0, 55.384155, 23.77193, -80.240036, 0, 0, 0, 0, 0, 0, 47.3869, 20.44617, -38.245907, 0, 0, 0, 0, 0, 0, 40.255516, 15.866194, 10.652565),
 "tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 }
 point_count = 10
 
+[sub_resource type="Gradient" id="Gradient_qsxe3"]
+offsets = PackedFloat32Array(0.29802954, 0.48522168, 0.67241377, 1)
+colors = PackedColorArray(0.5689727, 0.56897277, 0.5689727, 1, 0.15127617, 0.15127605, 0.15127602, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_6o7wi"]
+noise_type = 2
+frequency = 0.0124
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_diy82"]
+noise = SubResource("FastNoiseLite_6o7wi")
+color_ramp = SubResource("Gradient_qsxe3")
+seamless = true
+invert = true
+
+[sub_resource type="Gradient" id="Gradient_u3udp"]
+resource_local_to_scene = true
+interpolation_mode = 1
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_jw5tk"]
+frequency = 0.004
+fractal_type = 2
+fractal_lacunarity = 1.675
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_dyoux"]
+resource_local_to_scene = true
+noise = SubResource("FastNoiseLite_jw5tk")
+color_ramp = SubResource("Gradient_u3udp")
+seamless = true
+invert = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mjoo4"]
+resource_local_to_scene = true
+albedo_color = Color(0.81871665, 0.46096766, 0.19233632, 1)
+emission = Color(0.50928617, 0.50928617, 0.50928617, 1)
+detail_enabled = true
+detail_mask = SubResource("NoiseTexture2D_dyoux")
+detail_blend_mode = 2
+detail_uv_layer = 1
+detail_albedo = SubResource("NoiseTexture2D_diy82")
+uv2_scale = Vector3(0.05, 0.2, 0.05)
+uv2_triplanar = true
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_dyoux"]
+radius = 2.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dyoux"]
+albedo_color = Color(0.17641911, 0.17641908, 0.17641908, 1)
+emission_enabled = true
+emission = Color(0.2931018, 1.8570546, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_5uagc"]
+radius = 2.0
+height = 4.0
+
+[sub_resource type="Animation" id="Animation_mjoo4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StaticBody3D/MeshInstance3D:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("StaticBody3D/MeshInstance3D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_5uagc"]
+resource_name = "enter"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StaticBody3D/MeshInstance3D:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("StaticBody3D/MeshInstance3D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(0.35355353, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_e12ym"]
+resource_name = "leave"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StaticBody3D/MeshInstance3D:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("StaticBody3D/MeshInstance3D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(0.40612617, 0.35355353),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_l2dhc"]
+resource_name = "leave_2"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StaticBody3D/MeshInstance3D:visible")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("StaticBody3D/MeshInstance3D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.5),
+"transitions": PackedFloat32Array(0.5547847, 0.3298771, 0.35355353),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(2.8, 2.8, 2.8), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_e12ym"]
+_data = {
+&"RESET": SubResource("Animation_mjoo4"),
+&"enter": SubResource("Animation_5uagc"),
+&"leave": SubResource("Animation_e12ym"),
+&"leave_2": SubResource("Animation_l2dhc")
+}
+
+[sub_resource type="Animation" id="Animation_0nyw5"]
+resource_name = "death"
+length = 0.4
+tracks/0/type = "method"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimationPlayer")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"leave_2"],
+"method": &"play"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1nno4"]
+_data = {
+&"death": SubResource("Animation_0nyw5")
+}
+
 [node name="World" type="Node3D" unique_id=1982225913]
 
 [node name="MeshInstance3D4" type="MeshInstance3D" parent="." unique_id=293813828]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.973773, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.973773, 0)
 mesh = SubResource("BoxMesh_ctr7f")
 surface_material_override/0 = SubResource("StandardMaterial3D_fvgax")
 
@@ -48,7 +248,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_fvgax")
 shape = SubResource("ConvexPolygonShape3D_2orrn")
 
 [node name="MeshInstance3D7" type="MeshInstance3D" parent="." unique_id=1158263277]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.5624247, -20.162228)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -5.5624247, -20.162228)
 mesh = SubResource("BoxMesh_ctr7f")
 surface_material_override/0 = SubResource("StandardMaterial3D_fvgax")
 
@@ -58,7 +258,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_fvgax")
 shape = SubResource("ConvexPolygonShape3D_2orrn")
 
 [node name="MeshInstance3D5" type="MeshInstance3D" parent="." unique_id=2098825395]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 1.6984749, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 0.6984749, 0)
 mesh = SubResource("BoxMesh_ctr7f")
 surface_material_override/0 = SubResource("StandardMaterial3D_fvgax")
 
@@ -68,7 +268,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_fvgax")
 shape = SubResource("ConvexPolygonShape3D_2orrn")
 
 [node name="MeshInstance3D6" type="MeshInstance3D" parent="." unique_id=138918481]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, -4.6890564, -11)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, -5.6890564, -11)
 mesh = SubResource("BoxMesh_ctr7f")
 surface_material_override/0 = SubResource("StandardMaterial3D_fvgax")
 
@@ -80,14 +280,14 @@ shape = SubResource("ConvexPolygonShape3D_2orrn")
 [node name="LevelPath" type="Node3D" parent="." unique_id=1138437555 node_paths=PackedStringArray("remote_transform")]
 script = ExtResource("1_fvgax")
 remote_transform = NodePath("Path3D/PathFollow3D/RemoteTransform3D")
-base_speed = 7.0
+base_speed = 11.0
 
 [node name="Path3D" type="Path3D" parent="LevelPath" unique_id=1165247603]
 transform = Transform3D(0.9972047, 0, 0.074717656, 0, 1, 0, -0.074717656, 0, 0.9972047, -11.148768, -1.9073486e-06, 42.04453)
 curve = SubResource("Curve3D_q24km")
 
 [node name="PathFollow3D" type="PathFollow3D" parent="LevelPath/Path3D" unique_id=1948369827]
-transform = Transform3D(0.99999887, 0, 0, 0, 0.9999953, 0, 0, 0, 0.99999785, 13.283602, 14.70947, 22.419273)
+transform = Transform3D(0.99999887, 0, 0, 0, 0.9999953, 0, 0, 0, 0.99999785, 13.52319, 14.70947, 19.221664)
 rotation_mode = 0
 use_model_front = true
 tilt_enabled = false
@@ -99,16 +299,188 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.523979, 0, -5.5038967)
 
 [node name="BG" parent="." unique_id=1845397069 instance=ExtResource("2_oo5y3")]
 
+[node name="TowerHere4" type="Marker3D" parent="." unique_id=390751763]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+gizmo_extents = 1.0
+
 [node name="TowerEnemy" parent="." unique_id=1300767209 instance=ExtResource("3_ctr7f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+
+[node name="MeshInstance3D8" type="MeshInstance3D" parent="." unique_id=668533780]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.457365, -3.1522312, -44.739697)
+mesh = SubResource("BoxMesh_ctr7f")
+surface_material_override/0 = SubResource("StandardMaterial3D_fvgax")
+
+[node name="StaticBody3D2" type="StaticBody3D" parent="MeshInstance3D8" unique_id=553536528]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D8/StaticBody3D2" unique_id=1889533968]
+shape = SubResource("ConvexPolygonShape3D_2orrn")
+
+[node name="TowerHere" type="Marker3D" parent="." unique_id=1745882983]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.457365, 1.8888257, -44.739697)
+gizmo_extents = 1.0
+metadata/far = true
+
+[node name="TowerHere5" type="Marker3D" parent="." unique_id=1123341712]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.110711, 6.7317734, 1.5636444)
+gizmo_extents = 1.0
+
+[node name="TowerHere6" type="Marker3D" parent="." unique_id=1187605680]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.040887, 6.7317734, -2.8927898)
+gizmo_extents = 1.0
 
 [node name="TowerEnemy2" parent="." unique_id=1850575307 instance=ExtResource("3_ctr7f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 6.7317734, 0)
 show_debug_path = true
 
-[node name="TowerEnemy3" parent="." unique_id=851438947 instance=ExtResource("3_ctr7f")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, -9)
+[node name="TowerEnemy4" parent="." unique_id=1836161491 instance=ExtResource("3_ctr7f")]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, -13.645056, 2.8766165, -43.44496)
+no_pos_x_z = true
+active_distance = 40.0
 show_debug_path = true
 
-[node name="TowerEnemy4" parent="." unique_id=818737262 instance=ExtResource("3_ctr7f")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.715805, 0, -20.781796)
+[node name="EntityStats" parent="TowerEnemy4" index="0" unique_id=181974756]
+health = 12.0
+max_health = 12.0
+
+[node name="MeshInstance3D" parent="TowerEnemy4/Offset/Shake" parent_id_path=PackedInt32Array(1836161491, 467974498) index="0" unique_id=797693633]
+material_override = SubResource("StandardMaterial3D_mjoo4")
+
+[node name="TowerHere2" type="Marker3D" parent="." unique_id=1926832678]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.944586, 0, -12.778146)
+gizmo_extents = 1.0
+
+[node name="TowerEnemy3" parent="." unique_id=851438947 instance=ExtResource("3_ctr7f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 0, -9)
+active_distance = 63.0
+show_debug_path = true
+
+[node name="SpecialSpawner" type="Node" parent="." unique_id=338963791]
+script = ExtResource("4_u3udp")
+
+[node name="TowerHere3" type="Marker3D" parent="." unique_id=644777872]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.026962757, 0, -20.014639)
+gizmo_extents = 1.0
+
+[node name="HealthOrb" type="Node3D" parent="." unique_id=1293254385]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.0984955, 17.988684, -24.26728)
+script = ExtResource("5_dyoux")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="HealthOrb" unique_id=945740369]
+collision_layer = 4
+collision_mask = 5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HealthOrb/StaticBody3D" unique_id=521875240]
+shape = SubResource("SphereShape3D_dyoux")
+disabled = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="HealthOrb/StaticBody3D" unique_id=1589680676]
+transform = Transform3D(0.9997007, -0.017145207, 0.017449748, 0.017449748, 0.9996954, -0.017452406, -0.017145207, 0.017751677, 0.9996954, 0, 0, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_dyoux")
+mesh = SubResource("SphereMesh_5uagc")
+
+[node name="EntityStats" type="Node" parent="HealthOrb" unique_id=199735384]
+script = ExtResource("6_mjoo4")
+health = 3.0
+max_health = 3.0
+metadata/_custom_type_script = "uid://byxnatvcndpcu"
+
+[node name="Timer" type="Timer" parent="HealthOrb" unique_id=25694462]
+wait_time = 15.0
+one_shot = true
+autostart = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="HealthOrb" unique_id=1110162309]
+libraries/ = SubResource("AnimationLibrary_e12ym")
+
+[node name="DeathAnimator" type="AnimationPlayer" parent="HealthOrb" unique_id=1832018277]
+libraries/ = SubResource("AnimationLibrary_1nno4")
+
+[node name="TimerSet" type="Node" parent="HealthOrb" unique_id=1688295291]
+script = ExtResource("7_5uagc")
+metadata/_custom_type_script = "uid://bar8gh3yeaipe"
+
+[node name="HealthOrb3" type="Node3D" parent="." unique_id=1469107276]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.0984955, 11.928045, -5.1664925)
+script = ExtResource("5_dyoux")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="HealthOrb3" unique_id=1285841901]
+collision_layer = 4
+collision_mask = 5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HealthOrb3/StaticBody3D" unique_id=734577538]
+shape = SubResource("SphereShape3D_dyoux")
+disabled = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="HealthOrb3/StaticBody3D" unique_id=42093043]
+transform = Transform3D(0.9997007, -0.017145207, 0.017449748, 0.017449748, 0.9996954, -0.017452406, -0.017145207, 0.017751677, 0.9996954, 0, 0, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_dyoux")
+mesh = SubResource("SphereMesh_5uagc")
+
+[node name="EntityStats" type="Node" parent="HealthOrb3" unique_id=882544624]
+script = ExtResource("6_mjoo4")
+health = 3.0
+max_health = 3.0
+metadata/_custom_type_script = "uid://byxnatvcndpcu"
+
+[node name="Timer" type="Timer" parent="HealthOrb3" unique_id=1058245210]
+wait_time = 38.0
+one_shot = true
+autostart = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="HealthOrb3" unique_id=1342740449]
+libraries/ = SubResource("AnimationLibrary_e12ym")
+
+[node name="DeathAnimator" type="AnimationPlayer" parent="HealthOrb3" unique_id=2076633703]
+libraries/ = SubResource("AnimationLibrary_1nno4")
+
+[node name="TimerSet" type="Node" parent="HealthOrb3" unique_id=2049118402]
+script = ExtResource("7_5uagc")
+metadata/_custom_type_script = "uid://bar8gh3yeaipe"
+
+[node name="HealthOrb2" type="Node3D" parent="." unique_id=1266254538]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.409554, 17.988684, -8.389639)
+script = ExtResource("5_dyoux")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="HealthOrb2" unique_id=1608052143]
+collision_layer = 4
+collision_mask = 5
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="HealthOrb2/StaticBody3D" unique_id=460169013]
+shape = SubResource("SphereShape3D_dyoux")
+disabled = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="HealthOrb2/StaticBody3D" unique_id=272658476]
+transform = Transform3D(0.9997007, -0.017145207, 0.017449748, 0.017449748, 0.9996954, -0.017452406, -0.017145207, 0.017751677, 0.9996954, 0, 0, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_dyoux")
+mesh = SubResource("SphereMesh_5uagc")
+
+[node name="EntityStats" type="Node" parent="HealthOrb2" unique_id=1093606778]
+script = ExtResource("6_mjoo4")
+health = 3.0
+max_health = 3.0
+metadata/_custom_type_script = "uid://byxnatvcndpcu"
+
+[node name="Timer" type="Timer" parent="HealthOrb2" unique_id=184927320]
+wait_time = 50.0
+one_shot = true
+autostart = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="HealthOrb2" unique_id=666238864]
+libraries/ = SubResource("AnimationLibrary_e12ym")
+
+[node name="DeathAnimator" type="AnimationPlayer" parent="HealthOrb2" unique_id=939894709]
+libraries/ = SubResource("AnimationLibrary_1nno4")
+
+[node name="TimerSet" type="Node" parent="HealthOrb2" unique_id=489851856]
+script = ExtResource("7_5uagc")
+metadata/_custom_type_script = "uid://bar8gh3yeaipe"
+
+[connection signal="timeout" from="HealthOrb/Timer" to="HealthOrb" method="start_now"]
+[connection signal="timeout" from="HealthOrb3/Timer" to="HealthOrb3" method="start_now"]
+[connection signal="timeout" from="HealthOrb2/Timer" to="HealthOrb2" method="start_now"]
+
+[editable path="TowerEnemy4"]

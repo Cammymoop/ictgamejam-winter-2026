@@ -8,6 +8,8 @@ class Timers:
     const RELOAD = "reload"
     const MIN_ACTIVE = "minimum_active"
 
+@export var no_pos_x_z: bool = false
+
 @export var shoot_from: Node3D = null
 
 @export var active_distance: float = 57
@@ -135,6 +137,15 @@ func active_check_ready() -> void:
 func try_activate(recheck: bool = false) -> void:
     if is_active and not recheck:
         return
+    
+    if no_pos_x_z:
+        var relative_pos: = get_player_global_pos() - global_position
+        if relative_pos.x > 0 or relative_pos.z > 0:
+            if is_active:
+                deactivate()
+            active_check_waiting = true
+            timer_set.start(Timers.ACTIVE_CHECK)
+            return
 
     var los_checker: = find_child("LineOfSightChecker") as ShapeCast3D
     if not los_checker and not is_active:

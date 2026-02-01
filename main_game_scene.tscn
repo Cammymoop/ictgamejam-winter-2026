@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://den5l0lqmqp0h" path="res://main_game_scene.gd" id="1_s4q73"]
 [ext_resource type="PackedScene" uid="uid://cgtjcig0iej8n" path="res://assets/main_camera.tscn" id="2_wpvyo"]
 [ext_resource type="Script" uid="uid://bu8s18bawijbh" path="res://player/cursor_manager.gd" id="3_cursor"]
+[ext_resource type="Theme" uid="uid://dul72sjhdo2gb" path="res://ui/font_theme.tres" id="4_s4q73"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qmwpp"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -88,6 +89,15 @@ _data = {
 &"fade_in": SubResource("Animation_2orrn")
 }
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uaptj"]
+content_margin_left = 6.0
+content_margin_right = 6.0
+bg_color = Color(0, 0, 0, 0.62352943)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
 [node name="Game" type="Node3D" unique_id=520359190]
 script = ExtResource("1_s4q73")
 
@@ -128,5 +138,41 @@ mouse_filter = 2
 [node name="AnimationPlayer" type="AnimationPlayer" parent="SceneFadeIn" unique_id=1519281817]
 libraries/ = SubResource("AnimationLibrary_wpvyo")
 autoplay = &"fade_in"
+
+[node name="WinLayer" type="CanvasLayer" parent="." unique_id=1673338417]
+layer = 5
+visible = false
+
+[node name="CenterContainer" type="CenterContainer" parent="WinLayer" unique_id=851174538]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="WinLayer/CenterContainer" unique_id=1277950592]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_uaptj")
+
+[node name="MarginContainer" type="MarginContainer" parent="WinLayer/CenterContainer/PanelContainer" unique_id=1819700727]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 24
+
+[node name="Label" type="Label" parent="WinLayer/CenterContainer/PanelContainer/MarginContainer" unique_id=711272120]
+layout_mode = 2
+theme = ExtResource("4_s4q73")
+text = "You Win!"
+
+[node name="Label" type="Label" parent="WinLayer/CenterContainer/PanelContainer/MarginContainer/Label" unique_id=1350045023]
+layout_mode = 0
+offset_top = 35.0
+offset_right = 120.0
+offset_bottom = 71.0
+theme_override_colors/font_color = Color(0.74558026, 0.7455802, 0.7455802, 1)
+theme_override_font_sizes/font_size = 12
+text = "(Press R to play again)"
 
 [connection signal="loaded_new_world" from="." to="SceneFadeIn/AnimationPlayer" method="play" binds= ["fade_in"]]

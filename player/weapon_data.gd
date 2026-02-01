@@ -13,6 +13,7 @@ class_name WeaponData
 @export var projectile_count: int = 1  # for shotgun spread
 @export var spread_angle: float = 0.0  # degrees
 @export var projectile_scale: float = 1.0
+@export var base_color: Color = Color.WHITE
 @export var projectile_color: Color = Color.WHITE
 @export var projectile_color_variance: float = 0.4
 @export var projectile_lifetime: float = 5.0

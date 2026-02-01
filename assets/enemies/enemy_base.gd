@@ -40,6 +40,8 @@ func _ready() -> void:
 	# Enemies without checkpoint_id activate based on distance (existing behavior)
 	if not checkpoint_id:
 		_check_distance_activation()
+	
+	EntityManager.set_entity_is_required_destroy(self, true)
 
 func _connect_entity_stats_signals() -> void:
 	if entity_stats:

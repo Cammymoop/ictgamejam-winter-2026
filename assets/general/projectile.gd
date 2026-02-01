@@ -44,7 +44,7 @@ func _process(_delta: float) -> void:
     update_mesh_color()
     
     var anim_player: = $AnimationPlayer
-    if not anim_player.is_playing() and lifetime_timer.time_left <= 0.71:
+    if not anim_player.is_playing() and lifetime_timer.time_left <= 0.31:
         anim_player.play("out")
 
 func set_direction(direction: Vector3) -> void:

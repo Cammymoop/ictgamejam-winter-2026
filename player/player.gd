@@ -8,12 +8,19 @@ extends CharacterBody3D
 
 @onready var collision_shape: CollisionShape3D = $CollisionShape3D
 @onready var flash_animator: AnimationPlayer = $FlashAnimator
+@onready var weapon_manager: WeaponManager = $WeaponManager
 
 var move_velocity: Vector2 = Vector2.ZERO
 var iframe_timer: Timer = null
 
 var target_world_position: Vector3 = Vector3.ZERO
 @onready var entity_stats: EntityStats = $EntityStats
+
+var destroyed_waves: int = 0
+
+var won_screen_on: bool = false
+
+var ready_to_aim: bool = false
 
 func _ready() -> void:
 	assert(entity_stats, "Player EntityStats not found")
@@ -25,7 +32,31 @@ func _ready() -> void:
 	iframe_timer.one_shot = true
 	iframe_timer.timeout.connect(iframe_timeout)
 	add_child(iframe_timer)
+	
+	EntityManager.entity_removed.connect(_on_entity_removed.unbind(1))
 
+func _on_entity_removed() -> void:
+	if not is_inside_tree():
+		return
+	if EntityManager.are_all_entities_required_destroy():
+		destroyed_waves += 1
+		if destroyed_waves > 1:
+			if not won_screen_on:
+				won_screen_on = true
+				print_debug("Showing won screen")
+				show_won_screen()
+		else:
+			print_debug("Spawning next wave")
+			var spawner = get_node("/root/Game").current_world.get_node("SpecialSpawner")
+			if spawner:
+				spawner.do_spawn()
+
+func show_won_screen() -> void:
+	if not is_inside_tree():
+		return
+	await get_tree().create_timer(0.8).timeout
+	var win_screen: = get_node("/root/Game/WinLayer") as CanvasLayer
+	win_screen.show()
 
 func _physics_process(delta: float) -> void:
 	var local_offset: = get_local_offset()
@@ -53,6 +84,8 @@ func get_local_offset() -> Vector2:
 
 func set_target_position(world_pos: Vector3) -> void:
 	target_world_position = world_pos
+	if not ready_to_aim:
+		return
 	var look_target := Vector3(world_pos.x, global_position.y, world_pos.z)
 	if look_target.distance_to(global_position) > 0.1:
 		look_at(look_target, Vector3.UP)
@@ -70,7 +103,7 @@ func _on_entity_stats_out_of_health() -> void:
 		var s_timer: = get_tree().create_timer(randf_range(0.01, 0.5))
 		s_timer.timeout.connect(func(): parent.add_child(impact))
 
-	var level_path: = get_node("/root/Game").find_child("LevelPath")
+	var level_path: = get_node("/root/Game").current_world.get_node("LevelPath") as LevelPath
 	level_path.slow_to_stop()
 	await get_tree().create_timer(3).timeout
 	get_tree().reload_current_scene()
