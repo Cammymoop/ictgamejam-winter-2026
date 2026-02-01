@@ -1,0 +1,183 @@
+[gd_scene format=3 uid="uid://bh3d0atta7hbw"]
+
+[ext_resource type="Script" uid="uid://ygql8xhga5y0" path="res://assets/enemies/laser_enemy.gd" id="1_laser_enemy"]
+[ext_resource type="Script" uid="uid://byxnatvcndpcu" path="res://assets/general/entity_stats.gd" id="2_entity_stats"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1"]
+size = Vector3(1.5, 3, 1.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_body"]
+resource_local_to_scene = true
+albedo_color = Color(0.4, 0.1, 0.5, 1)
+emission = Color(0.50928617, 0.50928617, 0.50928617, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_1"]
+size = Vector3(1.5, 3, 1.5)
+
+[sub_resource type="Animation" id="Animation_1cakt"]
+resource_name = "RESET"
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material_override:emission_enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:material_override:emission")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.50928617, 0.50928617, 0.50928617, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_qysnd"]
+resource_name = "flash"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material_override:emission_enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:material_override:emission")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1.5691684, 1),
+"update": 0,
+"values": [Color(0.6187021, 0.46343356, 0.43606433, 1), Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_xkaar"]
+resource_name = "flash_death"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material_override:emission_enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:material_override:emission")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1.5691684),
+"update": 0,
+"values": [Color(0.38956866, 0.27445075, 0.25452647, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_w5uxk"]
+_data = {
+&"RESET": SubResource("Animation_1cakt"),
+&"flash": SubResource("Animation_qysnd"),
+&"flash_death": SubResource("Animation_xkaar")
+}
+
+[sub_resource type="BoxMesh" id="BoxMesh_emitter"]
+size = Vector3(0.4, 0.4, 0.6)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_emitter"]
+resource_local_to_scene = true
+albedo_color = Color(0.8, 0.1, 0.1, 1)
+emission_enabled = true
+emission = Color(0.8, 0.1, 0.1, 1)
+emission_energy_multiplier = 0.5
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_charge"]
+top_radius = 0.05
+bottom_radius = 0.05
+height = 50.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_charge"]
+resource_local_to_scene = true
+transparency = 1
+albedo_color = Color(1, 0.2, 0.2, 0.5)
+emission_enabled = true
+emission = Color(1, 0.2, 0.2, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_beam"]
+top_radius = 0.15
+bottom_radius = 0.15
+height = 50.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_beam"]
+resource_local_to_scene = true
+emission_enabled = true
+emission = Color(1, 0.9, 0.8, 1)
+emission_energy_multiplier = 3.0
+
+[node name="LaserEnemy" type="CharacterBody3D" unique_id=806110453 node_paths=PackedStringArray("flash_animator")]
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_laser_enemy")
+flash_animator = NodePath("MeshInstance3D/FlashAnimator")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=455652715]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("BoxShape3D_1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1318953337]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+material_override = SubResource("StandardMaterial3D_body")
+mesh = SubResource("BoxMesh_1")
+
+[node name="FlashAnimator" type="AnimationPlayer" parent="MeshInstance3D" unique_id=804106203]
+libraries/ = SubResource("AnimationLibrary_w5uxk")
+
+[node name="EmitterMesh" type="MeshInstance3D" parent="." unique_id=637114812]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -0.8)
+mesh = SubResource("BoxMesh_emitter")
+surface_material_override/0 = SubResource("StandardMaterial3D_emitter")
+
+[node name="LaserRaycast" type="RayCast3D" parent="." unique_id=1203057847]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -0.8)
+target_position = Vector3(0, 0, -100)
+collision_mask = 3
+
+[node name="ChargeMesh" type="MeshInstance3D" parent="." unique_id=1125844265]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 2.5, -25.8)
+visible = false
+mesh = SubResource("CylinderMesh_charge")
+surface_material_override/0 = SubResource("StandardMaterial3D_charge")
+
+[node name="BeamMesh" type="MeshInstance3D" parent="." unique_id=492347832]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 2.5, -25.8)
+visible = false
+mesh = SubResource("CylinderMesh_beam")
+surface_material_override/0 = SubResource("StandardMaterial3D_beam")
+
+[node name="EntityStats" type="Node" parent="." unique_id=2113032015]
+script = ExtResource("2_entity_stats")
+health = 8.0
+max_health = 8.0
+metadata/_custom_type_script = "uid://byxnatvcndpcu"

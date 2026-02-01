@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://duxu03vcux0gg"]
+
+[ext_resource type="Script" uid="uid://ebvnk7bjmutd" path="res://assets/enemies/enemy_base.gd" id="1_enemy_base"]
+[ext_resource type="Script" uid="uid://byxnatvcndpcu" path="res://assets/general/entity_stats.gd" id="2_entity_stats"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1"]
+size = Vector3(2, 2, 2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_1"]
+size = Vector3(2, 2, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
+resource_local_to_scene = true
+albedo_color = Color(0.8, 0.2, 0.2, 1)
+
+[node name="EnemyBase" type="CharacterBody3D" unique_id=1209118854]
+script = ExtResource("1_enemy_base")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=772181207]
+shape = SubResource("BoxShape3D_1")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1696282483]
+mesh = SubResource("BoxMesh_1")
+surface_material_override/0 = SubResource("StandardMaterial3D_1")
+
+[node name="EntityStats" type="Node" parent="." unique_id=816835677]
+script = ExtResource("2_entity_stats")
+metadata/_custom_type_script = "uid://byxnatvcndpcu"
+
+[node name="FlashAnimator" type="AnimationPlayer" parent="." unique_id=814146988]

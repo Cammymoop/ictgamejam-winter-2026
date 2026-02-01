@@ -13,16 +13,20 @@ func _ready() -> void:
         return
     
     var remote_transform = level_path.remote_transform
-    remote_transform.remote_path = remote_transform.get_path_to(get_parent())
+    var parent: = get_parent()
+    remote_transform.remote_path = remote_transform.get_path_to(parent)
+    parent.global_transform = remote_transform.global_transform
     
     level_path.start()
 
     global_position = level_path.path_follow.global_position
 
+    await get_tree().process_frame
     camera.global_transform = camera_target.global_transform
 
 func _process(delta: float) -> void:
-    camera.global_transform = camera.global_transform.interpolate_with(camera_target.global_transform, delta * 3.4)
+    var interp_factor: = 3.4 if level_path.is_moving else 0.1
+    camera.global_transform = camera.global_transform.interpolate_with(camera_target.global_transform, delta * interp_factor)
     
     if Input.mouse_mode != Input.MOUSE_MODE_HIDDEN and Input.is_action_just_pressed("shoot"):
         Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
@@ -37,6 +41,7 @@ func _process(delta: float) -> void:
     
     if Input.is_action_just_pressed("reset"):
         get_tree().reload_current_scene()
+        return
         
     if Input.is_action_just_pressed("menu"):
         if Input.mouse_mode in [Input.MOUSE_MODE_CAPTURED, Input.MOUSE_MODE_HIDDEN]:
