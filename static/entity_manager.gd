@@ -74,8 +74,14 @@ func entity_exiting_tree(entity: Node3D) -> void:
     entity_removed.emit(entity)
 
 func are_all_entities_required_destroy() -> bool:
-    if not require_destroy_first_added:
+    #if not require_destroy_first_added:
+    var tower_count: = 0
+    for entity in entities:
+        if entity.get_script() == preload("res://assets/enemies/tower_enemy.gd"):
+            tower_count += 1
+    if tower_count > 0:
         return false
+
     var count: = 0
     for entity in entity_is_required_destroy:
         if entity_is_required_destroy.get(entity, false):
