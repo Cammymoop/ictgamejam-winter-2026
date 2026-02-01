@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://b4sp72w5sobps"]
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_fdrta"]
+[sub_resource type="TorusMesh" id="TorusMesh_fdrta"]
 
 [node name="Player" type="Node3D" unique_id=1524924709]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1680546450]
-mesh = SubResource("CylinderMesh_fdrta")
+mesh = SubResource("TorusMesh_fdrta")

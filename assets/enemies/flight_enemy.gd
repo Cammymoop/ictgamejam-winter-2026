@@ -59,6 +59,7 @@ func _ready() -> void:
 	super._ready()
 	_setup_flight_controller()
 	_setup_projectile_spawn()
+	enemy_died.connect(_on_enemy_died)
 
 
 func _physics_process(delta: float) -> void:
@@ -214,4 +215,4 @@ func apply_knockback(impulse: Vector3) -> void:
 
 
 func _on_enemy_died() -> void:
-	pass # Replace with function body.
+	$CollisionShape3D.set_deferred("disabled", true)

@@ -22,6 +22,10 @@ EntityManager="*res://static/entity_manager.gd"
 Global="*res://static/global.gd"
 SFXManager="*res://static/sfx_manager.gd"
 
+[filesystem]
+
+import/blender/enabled=false
+
 [global_group]
 
 Player=""
