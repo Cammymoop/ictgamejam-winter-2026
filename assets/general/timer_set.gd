@@ -17,6 +17,7 @@ func add_timer(t_name: String, wait_time: float, on_timeout: Callable = Callable
     if on_timeout != Callable():
         timer.timeout.connect(on_timeout)
     add_child(timer, true)
+    timers[t_name] = timer
     return timer
 
 func get_timer(t_name: String) -> Timer:

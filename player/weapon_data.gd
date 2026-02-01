@@ -1,7 +1,7 @@
 extends Resource
 class_name WeaponData
 
-@export var projectile_scene: PackedScene = preload("res://assets/new_projectile.tscn")
+@export var projectile_scene: PackedScene = preload("res://assets/general/projectile.tscn")
 
 @export var is_enemy: bool = false
 

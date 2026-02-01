@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://dnffch5xjp5by"]
 
-[ext_resource type="Script" uid="uid://cc34hukncrwip" path="res://assets/test_enemy.gd" id="1_2yjhm"]
+[ext_resource type="Script" uid="uid://cc34hukncrwip" path="res://assets/enemies/tower_enemy.gd" id="1_2yjhm"]
 [ext_resource type="Script" uid="uid://byxnatvcndpcu" path="res://assets/general/entity_stats.gd" id="2_qsxe3"]
+[ext_resource type="Script" uid="uid://bar8gh3yeaipe" path="res://assets/general/timer_set.gd" id="3_6o7wi"]
 
 [sub_resource type="Gradient" id="Gradient_qsxe3"]
 offsets = PackedFloat32Array(0.29802954, 0.48522168, 0.67241377, 1)
@@ -491,6 +492,10 @@ libraries/ = SubResource("AnimationLibrary_v522o")
 
 [node name="ActiveAnimator" type="AnimationPlayer" parent="Offset/Shake" unique_id=102138290]
 libraries/ = SubResource("AnimationLibrary_52q70")
+
+[node name="TimerSet" type="Node" parent="." unique_id=348021377]
+script = ExtResource("3_6o7wi")
+metadata/_custom_type_script = "uid://bar8gh3yeaipe"
 
 [connection signal="got_hit" from="EntityStats" to="." method="_on_entity_stats_got_hit"]
 [connection signal="out_of_health" from="EntityStats" to="." method="_on_entity_stats_out_of_health"]

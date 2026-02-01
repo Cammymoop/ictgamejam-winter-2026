@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://x3cdtgoi7224"]
 
-[ext_resource type="Script" uid="uid://bse5fr0h78da4" path="res://assets/new_projectile.gd" id="1_ityly"]
+[ext_resource type="Script" uid="uid://bse5fr0h78da4" path="res://assets/general/projectile.gd" id="1_ityly"]
 [ext_resource type="Texture2D" uid="uid://bxjret3dr74om" path="res://assets/textures/fuzzy_particle.tres" id="2_82dbo"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gjidt"]

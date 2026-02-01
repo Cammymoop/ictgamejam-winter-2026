@@ -1,6 +1,12 @@
 extends Node3D
 
-var projectile_scene: PackedScene = preload("res://assets/new_projectile.tscn")
+var projectile_scene: PackedScene = preload("res://assets/general/projectile.tscn")
+
+class Timers:
+    const DELAY = "delay"
+    const ACTIVE_CHECK = "active_check"
+    const RELOAD = "reload"
+    const MIN_ACTIVE = "minimum_active"
 
 @export var shoot_from: Node3D = null
 
@@ -8,7 +14,8 @@ var projectile_scene: PackedScene = preload("res://assets/new_projectile.tscn")
 
 @export var move_speed: float = 4
 @export var fire_rate: float = 0.2
-@export var delay_ratio: float = 0.2
+@export var delay_chance: float = 0.2
+@export var min_time_before_shield: float = 1
 @export var delay_base_time: float = 2.0
 @export var active_distance: float = 57
 
@@ -16,6 +23,7 @@ var projectile_scene: PackedScene = preload("res://assets/new_projectile.tscn")
 @export var shield_on_when_inactive: bool = true
 
 @export var show_before_shoot: Node3D
+@onready var timer_set: TimerSet = $TimerSet
 @onready var flash_animator: AnimationPlayer = find_child("FlashAnimator")
 @onready var active_animator: AnimationPlayer = find_child("ActiveAnimator")
 
@@ -38,13 +46,11 @@ var projectile_scene: PackedScene = preload("res://assets/new_projectile.tscn")
 
 @export var show_debug_path: bool = false
 
-var active_check_timer: Timer = null
 var active_check_waiting: bool = false
 
 var player_ref: Node3D = null
 var entity_stats: EntityStats = null
 
-var delay_timer: Timer = null
 var is_shooting: bool = false
 var is_reloading: bool = true
 var reload_timeleft: float = 0
@@ -58,20 +64,16 @@ func _ready() -> void:
         show_before_shoot.visible = false
         show_before_shoot.material_override.albedo_color = bullet_color
     
+    prints("my global aabb", Util.get_enclosing_aabb_of_mesh_instances_approximate([shoot_from, find_child("MeshInstance3D")]))
+    
     show_warning_time = minf(show_warning_time, (1 / fire_rate) * 0.75)
     
     active_animator.animation_finished.connect(_on_active_animator_animation_finished)
     
-    delay_timer = Timer.new()
-    delay_timer.one_shot = true
-    delay_timer.timeout.connect(delay_over)
-    add_child(delay_timer)
-    
-    active_check_timer = Timer.new()
-    active_check_timer.wait_time = active_check_interval
-    active_check_timer.one_shot = false
-    active_check_timer.timeout.connect(active_check_ready)
-    add_child(active_check_timer)
+    timer_set.add_timer(Timers.DELAY, delay_base_time, delay_over)
+    timer_set.add_timer(Timers.ACTIVE_CHECK, active_check_interval, active_check_ready, true)
+    timer_set.add_timer(Timers.RELOAD, 1 / fire_rate)
+    timer_set.add_timer(Timers.MIN_ACTIVE, min_time_before_shield)
     
     if (not use_shield or not shield_on_when_inactive) and is_shield_active():
         turn_off_shield()
@@ -128,8 +130,7 @@ func random_delay() -> void:
     is_shooting = false
     is_reloading = true
     reload_timeleft = show_warning_time
-    delay_timer.wait_time = delay_base_time * randf_range(.8, 1.5)
-    delay_timer.start()
+    timer_set.start(Timers.DELAY, delay_base_time * randf_range(.8, 1.5))
     if use_shield and not is_shield_active():
         turn_on_shield()
 
@@ -162,7 +163,7 @@ func try_activate(recheck: bool = false) -> void:
         if is_active:
             deactivate()
         active_check_waiting = true
-        active_check_timer.start()
+        timer_set.start(Timers.ACTIVE_CHECK)
     else:
         activate()
 
@@ -175,6 +176,7 @@ func _on_active_animator_animation_finished(anim_name: String) -> void:
         activate_done()
 
 func activate_done() -> void:
+    timer_set.start(Timers.MIN_ACTIVE)
     active_check_waiting = false
     is_active = true
     random_delay()
@@ -206,21 +208,18 @@ func _process(delta: float) -> void:
     if not is_shooting or not is_active:
         return
     
+    var reload_timeleft: = timer_set.time_left(Timers.RELOAD)
+    var is_reloading: = reload_timeleft > 0
     if is_reloading:
-        reload_timeleft -= delta
         if show_before_shoot:
             show_before_shoot.visible = reload_timeleft < show_warning_time
-        if reload_timeleft <= 0:
-            is_reloading = false
-            return
     
     if is_shooting and not is_reloading:
         fire()
-        if randf() < delay_ratio:
+        if randf() < delay_chance:
             random_delay()
         else:
-            reload_timeleft = 1 / fire_rate
-            is_reloading = true
+            timer_set.start(Timers.RELOAD)
 
 func fire() -> void:
     var start_pos = global_position
@@ -295,14 +294,15 @@ func spawn_random_impact() -> void:
         _spawn_random_impact()
 
 func _spawn_random_impact() -> bool:
+    #var ray_cast_destination: = get_global_center_approx()
     var ray_cast_destination: = shake_offset.global_position + (Vector3.UP * 5)
     var ray_cast_direction: = Vector3.FORWARD.rotated(Vector3.RIGHT, (TAU/4) * ease(randf(), 2))
-    ray_cast_direction = ray_cast_direction.rotated(Vector3.UP, randf_range(0, TAU/4))
+    ray_cast_direction = ray_cast_direction.rotated(Vector3.UP, randf_range(0, TAU))
     
     var ray_cast_query: = PhysicsRayQueryParameters3D.new()
     ray_cast_query.from = ray_cast_destination + ray_cast_direction * 4
     ray_cast_query.to = ray_cast_destination
-    ray_cast_query.collision_mask = Util.layer_to_bit(Util.get_phys_layer_by_name("Enemies"))
+    ray_cast_query.collision_mask = Util.get_phys_bitmask_from_layer_names(["Enemies"])
     ray_cast_query.hit_from_inside = true
     var ray_cast_result: = get_world_3d().direct_space_state.intersect_ray(ray_cast_query)
     

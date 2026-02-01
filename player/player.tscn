@@ -31,6 +31,36 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_yw30f"]
 resource_name = "flash"
+length = 0.4667
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:material_override:albedo_color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.23333335, 0.33333334, 0.46666667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(0.9564864, 0.3347615, 0.3121374, 1), Color(0.32841647, 0.124220274, 0.11084012, 1), Color(0.9564864, 0.3347615, 0.3121374, 1), Color(0.32841647, 0.124220274, 0.11084012, 1), Color(0.9564864, 0.3347615, 0.3121374, 1)]
+}
+tracks/1/type = "method"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FlashAnimator/DamageAnimator")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"hit_back"],
+"method": &"play"
+}]
+}
+
+[sub_resource type="Animation" id="Animation_qjkh3"]
+resource_name = "flash_loop"
 length = 0.4666
 loop_mode = 1
 tracks/0/type = "value"
@@ -40,16 +70,53 @@ tracks/0/path = NodePath("MeshInstance3D:material_override:albedo_color")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.46666667),
-"transitions": PackedFloat32Array(1, 4, 1),
+"times": PackedFloat32Array(0, 0.1, 0.23333335, 0.33333334, 0.46666667),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
-"values": [Color(0.9564864, 0.3347615, 0.3121374, 1), Color(0.9620361, 0.80102986, 0.779495, 1), Color(0.9564864, 0.3347615, 0.3121374, 1)]
+"values": [Color(0.9564864, 0.3347615, 0.3121374, 1), Color(0.43120927, 0.17437991, 0.1544762, 1), Color(0.9564864, 0.3347615, 0.3121374, 1), Color(0.43120927, 0.17437991, 0.1544762, 1), Color(0.9564864, 0.3347615, 0.3121374, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_qjkh3"]
 _data = {
 &"RESET": SubResource("Animation_g1dw6"),
-&"flash": SubResource("Animation_yw30f")
+&"flash": SubResource("Animation_yw30f"),
+&"flash_loop": SubResource("Animation_qjkh3")
+}
+
+[sub_resource type="Animation" id="Animation_g6k8r"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_boad6"]
+resource_name = "hit_back"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.16000001, 0.53333336, 0.6133334, 0.72),
+"transitions": PackedFloat32Array(0.36602142, 1.6817931, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0.41840148), Vector3(0, 0, 0), Vector3(0, 0, -0.08297014), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rgyib"]
+_data = {
+&"RESET": SubResource("Animation_g6k8r"),
+&"hit_back": SubResource("Animation_boad6")
 }
 
 [node name="Player" type="CharacterBody3D" unique_id=1128950859 groups=["Player"]]
@@ -77,6 +144,11 @@ metadata/_custom_type_script = "uid://byxnatvcndpcu"
 
 [node name="FlashAnimator" type="AnimationPlayer" parent="." unique_id=331563060]
 libraries/ = SubResource("AnimationLibrary_qjkh3")
+next/flash = &"flash_loop"
+
+[node name="DamageAnimator" type="AnimationPlayer" parent="FlashAnimator" unique_id=946896548]
+root_node = NodePath("../..")
+libraries/ = SubResource("AnimationLibrary_rgyib")
 
 [node name="HUDLayer" type="CanvasLayer" parent="." unique_id=165043491]
 layer = 2
