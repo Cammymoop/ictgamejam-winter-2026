@@ -46,8 +46,8 @@ enum AttackMode {
 @export var projectile_damage: float = 1.0
 @export var aim_lead: float = 0.0  ## How much to lead the target (0-1)
 @export var inaccuracy: float = TAU / 32  ## Spread angle in radians
-@export_exp_easing var inaccuracy_curve_param: float = 1.0  ## Easing for spread distribution
 @export var chase_strength: float = 1.5  ## Stiffness when chasing
+@export_exp_easing() var inaccuracy_curve_param = 1 
 
 ## Internal state
 var flight_controller: BFC
@@ -211,3 +211,7 @@ func set_flight_bounds(new_min: Vector3, new_max: Vector3) -> void:
 func apply_knockback(impulse: Vector3) -> void:
 	if flight_controller:
 		flight_controller.apply_linear_impulse(impulse)
+
+
+func _on_enemy_died() -> void:
+	pass # Replace with function body.

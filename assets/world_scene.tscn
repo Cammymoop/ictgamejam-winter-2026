@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://b18ag448mcsam" path="res://assets/level_path.gd" id="1_fvgax"]
 [ext_resource type="PackedScene" uid="uid://5euivoegl7lv" path="res://assets/bg_meshes.tscn" id="2_oo5y3"]
 [ext_resource type="PackedScene" uid="uid://dnffch5xjp5by" path="res://assets/enemies/test_enemy.tscn" id="3_ctr7f"]
+[ext_resource type="PackedScene" uid="uid://dasygi206clwu" path="res://assets/enemies/flight_enemy.tscn" id="4_2orrn"]
 
 [sub_resource type="Animation" id="Animation_ctr7f"]
 length = 0.001
@@ -188,3 +189,31 @@ show_debug_path = true
 
 [node name="Enemy2" parent="." unique_id=818737262 instance=ExtResource("3_ctr7f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.715805, 0, -20.781796)
+
+[node name="FlightEnemyNode" parent="." unique_id=361403220 instance=ExtResource("4_2orrn")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.35208, 12.364298, 23.971273)
+bounds_min = null
+bounds_max = Vector3(100, 80, 100)
+use_2d_plane = null
+plane_height = null
+movement_mode = null
+brownian_intensity = null
+drift_max_acceleration = 80.0
+drift_interval_min = null
+drift_interval_max = null
+align_to_movement = null
+alignment_stiffness = null
+roll_limit_degrees = null
+pitch_limit_degrees = null
+attack_mode = null
+fire_rate = null
+projectile_speed = null
+projectile_damage = null
+aim_lead = null
+inaccuracy = null
+inaccuracy_curve_param = null
+chase_strength = null
+move_speed = null
+attack_range = null
+detection_range = null
+checkpoint_id = null
